@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "VeneM Poultry"
+rootProject.name = "VeneMPoultry"
 include(":app")
  
