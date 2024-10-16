@@ -8,13 +8,14 @@
     tools:context=".MainActivity">
 
     <!-- Card for Ongoing Medication Regiments -->
+    <!-- Card for Ongoing Medication Regiments -->
     <androidx.cardview.widget.CardView
         android:id="@+id/medicationRegimentsCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:cardElevation="4dp"
         android:layout_marginBottom="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -32,6 +33,7 @@
                 android:textStyle="bold"
                 android:textSize="16sp" />
 
+            <!-- Medication Regimen Details -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,12 +42,14 @@
                 android:paddingTop="8dp">
 
                 <TextView
+                    android:id="@+id/medicationTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Valuntion Vaccination" />
 
                 <TextView
+                    android:id="@+id/medicationDateTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="26 Dec" />
@@ -62,7 +66,6 @@
         android:layout_margin="16dp"
         android:layout_marginBottom="8dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/medicationRegimentsCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -89,6 +92,7 @@
                 android:paddingTop="8dp">
 
                 <TextView
+                    android:id="@+id/batchATextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -109,6 +113,7 @@
                 android:paddingTop="8dp">
 
                 <TextView
+                    android:id="@+id/batchBTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -122,6 +127,7 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
     <!-- Bottom buttons: Vaccinations and Medication -->
     <GridLayout

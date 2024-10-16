@@ -1,7 +1,6 @@
 package com.example.venempoultry
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -9,7 +8,12 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -21,14 +25,16 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var userNameTextView: TextView
     private lateinit var userEmailTextView: TextView
 
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var database: DatabaseReference
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_staff_settings)
 
-        // Initialize shared preferences
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        // Initialize Firebase components
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
 
         // Initialize views
         autoBackupSwitch = findViewById(R.id.autoBackupSwitch)
@@ -39,90 +45,107 @@ class SettingsActivity : AppCompatActivity() {
         userNameTextView = findViewById(R.id.userNameTextView)
         userEmailTextView = findViewById(R.id.userEmailTextView)
 
-        // Load preferences
+        // Load profile info from Firebase
+        setProfileInfo()
+
+        // Load user preferences from Firebase
         loadPreferences()
 
-        // Set listeners
+        // Set listeners for UI interactions
         setListeners()
-
-        // Set profile details (fetch from database if necessary)
-        setProfileInfo()
     }
 
     private fun loadPreferences() {
-        val isAutoBackupEnabled = sharedPreferences.getBoolean("auto_backup", false)
-        val areNotificationsEnabled = sharedPreferences.getBoolean("notifications", true)
-        val selectedLanguage = sharedPreferences.getString("language", "English")
+        // Retrieve preferences from Firebase for the current user
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            database.child("users").child(userId).child("preferences").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val isAutoBackupEnabled = snapshot.child("auto_backup").getValue(Boolean::class.java) ?: false
+                    val areNotificationsEnabled = snapshot.child("notifications").getValue(Boolean::class.java) ?: true
+                    val selectedLanguage = snapshot.child("language").getValue(String::class.java) ?: "English"
 
-        autoBackupSwitch.isChecked = isAutoBackupEnabled
-        notificationsSwitch.isChecked = areNotificationsEnabled
-        languageTextView.text = selectedLanguage
+                    // Update UI with the retrieved preferences
+                    autoBackupSwitch.isChecked = isAutoBackupEnabled
+                    notificationsSwitch.isChecked = areNotificationsEnabled
+                    languageTextView.text = selectedLanguage
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@SettingsActivity, "Failed to load preferences", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
     }
 
     private fun setListeners() {
         // Toggle Auto Backup
         autoBackupSwitch.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferences.edit().putBoolean("auto_backup", isChecked).apply()
+            savePreferenceToFirebase("auto_backup", isChecked)
             Toast.makeText(this, "Auto Backup is now ${if (isChecked) "enabled" else "disabled"}", Toast.LENGTH_SHORT).show()
         }
 
         // Toggle Notifications
         notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferences.edit().putBoolean("notifications", isChecked).apply()
+            savePreferenceToFirebase("notifications", isChecked)
             Toast.makeText(this, "Notifications are now ${if (isChecked) "enabled" else "disabled"}", Toast.LENGTH_SHORT).show()
         }
 
         // Change Language
         languageTextView.setOnClickListener {
             // Logic for showing a language selection dialog
-            // For simplicity, this example just toggles between English and Spanish
             val currentLanguage = languageTextView.text.toString()
             val newLanguage = if (currentLanguage == "English") "Spanish" else "English"
             languageTextView.text = newLanguage
-            sharedPreferences.edit().putString("language", newLanguage).apply()
+            savePreferenceToFirebase("language", newLanguage)
             Toast.makeText(this, "Language changed to $newLanguage", Toast.LENGTH_SHORT).show()
         }
 
-        // Edit Profile
+        // Edit Profile Button Click
         editProfileButton.setOnClickListener {
-            // Handle edit profile logic, open new activity or fragment
             Toast.makeText(this, "Edit Profile clicked", Toast.LENGTH_SHORT).show()
-            // Example: startActivity(Intent(this, EditProfileActivity::class.java))
+            // Implement edit profile functionality (e.g., open a new activity)
         }
 
         // Profile Image Click
         profileImageView.setOnClickListener {
-            // Optionally, allow changing profile picture by opening image picker
             Toast.makeText(this, "Profile image clicked", Toast.LENGTH_SHORT).show()
         }
 
-        // Help, Contact, Logout logic can be added in the same manner
-        findViewById<TextView>(R.id.helpTextView).setOnClickListener {
-            // Open Help Activity
-            Toast.makeText(this, "Help clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<TextView>(R.id.contactTextView).setOnClickListener {
-            // Open Contact Activity
-            Toast.makeText(this, "Contact clicked", Toast.LENGTH_SHORT).show()
-        }
-
+        // Logout
         findViewById<TextView>(R.id.logoutTextView).setOnClickListener {
             // Perform logout
-            Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show()
-            // Clear user session and redirect to login
-            sharedPreferences.edit().clear().apply()
+            auth.signOut()
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
         }
     }
 
-    private fun setProfileInfo() {
-        // For now, we'll set the user info statically.
-        // Ideally, this data will be fetched from a backend or user database.
+    private fun savePreferenceToFirebase(key: String, value: Any) {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            database.child("users").child(userId).child("preferences").child(key).setValue(value)
+        }
+    }
 
-        userNameTextView.text = "Andrew Tate" // Fetch from DB
-        userEmailTextView.text = "drewTate@what.com" // Fetch from DB
-        // Profile image could be loaded using a library like Glide/Picasso if from a URL
+    private fun setProfileInfo() {
+        // Retrieve the user's profile info from Firebase
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            database.child("users").child(userId).child("profile").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userName = snapshot.child("name").getValue(String::class.java) ?: "Unknown User"
+                    val userEmail = snapshot.child("email").getValue(String::class.java) ?: "Unknown Email"
+
+                    // Set the profile data in the UI
+                    userNameTextView.text = userName
+                    userEmailTextView.text = userEmail
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@SettingsActivity, "Failed to load profile info", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
     }
 }
