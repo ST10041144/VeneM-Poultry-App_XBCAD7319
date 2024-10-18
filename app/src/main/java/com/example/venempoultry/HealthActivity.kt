@@ -222,7 +222,7 @@ class MedicationActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Medication data submitted successfully", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(this, "Failed to submit data: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, "Failedf to submit data: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                         }
                     }
             }
