@@ -14,15 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class AuthActivity : AppCompatActivity() {
 
-    // Firebase authentication and database references
     private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
-
-    // UI components
+    private lateinit var db: FirebaseFirestore
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var signInButton: Button
@@ -32,58 +30,62 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        // Initialize Firebase auth
+        // Initialize Firebase and UI elements
         auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().reference
+        db = FirebaseFirestore.getInstance()
 
-        // Initialize UI components
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         signInButton = findViewById(R.id.signInButton)
         registerTextView = findViewById(R.id.registerTextView)
 
-        // Set up sign-in button click listener
+        // Set sign-in button click listener
         signInButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Email or Password cannot be empty", Toast.LENGTH_SHORT).show()
+                showToast("Email and Password cannot be empty")
                 return@setOnClickListener
             }
 
-            // Log in the user
             loginUser(email, password)
         }
 
-        // Set up register link click listener
+        // Set register text view click listener
         registerTextView.setOnClickListener {
-            // Redirect to registration activity (if implemented)
             val intent = Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
         }
     }
 
+    // Method to log in the user
     private fun loginUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Login successful, navigate to the main activity
-                    val intent = Intent(this, RoleDashboard::class.java) // Replace with your main activity
-                    startActivity(intent)
-                    finish()
+                    // User is successfully authenticated, proceed to the dashboard
+                    navigateToDashboard()
                 } else {
-                    // Handle authentication failure
                     val errorMessage = task.exception?.localizedMessage ?: "Login failed"
-                    Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                    showToast(errorMessage)
                     Log.e("AuthActivity", "Authentication failed: $errorMessage")
                 }
             }
     }
+
+    // Method to navigate to the dashboard after successful login
+    private fun navigateToDashboard() {
+        val intent = Intent(this, StaffActivity::class.java)  // Redirect to your main dashboard
+        startActivity(intent)
+        finish()  // Close the login activity
+    }
+
+    // Helper method to display toast messages
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }
-
-
-
 
 
 
@@ -184,9 +186,9 @@ class RegistrationActivity : AppCompatActivity() {
 
                                     // User is already logged in, redirect to the appropriate dashboard
                                     if (role == "Farmer") {
-                                        startActivity(Intent(this, StaffDashboardActivity::class.java))
+                                        startActivity(Intent(this, StaffActivity::class.java))
                                     } else {
-                                        startActivity(Intent(this, ManagerActivity::class.java))
+                                        startActivity(Intent(this, StaffActivity::class.java))
                                     }
                                     finish()
                                 } else {

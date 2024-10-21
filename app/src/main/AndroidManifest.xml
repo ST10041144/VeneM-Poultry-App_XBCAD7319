@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -23,7 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StaffDashboardActivity" />
+        <activity android:name=".StaffActivity" />
         <activity android:name=".ManagerActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".MainActivity" />
@@ -37,7 +39,6 @@
         <activity android:name=".MedicationActivity" />
         <activity android:name=".VaccinationsActivity" />
         <activity android:name=".MaintenanceAdapter" />
-        <activity android:name=".RoleDashboard" />
         <activity android:name=".HealthActivity" />
         <activity android:name=".FlockManagementActivity" />
 
