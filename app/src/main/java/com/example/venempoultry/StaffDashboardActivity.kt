@@ -35,7 +35,7 @@ class StaffDashboardActivity : AppCompatActivity() {
 
         maintenanceCard.setOnClickListener {
             // Open the Maintenance activity or perform an action
-            startActivity(Intent(this, MaintenanceActivity::class.java))
+            startActivity(Intent(this, StaffMaintenanceActivity::class.java))
         }
     }
 }

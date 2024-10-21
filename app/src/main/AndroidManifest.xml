@@ -29,7 +29,15 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ProductionActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".MaintenanceActivity" />
+        <activity android:name=".StaffMaintenanceActivity" />
+        <activity android:name=".ManagerMaintenanceActivity" />
+        <activity android:name=".FinancialFormActivity" />
+        <activity android:name=".FinancialsActivity" />
+        <activity android:name=".InventoryActivity" />
+        <activity android:name=".MedicationActivity" />
+        <activity android:name=".VaccinationsActivity" />
+        <activity android:name=".MaintenanceAdapter" />
+        <activity android:name=".RoleDashboard" />
         <activity android:name=".HealthActivity" />
         <activity android:name=".FlockManagementActivity" />
 

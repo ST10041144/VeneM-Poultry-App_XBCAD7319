@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".FinancialFormActivity">
+
+    <!-- Amount Text -->
+    <TextView
+        android:id="@+id/amountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amount"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Amount Display -->
+    <TextView
+        android:id="@+id/amountDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9.99"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        app:layout_constraintTop_toBottomOf="@id/amountText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Date Input -->
+    <EditText
+        android:id="@+id/dateInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Date"
+        android:backgroundTint="@android:color/darker_gray"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/amountDisplay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Transaction Title Input -->
+    <EditText
+        android:id="@+id/transactionTitleInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Transaction Title"
+        android:backgroundTint="@android:color/darker_gray"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/dateInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- To Input -->
+    <EditText
+        android:id="@+id/toInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="To"
+        android:backgroundTint="@android:color/darker_gray"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/transactionTitleInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Sale/Expense Dropdown -->
+    <Spinner
+        android:id="@+id/saleExpenseDropdown"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/toInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- For Dropdown -->
+    <Spinner
+        android:id="@+id/forDropdown"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/saleExpenseDropdown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Description Input -->
+    <EditText
+        android:id="@+id/descriptionInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:backgroundTint="@android:color/darker_gray"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/forDropdown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:inputType="textMultiLine"
+        android:minLines="3" />
+
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="156dp"
+        android:backgroundTint="@android:color/holo_orange_dark"
+        android:padding="12dp"
+        android:text="Submit"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/descriptionInput" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

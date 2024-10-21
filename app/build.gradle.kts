@@ -5,6 +5,8 @@ plugins {
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
 
+
+
 }
 
 android {
@@ -63,29 +65,36 @@ dependencies {
 
 
     //Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     //OKHttp
-    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
 
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
 
 
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Firebase Authentication
-    implementation ("com.google.firebase:firebase-auth:22.1.1")
+    implementation ("com.google.firebase:firebase-auth:23.0.0")
 
     //bcrypt
-    implementation("org.mindrot:jbcrypt:0.4")
+    implementation(libs.jbcrypt)
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
+
+    //database declaration
+    implementation (libs.firebase.database)
+
+    implementation (libs.androidx.constraintlayout)
+
+
 
 }

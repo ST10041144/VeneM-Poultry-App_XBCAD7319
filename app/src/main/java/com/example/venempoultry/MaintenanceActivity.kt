@@ -1,90 +1,151 @@
 package com.example.venempoultry
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.ArrayAdapter
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 
-class MaintenanceActivity : AppCompatActivity() {
+class StaffMaintenanceActivity : AppCompatActivity() {
 
-    private lateinit var dateEditText: EditText
     private lateinit var issueTitleEditText: EditText
-    private lateinit var relatedToSpinner: Spinner
-    private lateinit var urgencyLevelSpinner: Spinner
-    private lateinit var descriptionEditText: EditText
-    private lateinit var possibleSolutionEditText: EditText
+    private lateinit var issueDateEditText: EditText
     private lateinit var submitButton: Button
+
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_staff_maintanance) // Ensure this layout file matches your XML filename
+        setContentView(R.layout.activity_staff_maintanance)
 
-        // Initialize the views
-        dateEditText = findViewById(R.id.dateInput)
-        issueTitleEditText = findViewById(R.id.issueTitleInput)
-        relatedToSpinner = findViewById(R.id.relatedToSpinner)
-        urgencyLevelSpinner = findViewById(R.id.urgencyLevelSpinner)
-        descriptionEditText = findViewById(R.id.descriptionInput)
-        possibleSolutionEditText = findViewById(R.id.possibleSolutionInput)
-        submitButton = findViewById(R.id.submitMaintenanceButton)
+        issueTitleEditText = findViewById(R.id.issueTitleEditText)
+        issueDateEditText = findViewById(R.id.issueDateEditText)
+        submitButton = findViewById(R.id.submitButton)
 
-        // Set up the "Related to" Spinner
-        val relatedToItems = arrayOf("Equipment", "Infrastructure", "Electrical", "Other")
-        val relatedToAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, relatedToItems)
-        relatedToAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        relatedToSpinner.adapter = relatedToAdapter
-
-        // Set up the "Urgency Level" Spinner
-        val urgencyItems = arrayOf("Low", "Medium", "High", "Critical")
-        val urgencyAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, urgencyItems)
-        urgencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        urgencyLevelSpinner.adapter = urgencyAdapter
-
-        // Set OnClickListener for the submit button
         submitButton.setOnClickListener {
-            submitMaintenanceForm()
+            val title = issueTitleEditText.text.toString().trim()
+            val date = issueDateEditText.text.toString().trim()
+
+            if (title.isNotEmpty() && date.isNotEmpty()) {
+                // Create a map to store the issue
+                val issue = hashMapOf(
+                    "title" to title,
+                    "date" to date,
+                    "status" to "Pending"  // You can have status like Pending, Resolved, etc.
+                )
+
+                // Add the issue to Firestore
+                db.collection("maintenanceIssues")
+                    .add(issue)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Issue logged successfully", Toast.LENGTH_SHORT).show()
+                        // Clear the input fields after submitting
+                        issueTitleEditText.text.clear()
+                        issueDateEditText.text.clear()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Failed to log issue", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
-
-    // Function to handle form submission
-    private fun submitMaintenanceForm() {
-        val date = dateEditText.text.toString()
-        val issueTitle = issueTitleEditText.text.toString()
-        val relatedTo = relatedToSpinner.selectedItem.toString()
-        val urgencyLevel = urgencyLevelSpinner.selectedItem.toString()
-        val description = descriptionEditText.text.toString()
-        val possibleSolution = possibleSolutionEditText.text.toString()
-
-        if (validateInput(date, issueTitle, description, possibleSolution)) {
-            // Simulate sending data to server or saving to database
-            Log.d("MaintenanceForm", "Date: $date, Issue: $issueTitle, Related to: $relatedTo, Urgency: $urgencyLevel, Description: $description, Solution: $possibleSolution")
-
-            // Show a confirmation toast
-            Toast.makeText(this, "Maintenance form submitted successfully!", Toast.LENGTH_SHORT).show()
-
-            // Optionally clear the form
-            clearForm()
-        } else {
-            Toast.makeText(this, "Please fill in all fields!", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    // Validation method to check if all inputs are filled
-    private fun validateInput(date: String, issueTitle: String, description: String, possibleSolution: String): Boolean {
-        return date.isNotEmpty() && issueTitle.isNotEmpty() && description.isNotEmpty() && possibleSolution.isNotEmpty()
-    }
-
-    // Clear the form after submission
-    private fun clearForm() {
-        dateEditText.text.clear()
-        issueTitleEditText.text.clear()
-        descriptionEditText.text.clear()
-        possibleSolutionEditText.text.clear()
-        relatedToSpinner.setSelection(0)
-        urgencyLevelSpinner.setSelection(0)
     }
 }
+
+
+
+class ManagerMaintenanceActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: MaintenanceAdapter
+    private val db = FirebaseFirestore.getInstance()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_manager_maintanance)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = MaintenanceAdapter(emptyList())  // Initialize with empty list
+        recyclerView.adapter = adapter
+
+        loadMaintenanceIssues()
+    }
+
+    private fun loadMaintenanceIssues() {
+        // Get the maintenance issues from Firestore
+        db.collection("maintenanceIssues")
+            .get()
+            .addOnSuccessListener { result ->
+                val issues = result.toObjects(MaintenanceIssue::class.java)
+                adapter.updateData(issues)
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to load maintenance issues", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
+}
+
+
+
+class MaintenanceAdapter(private var issues: List<MaintenanceIssue>) : RecyclerView.Adapter<MaintenanceAdapter.MaintenanceViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaintenanceViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_maintenance_issue, parent, false)
+        return MaintenanceViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: MaintenanceViewHolder, position: Int) {
+        val issue = issues[position]
+        holder.titleTextView.text = issue.title
+        holder.dateTextView.text = issue.date
+        holder.statusTextView.text = issue.status
+
+        // Optional: Color the text based on the status
+        when (issue.status) {
+            "Pending" -> holder.titleTextView.setTextColor(
+                ContextCompat.getColor(holder.itemView.context, R.color.black)
+            )
+            "Resolved" -> holder.titleTextView.setTextColor(
+                ContextCompat.getColor(holder.itemView.context, R.color.black)
+            )
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return issues.size
+    }
+
+    fun updateData(newIssues: List<MaintenanceIssue>) {
+        issues = newIssues
+        notifyDataSetChanged()
+    }
+
+    class MaintenanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val titleTextView: TextView = itemView.findViewById(R.id.issueTitleTextView)
+        val dateTextView: TextView = itemView.findViewById(R.id.issueDateTextView)
+        val statusTextView: TextView = itemView.findViewById(R.id.issueStatusTextView)
+    }
+}
+
+data class MaintenanceIssue(
+    val title: String = "",
+    val date: String = "",
+    val status: String = "Pending"
+)
+
+
+
+
+

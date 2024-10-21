@@ -12,18 +12,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+
 
 class AuthActivity : AppCompatActivity() {
 
-    private lateinit var firebaseAuth: FirebaseAuth
+    // Firebase authentication and database references
+    private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
-    private lateinit var farmerIdEditText: EditText
+    // UI components
+    private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var signInButton: Button
     private lateinit var registerTextView: TextView
@@ -32,84 +32,57 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        // Initialize Firebase Auth and Database
-        firebaseAuth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().getReference("users")
+        // Initialize Firebase auth
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
 
-        // Initialize views
-        farmerIdEditText = findViewById(R.id.farmerIdEditText)
+        // Initialize UI components
+        emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         signInButton = findViewById(R.id.signInButton)
         registerTextView = findViewById(R.id.registerTextView)
 
-        // Handle the Sign In button click
+        // Set up sign-in button click listener
         signInButton.setOnClickListener {
-            val email = farmerIdEditText.text.toString().trim()
+            val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                signInUser(email, password)
-            } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Email or Password cannot be empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            // Log in the user
+            loginUser(email, password)
         }
 
-        // Handle the Register text click
+        // Set up register link click listener
         registerTextView.setOnClickListener {
-            // Navigate to RegisterActivity
+            // Redirect to registration activity (if implemented)
             val intent = Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
         }
     }
 
-    private fun signInUser(email: String, password: String) {
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+    private fun loginUser(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val user = firebaseAuth.currentUser
-                    val uid = user?.uid
-
-                    if (uid != null) {
-                        // Retrieve user role from the database
-                        database.child(uid).child("role").addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val userRole = snapshot.getValue(String::class.java)
-                                if (userRole != null) {
-                                    Log.d("AuthActivity", "User role: $userRole")
-                                    // Navigate to the appropriate dashboard based on role
-                                    navigateToDashboard(userRole)
-                                } else {
-                                    Log.e("AuthActivity", "Role is null")
-                                    Toast.makeText(this@AuthActivity, "Failed to fetch role", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                Log.e("AuthActivity", "Database error: ${error.message}")
-                                Toast.makeText(this@AuthActivity, "Failed to fetch role: ${error.message}", Toast.LENGTH_SHORT).show()
-                            }
-                        })
-                    } else {
-                        Log.e("AuthActivity", "UID is null after login")
-                        Toast.makeText(this, "Failed to get user ID", Toast.LENGTH_SHORT).show()
-                    }
+                    // Login successful, navigate to the main activity
+                    val intent = Intent(this, RoleDashboard::class.java) // Replace with your main activity
+                    startActivity(intent)
+                    finish()
                 } else {
-                    Log.e("AuthActivity", "Authentication failed: ${task.exception?.message}")
-                    Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    // Handle authentication failure
+                    val errorMessage = task.exception?.localizedMessage ?: "Login failed"
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                    Log.e("AuthActivity", "Authentication failed: $errorMessage")
                 }
             }
     }
-
-    private fun navigateToDashboard(role: String) {
-        val intent = if (role == "Farmer") {
-            Intent(this, StaffDashboardActivity::class.java)
-        } else {
-            Intent(this, ManagerActivity::class.java)
-        }
-        startActivity(intent)
-        finish() // Close the login screen
-    }
 }
+
+
 
 
 
@@ -201,7 +174,7 @@ class RegistrationActivity : AppCompatActivity() {
                     val user = User(fullName, email, role)
                     if (userId != null) {
                         databaseReference.child(userId).setValue(user)
-                            .addOnCompleteListener { task ->
+                            .addOnCompleteListener {task ->
                                 if (task.isSuccessful) {
                                     Toast.makeText(
                                         this,
@@ -235,7 +208,6 @@ class RegistrationActivity : AppCompatActivity() {
             }
     }
 }
-
 
 
 

@@ -17,7 +17,7 @@ object RetrofitInstance {
 
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://ranjjsnzhklmubcydccn.supabase.co")  // Replace with your Supabase project URL
+            .baseUrl("https://ranjjsnzhklmubcydccn.supabase.co")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
