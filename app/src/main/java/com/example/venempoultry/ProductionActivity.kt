@@ -6,17 +6,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.venempoultry.databinding.ActivityStaffProductionBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class ProductionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStaffProductionBinding
 
     // Production counters
-    private var chickenCount = 45
-    private var meatCount = 10
-    private var eggsCount = 20
+    private var chickenCount = 0
+    private var meatCount = 0
+    private var eggsCount = 0
 
     // Firebase Database reference
     private lateinit var database: DatabaseReference
@@ -31,8 +34,8 @@ class ProductionActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
-        // Initialize TextViews with the current production values
-        updateTextViews()
+        // Load current production data from Firebase
+        loadProductionData()
 
         // Set button listeners for updating production values
         binding.chickenCard.setOnClickListener { updateCount(binding.chickenAmount, "chicken") }
@@ -42,6 +45,35 @@ class ProductionActivity : AppCompatActivity() {
         // Save the updated data to Firebase when the "Update" button is clicked
         binding.updateButton.setOnClickListener {
             saveProductionDataToFirebase()
+        }
+    }
+
+    private fun loadProductionData() {
+        // Get the currently authenticated user
+        val user = auth.currentUser
+
+        if (user != null) {
+            val userId = user.uid
+
+            // Fetch production data from Firebase
+            database.child("users").child(userId).child("productionData")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            chickenCount = snapshot.child("chickenCount").getValue(Int::class.java) ?: 0
+                            meatCount = snapshot.child("meatCount").getValue(Int::class.java) ?: 0
+                            eggsCount = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
+                        }
+                        updateTextViews()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@ProductionActivity, "Failed to load data.", Toast.LENGTH_SHORT).show()
+                    }
+                })
+        } else {
+            // Handle case where user is not logged in
+            showToast("User is not logged in.")
         }
     }
 
@@ -107,3 +139,4 @@ class ProductionActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
+

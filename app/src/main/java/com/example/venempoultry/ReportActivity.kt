@@ -1,11 +1,9 @@
 package com.example.venempoultry
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import com.example.venempoultry.databinding.ActivityManagerReportBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -13,68 +11,60 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+
 class ReportActivity : AppCompatActivity() {
 
-    private lateinit var overallHealthTitle: TextView
-    private lateinit var flocksHealthText: TextView
-    private lateinit var eggsHealthText: TextView
-    private lateinit var eggProductionText: TextView
-    private lateinit var eggProductionDetail: TextView
-    private lateinit var meatProductionText: TextView
-    private lateinit var meatProductionDetail: TextView
+    private lateinit var binding: ActivityManagerReportBinding
 
     // Firebase reference
-    private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_manager_report)
+        binding = ActivityManagerReportBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Initialize views
-        overallHealthTitle = findViewById(R.id.overallHealthTitle)
-        flocksHealthText = findViewById(R.id.flocksHealthText)
-        eggsHealthText = findViewById(R.id.eggsHealthText)
-        eggProductionText = findViewById(R.id.eggProductionText)
-        eggProductionDetail = findViewById(R.id.eggProductionDetail)
-        meatProductionText = findViewById(R.id.meatProductionText)
-        meatProductionDetail = findViewById(R.id.meatProductionDetail)
-
-        // Initialize Firebase reference under the user's specific path
-        val userId = firebaseAuth.currentUser?.uid ?: ""
-        database = FirebaseDatabase.getInstance().reference.child("users").child(userId).child("reports")
+        // Initialize Firebase
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
 
         // Load data from Firebase and update the UI
         loadReportData()
     }
 
     private fun loadReportData() {
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    // Update overall health
-                    val overallHealth = snapshot.child("overallHealth").getValue(Double::class.java) ?: 0.0
-                    val flocksHealth = snapshot.child("flocksHealth").getValue(Double::class.java) ?: 0.0
-                    val eggsHealth = snapshot.child("eggsHealth").getValue(Double::class.java) ?: 0.0
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            // Reference to the user's production data
+            database.child("users").child(userId).child("productionData")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            // Get production data
+                            val totalChickens = snapshot.child("chickenCount").getValue(Int::class.java) ?: 0
+                            val totalMeat = snapshot.child("meatCount").getValue(Int::class.java) ?: 0
+                            val totalEggs = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
 
-                    // Set values to views
-                    flocksHealthText.text = "$flocksHealth%"
-                    eggsHealthText.text = "$eggsHealth%"
+                            // Update the UI with the correct TextView IDs from your layout
+                            binding.flocksHealthText.text = "$totalChickens"  // Assuming you want to show total chickens
+                            binding.eggProductionDetail.text = "$totalEggs Dozen" // Assuming you want to show total eggs as dozens
+                            binding.meatProductionDetail.text = "$totalMeat kg" // Assuming you want to show total meat
+                        } else {
+                            showToast("No production data found.")
+                        }
+                    }
 
-                    // Update egg production
-                    val eggProduction = snapshot.child("eggProduction").getValue(String::class.java) ?: "No data"
-                    eggProductionDetail.text = eggProduction
+                    override fun onCancelled(error: DatabaseError) {
+                        showToast("Failed to load production data: ${error.message}")
+                    }
+                })
+        } else {
+            showToast("User not logged in.")
+        }
+    }
 
-                    // Update meat production
-                    val meatProduction = snapshot.child("meatProduction").getValue(String::class.java) ?: "No data"
-                    meatProductionDetail.text = meatProduction
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@ReportActivity, "Failed to load reports.", Toast.LENGTH_SHORT).show()
-            }
-        })
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
-

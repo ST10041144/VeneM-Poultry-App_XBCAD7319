@@ -2,6 +2,7 @@ package com.example.venempoultry
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Switch
@@ -132,9 +133,12 @@ class SettingsActivity : AppCompatActivity() {
         // Retrieve the user's profile info from Firebase
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            database.child("users").child(userId).child("profile").addListenerForSingleValueEvent(object : ValueEventListener {
+            database.child("users").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val userName = snapshot.child("name").getValue(String::class.java) ?: "Unknown User"
+                    // Log the entire snapshot to see its structure
+                    Log.d("FirebaseData", snapshot.value.toString())
+
+                    val userName = snapshot.child("ld").getValue(String::class.java) ?: "Unknown User"
                     val userEmail = snapshot.child("email").getValue(String::class.java) ?: "Unknown Email"
 
                     // Set the profile data in the UI
@@ -142,10 +146,12 @@ class SettingsActivity : AppCompatActivity() {
                     userEmailTextView.text = userEmail
                 }
 
+
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(this@SettingsActivity, "Failed to load profile info", Toast.LENGTH_SHORT).show()
                 }
             })
         }
     }
+
 }

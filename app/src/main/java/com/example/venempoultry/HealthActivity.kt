@@ -1,12 +1,15 @@
 package com.example.venempoultry
 
+import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -14,67 +17,115 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-
+import java.util.Calendar
 
 class HealthActivity : AppCompatActivity() {
 
-    private lateinit var database: DatabaseReference
+    private lateinit var vaccinationsCard: CardView
+    private lateinit var medicationCard: CardView
 
-    // TextViews for displaying data
     private lateinit var medicationTextView: TextView
     private lateinit var medicationDateTextView: TextView
     private lateinit var batchATextView: TextView
     private lateinit var batchBTextView: TextView
 
+    // Firebase Database and Auth reference
+    private lateinit var database: DatabaseReference
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_staff_health)
 
-        // Initialize Firebase database reference
-        database = FirebaseDatabase.getInstance().getReference("healthData")
+        // Initialize Firebase Database and Auth
+        database = FirebaseDatabase.getInstance().reference
+        auth = FirebaseAuth.getInstance()
 
-        // Find the TextViews by ID
+        // Initialize views
+        vaccinationsCard = findViewById(R.id.vaccinationsCard)
+        medicationCard = findViewById(R.id.medicationCardView)
         medicationTextView = findViewById(R.id.medicationTextView)
         medicationDateTextView = findViewById(R.id.medicationDateTextView)
         batchATextView = findViewById(R.id.batchATextView)
         batchBTextView = findViewById(R.id.batchBTextView)
 
-        // Fetch and display health data from Firebase
-        fetchHealthData()
+        // Fetch data from Firebase and populate the UI
+        fetchDataFromFirebase()
+
+        // Set up click listeners for Vaccinations and Medication CardViews
+        setCardViewClickListeners()
     }
 
-    private fun fetchHealthData() {
-        // Assuming healthData node contains relevant data for medications and flock batches
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                // Handle the data snapshot from Firebase
-                if (snapshot.exists()) {
-                    // Fetch medication regiments data
-                    val medicationName = snapshot.child("medicationRegiments/name").getValue(String::class.java)
-                    val medicationDate = snapshot.child("medicationRegiments/date").getValue(String::class.java)
+    private fun fetchDataFromFirebase() {
+        val currentUser = auth.currentUser
 
-                    // Fetch flock batch data
-                    val batchA = snapshot.child("flockBatches/batchA").getValue(String::class.java)
-                    val batchB = snapshot.child("flockBatches/batchB").getValue(String::class.java)
+        if (currentUser != null) {
+            val userId = currentUser.uid
 
-                    // Update TextViews with the fetched data
-                    medicationTextView.text = medicationName ?: "No Medication Data"
-                    medicationDateTextView.text = medicationDate ?: "No Date Available"
-                    batchATextView.text = batchA ?: "No Batch A Data"
-                    batchBTextView.text = batchB ?: "No Batch B Data"
-                } else {
-                    Log.e("HealthActivity", "No data found in Firebase")
+            // Fetch Medication Regimens data
+            database.child("users").child(userId).child("medications").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        // Get the first medication entry (can be modified for multiple entries)
+                        val firstMedication = snapshot.children.firstOrNull()
+
+                        if (firstMedication != null) {
+                            val medicationName = firstMedication.child("medicationName").getValue(String::class.java) ?: "No data"
+                            val medicationDate = firstMedication.child("date").getValue(String::class.java) ?: "No data"
+                            medicationTextView.text = medicationName
+                            medicationDateTextView.text = medicationDate
+                        } else {
+                            medicationTextView.text = "No medication data"
+                            medicationDateTextView.text = ""
+                        }
+                    } else {
+                        medicationTextView.text = "No data to show"
+                        medicationDateTextView.text = ""
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Handle errors
-                Log.e("HealthActivity", "Database error: ${error.message}")
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@HealthActivity, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+
+            // Fetch Monitored Flock Batches data
+            database.child("users").child(userId).child("flockBatches").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val batchA = snapshot.child("batchA").getValue(String::class.java) ?: "No data"
+                        val batchB = snapshot.child("batchB").getValue(String::class.java) ?: "No data"
+                        batchATextView.text = batchA
+                        batchBTextView.text = batchB
+                    } else {
+                        batchATextView.text = "No data to show"
+                        batchBTextView.text = ""
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@HealthActivity, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setCardViewClickListeners() {
+        // Redirect to VaccinationsActivity when the Vaccinations card is clicked
+        vaccinationsCard.setOnClickListener {
+            val intent = Intent(this, VaccinationsActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Redirect to MedicationActivity when the Medication card is clicked
+        medicationCard.setOnClickListener {
+            val intent = Intent(this, MedicationActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
-
 
 
 
@@ -106,9 +157,49 @@ class VaccinationsActivity : AppCompatActivity() {
         medicationInput = findViewById(R.id.medication_input)
         submitButton = findViewById(R.id.vaccination_submit_button)
 
+        // Setup DatePicker for vaccination date input
+        setupDatePicker()
+
+        // Setup Batch Dropdown for batchAffected input
+        setupBatchDropdown()
+
         // Set onClickListener for the submit button
         submitButton.setOnClickListener {
             submitVaccinationForm()
+        }
+    }
+
+    private fun setupDatePicker() {
+        vaccinationDateInput.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            // Show DatePickerDialog
+            val datePickerDialog = DatePickerDialog(
+                this,
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    val formattedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                    vaccinationDateInput.setText(formattedDate)
+                },
+                year, month, day
+            )
+            datePickerDialog.show()
+        }
+    }
+
+    private fun setupBatchDropdown() {
+        // Create a list of batches
+        val batchOptions = listOf("Batch A", "Batch B", "Batch C", "Batch D", "Batch E", "Batch F")
+
+        // Create an ArrayAdapter to display the list of batches
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, batchOptions)
+        batchAffectedDropdown.setAdapter(adapter)
+
+        // Show dropdown when clicked
+        batchAffectedDropdown.setOnClickListener {
+            batchAffectedDropdown.showDropDown()
         }
     }
 
@@ -184,9 +275,33 @@ class MedicationActivity : AppCompatActivity() {
         prescriptionInput = findViewById(R.id.prescription_input)
         submitButton = findViewById(R.id.submit_button)
 
+        // Setup DatePicker for date input
+        setupDatePicker()
+
         // Set onClickListener for the submit button
         submitButton.setOnClickListener {
             submitMedicationForm()
+        }
+    }
+
+    private fun setupDatePicker() {
+        dateInput.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            // Show DatePickerDialog
+            val datePickerDialog = DatePickerDialog(
+                this,
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    // Format selected date and set it in the input field
+                    val formattedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                    dateInput.setText(formattedDate)
+                },
+                year, month, day
+            )
+            datePickerDialog.show()
         }
     }
 
@@ -222,7 +337,7 @@ class MedicationActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Medication data submitted successfully", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(this, "Failedf to submit data: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, "Failed to submit data: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                         }
                     }
             }
@@ -231,5 +346,6 @@ class MedicationActivity : AppCompatActivity() {
         }
     }
 }
+
 
 

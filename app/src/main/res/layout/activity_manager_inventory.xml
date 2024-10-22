@@ -43,7 +43,8 @@
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="Chicken Icon" />
+                android:src="@drawable/ic_chicken"
+            android:contentDescription="Chicken Icon" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -64,7 +65,7 @@
                     android:id="@+id/tvChickenBatchDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Latest: 22 September"
+                    android:text="Last updated: N/A"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray" />
             </LinearLayout>
@@ -93,7 +94,8 @@
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="Meat Icon" />
+                android:src="@drawable/ic_meat"
+            android:contentDescription="Meat Icon" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -114,7 +116,7 @@
                     android:id="@+id/tvMeatProductionDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Latest: 20 September"
+                    android:text="Last updated: N/A"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray" />
             </LinearLayout>
@@ -143,7 +145,8 @@
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="Egg Icon" />
+                android:src="@drawable/ic_eggs"
+            android:contentDescription="Egg Icon" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -164,7 +167,7 @@
                     android:id="@+id/tvEggProductionDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Latest: 21 September"
+                    android:text="Last updated: N/A"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray" />
             </LinearLayout>
@@ -193,7 +196,8 @@
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="Feed Icon" />
+                android:src="@drawable/ic_feed"
+            android:contentDescription="Feed Icon" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -214,7 +218,7 @@
                     android:id="@+id/tvFeedDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Latest: 21 September"
+                    android:text="Last updated: N/A"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray" />
             </LinearLayout>

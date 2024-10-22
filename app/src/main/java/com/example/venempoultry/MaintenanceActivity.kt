@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,8 @@ class StaffMaintenanceActivity : AppCompatActivity() {
 
     private lateinit var issueTitleEditText: EditText
     private lateinit var issueDateEditText: EditText
+    private lateinit var relatedToSpinner: Spinner
+    private lateinit var urgencyLevelSpinner: Spinner
     private lateinit var submitButton: Button
 
     private val db = FirebaseFirestore.getInstance()
@@ -28,18 +32,42 @@ class StaffMaintenanceActivity : AppCompatActivity() {
 
         issueTitleEditText = findViewById(R.id.issueTitleEditText)
         issueDateEditText = findViewById(R.id.issueDateEditText)
+        relatedToSpinner = findViewById(R.id.relatedToSpinner)
+        urgencyLevelSpinner = findViewById(R.id.urgencyLevelSpinner)
         submitButton = findViewById(R.id.submitButton)
+
+        // Populate "Related To" Spinner with poultry app data and add a prompt as the first item
+        val relatedToOptions = arrayOf("Select Related To", "Feeding System", "Watering System", "Housing", "Lighting", "Ventilation")
+        val relatedToAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, relatedToOptions)
+        relatedToAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        relatedToSpinner.adapter = relatedToAdapter
+
+        // Set the first item (hint) as disabled so it's not selectable
+        relatedToSpinner.setSelection(0)
+
+        // Populate "Urgency Level" Spinner with a prompt as the first item
+        val urgencyLevels = arrayOf("Select Urgency Level", "Low", "Medium", "High")
+        val urgencyLevelAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, urgencyLevels)
+        urgencyLevelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        urgencyLevelSpinner.adapter = urgencyLevelAdapter
+
+        // Set the first item (hint) as disabled so it's not selectable
+        urgencyLevelSpinner.setSelection(0)
 
         submitButton.setOnClickListener {
             val title = issueTitleEditText.text.toString().trim()
             val date = issueDateEditText.text.toString().trim()
+            val relatedTo = relatedToSpinner.selectedItem.toString()
+            val urgencyLevel = urgencyLevelSpinner.selectedItem.toString()
 
-            if (title.isNotEmpty() && date.isNotEmpty()) {
+            if (title.isNotEmpty() && date.isNotEmpty() && relatedTo != "Select Related To" && urgencyLevel != "Select Urgency Level") {
                 // Create a map to store the issue
                 val issue = hashMapOf(
                     "title" to title,
                     "date" to date,
-                    "status" to "Pending"  // You can have status like Pending, Resolved, etc.
+                    "relatedTo" to relatedTo,
+                    "urgencyLevel" to urgencyLevel,
+                    "status" to "Pending"  // Status can be Pending, Resolved, etc.
                 )
 
                 // Add the issue to Firestore
@@ -50,6 +78,8 @@ class StaffMaintenanceActivity : AppCompatActivity() {
                         // Clear the input fields after submitting
                         issueTitleEditText.text.clear()
                         issueDateEditText.text.clear()
+                        relatedToSpinner.setSelection(0)
+                        urgencyLevelSpinner.setSelection(0)
                     }
                     .addOnFailureListener {
                         Toast.makeText(this, "Failed to log issue", Toast.LENGTH_SHORT).show()
@@ -60,6 +90,8 @@ class StaffMaintenanceActivity : AppCompatActivity() {
         }
     }
 }
+
+
 
 
 
