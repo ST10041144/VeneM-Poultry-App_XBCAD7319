@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "203323443652",
+    "project_id": "venempoultry",
+    "storage_bucket": "venempoultry.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203323443652:android:6accb077eff6db4487bc91",
+        "android_client_info": {
+          "package_name": "com.example.venempoultry"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmw-GIzlS-vVH6eZlI8pJxZ9Ruzz6GN0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
