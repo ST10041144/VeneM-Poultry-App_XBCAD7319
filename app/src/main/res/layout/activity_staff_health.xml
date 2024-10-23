@@ -1,204 +1,257 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F9FFF9"
     tools:context=".HealthActivity">
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/medicationCard"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:layout_marginBottom="8dp"
-    app:cardElevation="4dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
-
+    <!-- Ongoing Medication Regiments -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/medicationCard"
+        android:layout_width="372dp"
+        android:layout_height="157dp"
+        android:layout_gravity="center"
+        android:layout_margin="6dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/orange_border"
+        android:backgroundTint="#FFA500"
+        android:backgroundTintMode="src_atop"
+        android:elevation="4dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ongoing Medication Regimens"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:text="@string/ongoing_medication_regiments"
+            android:textColor="#0A70C1"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <!-- Medication Regimen Details -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:paddingTop="8dp">
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
 
             <TextView
                 android:id="@+id/medicationTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Valuntion Vaccination" />
+                android:hint="@string/valuntion_vaccination"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/medicationDateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="26 Dec" />
+                android:hint="@string/_26_dec"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Monitored Flock Batches -->
+    <LinearLayout
+        android:id="@+id/flockBatchesCard"
+        android:layout_width="372dp"
+        android:layout_height="157dp"
+        android:layout_gravity="center"
+        android:layout_margin="6dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/orange_border"
+        android:backgroundTint="#FFA500"
+
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/monitored_flock_batches"
+            android:textColor="#0A70C1"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/batchATextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/batch_a"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/medicationView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/valuntion"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/batchBTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/batch_b"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/ozempic"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!-- Ongoing Medication Regiments -->
+    <LinearLayout
+        android:layout_width="372dp"
+        android:layout_height="157dp"
+        android:layout_gravity="center"
+        android:layout_margin="6dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/orange_border"
+        android:backgroundTintMode="src_atop"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next_checkup_dates"
+            android:textColor="#0A70C1"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/batchNameCheckup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/batch_a"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/dateCheckup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/_13_jan"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Bottom Buttons -->
+    <LinearLayout
+        android:id="@+id/buttonGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/vaccinationsCard"
+            android:layout_width="162dp"
+            android:layout_height="135dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/roundedd_button"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/vaccine" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/vaccine"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/medicationCardView"
+            android:layout_width="162dp"
+            android:layout_height="135dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/roundedd_button"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="70dp"
+                android:src="@drawable/vaccine" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/medication"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
-
-
-<androidx.cardview.widget.CardView
-android:id="@+id/flockBatchesCard"
-android:layout_width="0dp"
-android:layout_height="wrap_content"
-android:layout_margin="16dp"
-android:layout_marginBottom="8dp"
-app:cardElevation="4dp"
-app:layout_constraintTop_toBottomOf="@id/medicationCard"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
-
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="16dp">
-
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Monitored Flock Batches"
-    android:textStyle="bold"
-    android:textSize="16sp" />
-
-<!-- Batch A Info -->
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_horizontal"
-    android:paddingTop="8dp">
-
-    <TextView
-        android:id="@+id/batchATextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Batch A" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Valuntion" />
 </LinearLayout>
-
-<!-- Batch B Info -->
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_horizontal"
-    android:paddingTop="8dp">
-
-    <TextView
-        android:id="@+id/batchBTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Batch B" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ozempic" />
-</LinearLayout>
-
-</LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Bottom buttons: Vaccinations and Medication -->
-<GridLayout
-android:id="@+id/buttonGrid"
-android:layout_width="0dp"
-android:layout_height="wrap_content"
-android:columnCount="2"
-android:layout_margin="16dp"
-app:layout_constraintTop_toBottomOf="@id/flockBatchesCard"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintEnd_toEndOf="parent">
-
-<!-- Vaccinations Button -->
-<androidx.cardview.widget.CardView
-    android:id="@+id/vaccinationsCard"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_columnWeight="1"
-    android:layout_margin="8dp"
-    app:cardElevation="4dp">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp">
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_vaccination_icon"
-            android:contentDescription="Vaccination Icon" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vaccinations"
-            android:textSize="16sp"
-            android:paddingTop="8dp" />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
-
-<!-- Medication Button -->
-<androidx.cardview.widget.CardView
-    android:id="@+id/medicationCardView"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_columnWeight="1"
-    android:layout_margin="8dp"
-    app:cardElevation="4dp">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp">
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_medication_icon"
-            android:contentDescription="Medication Icon" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Medication"
-            android:textSize="16sp"
-            android:paddingTop="8dp" />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
-</GridLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>

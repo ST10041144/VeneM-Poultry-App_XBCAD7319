@@ -1,120 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".VaccinationsActivity">
 
-    <!-- Vaccination Title -->
-    <TextView
-        android:id="@+id/vaccination_form_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Vaccination Form"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="#F9FFF9"
+        android:gravity="center_horizontal"
+        tools:ignore="UselessParent">
 
-    <!-- Date Picker -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/vaccination_date_input_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Date"
-        app:layout_constraintTop_toBottomOf="@id/vaccination_form_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/vaccination_date_input"
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/medication_form"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="20dp"/>
+
+        <!-- Date Input Field -->
+        <EditText
+            android:id="@+id/vaccination_date_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-        android:clickable="true" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/date"
+            android:backgroundTint="#F0F0F0"
+            android:padding="12dp"
+            android:textColorHint="#8A8A8A"
+            android:layout_marginBottom="16dp"
+            android:background="#F0F5F0"/>
 
-    <!-- Disease Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/disease_input_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Disease"
-        app:layout_constraintTop_toBottomOf="@id/vaccination_date_input_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/disease_input"
+        <!-- Disease Input Field -->
+        <EditText
+            android:id="@+id/disease_input_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:hint="@string/disease"
+            android:backgroundTint="#F0F0F0"
+            android:padding="12dp"
+            android:textColorHint="#8A8A8A"
+            android:layout_marginBottom="16dp"
+            android:background="#F0F5F0"/>
 
-    <!-- Batch Affected Dropdown -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/batch_affected_input_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Batch Affected"
-        app:layout_constraintTop_toBottomOf="@id/disease_input_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp">
-        <AutoCompleteTextView
+        <!-- Batch Affected Spinner -->
+        <Spinner
             android:id="@+id/batch_affected_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:focusable="false"
-            tools:ignore="TouchTargetSizeCheck"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#F0F0F0"
+            android:padding="12dp"
+            android:spinnerMode="dropdown"
+            tools:ignore="TouchTargetSizeCheck" />
 
-    <!-- Description Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/description_input_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Description"
-        app:layout_constraintTop_toBottomOf="@id/batch_affected_input_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/description_input"
+        <!-- Description Input Field -->
+        <EditText
+            android:id="@+id/description_input_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="80dp"
+            android:hint="@string/description"
+            android:backgroundTint="#F0F0F0"
+            android:padding="12dp"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start"
+            android:textColorHint="#8A8A8A"
+            android:layout_marginBottom="16dp"
+            android:background="#F0F5F0"/>
 
-    <!-- Medication Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/medication_input_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Medication"
-        app:layout_constraintTop_toBottomOf="@id/description_input_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/medication_input"
+        <!-- Medication Input Field -->
+        <EditText
+            android:id="@+id/medication_input_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="50dp"
+            android:hint="@string/medication"
+            android:backgroundTint="#F0F0F0"
+            android:padding="12dp"
+            android:textColorHint="#8A8A8A"
+            android:layout_marginBottom="30dp"
+            android:background="#F0F5F0"/>
 
-    <!-- Submit Button -->
-    <Button
-        android:id="@+id/vaccination_submit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        android:text="Submit"
-        android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/medication_input_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/dateCheckup_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/next_checkup_date"
+            android:backgroundTint="#F0F0F0"
+            android:padding="12dp"
+            android:textColorHint="#8A8A8A"
+            android:layout_marginBottom="30dp"
+            android:background="#F0F5F0"/>
+
+        <EditText
+            android:id="@+id/prescribtion_input"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:hint="@string/prescription_instructions"
+            android:backgroundTint="#F0F0F0"
+            android:padding="12dp"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start"
+            android:textColorHint="#8A8A8A"
+            android:layout_marginBottom="16dp"
+            android:background="#F0F5F0"/>
+
+        <!-- Submit Button -->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#D9752D"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:text="Submit"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+
+</LinearLayout>
