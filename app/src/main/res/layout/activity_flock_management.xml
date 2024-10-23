@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextSpecies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Species" />
+
+    <EditText
+        android:id="@+id/editTextBatchSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Batch Size"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextAgeInWeeks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Age in Weeks"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/buttonAddFlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Flock" />
+
+    <Button
+        android:id="@+id/buttonFetchFlocks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fetch Flocks" />
+</LinearLayout>
