@@ -3,8 +3,11 @@ version: 2.1
 executors:
   android-executor:
     docker:
-      - image: circleci/android:api-30  # Use a CircleCI Android image with the required SDK version
-    working_directory: ~/repo  t
+      - image: circleci/android:api-30  # Android image with SDK 30
+    working_directory: ~/repo
+    environment:
+      _JAVA_OPTIONS: "-Xmx2048m"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 jobs:
   build:
@@ -13,10 +16,19 @@ jobs:
       - checkout  # Checkout the source code
 
       - run:
+          name: Install JDK 17
+          command: |
+            sudo apt-get update
+            sudo apt-get install openjdk-17-jdk
+            sudo update-alternatives --config java
+            java -version
+
+      # Update SDKs
+      - run:
           name: Update SDKs
           command: sdkmanager "platforms;android-30" "build-tools;30.0.3"
 
-      # Restore Gradle dependencies cache based on build.gradle.kts and settings.gradle.kts
+      # Restore Gradle dependencies cache
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
