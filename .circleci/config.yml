@@ -22,11 +22,14 @@ jobs:
             sudo apt-get update
 
       - run:
-          name: Install JDK 17
+          name: Install JDK 17 from an alternate source
           command: |
             sudo apt-get update
-            sudo apt-get install openjdk-17-jdk
-            sudo update-alternatives --config java
+            sudo apt-get install -y wget
+            wget https://download.java.net/openjdk/jdk17/ri/openjdk-17+35_linux-x64_bin.tar.gz
+            sudo tar -xzf openjdk-17+35_linux-x64_bin.tar.gz -C /opt/
+            sudo update-alternatives --install /usr/bin/java java /opt/jdk-17/bin/java 1
+            sudo update-alternatives --install /usr/bin/javac javac /opt/jdk-17/bin/javac 1
             java -version
 
       # Update SDKs
