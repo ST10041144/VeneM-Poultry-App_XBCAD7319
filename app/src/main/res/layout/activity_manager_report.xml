@@ -1,176 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".ReportActivity">
+    android:layout_height="match_parent">
 
-    <!-- Overall Health Section -->
     <TextView
-        android:id="@+id/overallHealthTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Overall Health"
-        android:textSize="18sp"
+        android:id="@+id/textView13"
+        android:layout_width="213dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="32dp"
+        android:text="Overrall Health"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/healthCard" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Health CardView -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/healthCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        app:cardElevation="4dp"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/overallHealthTitle"
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="369dp"
+        android:layout_height="182dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/eggProductionCard">
+        android:background="@drawable/orange_border"
+        app:layout_constraintTop_toBottomOf="@+id/textView13">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Left Circular Progress Bar -->
+        <ProgressBar
+            android:id="@+id/circularProgressBarLeft"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="30dp"
+            android:layout_centerVertical="true"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="70"
+            android:progressDrawable="@drawable/round_progress"
+            android:rotation="270"/>
+
+        <!-- Percentage Text for Left Circular Progress Bar -->
+        <TextView
+            android:id="@+id/leftProgressPercentage"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_alignTop="@id/circularProgressBarLeft"
+            android:layout_alignBottom="@id/circularProgressBarLeft"
+            android:layout_alignStart="@id/circularProgressBarLeft"
+            android:layout_alignEnd="@id/circularProgressBarLeft"
+            android:gravity="center"
+            android:text="70%"
+            android:textSize="16sp"
+            android:textColor="#FFA500"
+            android:textStyle="bold"/>
 
-            <!-- Flocks Health -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+        <!-- Right Circular Progress Bar -->
+        <ProgressBar
+            android:id="@+id/circularProgressBarRight"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:layout_centerVertical="true"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="50"
+            android:progressDrawable="@drawable/round_progress"
+            android:rotation="270"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Flocks"
-                    android:textStyle="bold"
-                    android:gravity="center" />
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
-
-                <TextView
-                    android:id="@+id/flocksHealthText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:gravity="center" />
-            </LinearLayout>
-
-            <!-- Eggs Health -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Eggs"
-                    android:textStyle="bold"
-                    android:gravity="center" />
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
-
-                <TextView
-                    android:id="@+id/eggsHealthText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:gravity="center" />
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Egg Production Section -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/eggProductionCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/healthCard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/meatProductionCard">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Percentage Text for Right Circular Progress Bar -->
+        <TextView
+            android:id="@+id/rightProgressPercentage"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_alignTop="@id/circularProgressBarRight"
+            android:layout_alignBottom="@id/circularProgressBarRight"
+            android:layout_alignStart="@id/circularProgressBarRight"
+            android:layout_alignEnd="@id/circularProgressBarRight"
+            android:gravity="center"
+            android:text="50%"
+            android:textSize="16sp"
+            android:textColor="#FFA500"
+            android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/eggProductionText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Egg Production This Week"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/eggProductionDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:text="0 Dozen"
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="83dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:text="Flocks"
+            android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
-    <!-- Meat Production Section -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/meatProductionCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/eggProductionCard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/meatProductionText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Meat Production This Week"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/meatProductionDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:text="0 kg"
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="83dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:text="Eggs"
+            android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        android:layout_width="372dp"
+        android:layout_height="134dp"
+        android:layout_marginTop="68dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/orange_border"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
+        <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="86dp"
+            android:layout_height="92dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="253dp"
+            android:layout_marginBottom="25dp"
+            app:srcCompat="@drawable/ic_egg" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="124dp"
+            android:layout_height="43dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="217dp"
+            android:layout_marginBottom="54dp"
+            android:text="35 Dozen"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="372dp"
+        android:layout_height="134dp"
+        android:layout_marginTop="84dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.564"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/orange_border"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="104dp"
+            android:layout_height="94dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="233dp"
+            android:layout_marginBottom="16dp"
+            app:srcCompat="@drawable/ic_feed" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="73dp"
+            android:layout_height="49dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="232dp"
+            android:layout_marginBottom="38dp"
+            android:text="2 Kg"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="304dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="36dp"
+        android:text="Egg Production this Week:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.205"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="299dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="48dp"
+        android:text="Meat Production this week:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.241"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
 </androidx.constraintlayout.widget.ConstraintLayout>
