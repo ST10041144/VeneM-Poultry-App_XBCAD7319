@@ -29,7 +29,7 @@
 
         <!-- Date Input Field -->
         <EditText
-            android:id="@+id/vaccination_date_input_layout"
+            android:id="@+id/vaccination_date_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/date"
@@ -41,7 +41,7 @@
 
         <!-- Disease Input Field -->
         <EditText
-            android:id="@+id/disease_input_layout"
+            android:id="@+id/disease_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/disease"
@@ -64,7 +64,7 @@
 
         <!-- Description Input Field -->
         <EditText
-            android:id="@+id/description_input_layout"
+            android:id="@+id/description_input"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:hint="@string/description"
@@ -79,7 +79,7 @@
 
         <!-- Medication Input Field -->
         <EditText
-            android:id="@+id/medication_input_layout"
+            android:id="@+id/medication_input"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="@string/medication"
@@ -116,6 +116,7 @@
 
         <!-- Submit Button -->
         <Button
+            android:id="@+id/vaccination_submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
