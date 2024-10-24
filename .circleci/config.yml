@@ -16,6 +16,12 @@ jobs:
       - checkout  # Checkout the source code
 
       - run:
+          name: Fix GPG Key Issue for Google Cloud SDK
+          command: |
+            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C0BA5CE6DC6315A3
+            sudo apt-get update
+
+      - run:
           name: Install JDK 17
           command: |
             sudo apt-get update
