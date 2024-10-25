@@ -30,11 +30,11 @@ class StaffMaintenanceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_staff_maintanance)
 
-        issueTitleEditText = findViewById(R.id.issueTitleEditText)
-        issueDateEditText = findViewById(R.id.issueDateEditText)
-        relatedToSpinner = findViewById(R.id.relatedToSpinner)
-        urgencyLevelSpinner = findViewById(R.id.urgencyLevelSpinner)
-        submitButton = findViewById(R.id.submitButton)
+        issueTitleEditText = findViewById(R.id.issuetitle)
+        issueDateEditText = findViewById(R.id.maintenancedate)
+        relatedToSpinner = findViewById(R.id.relateddropdown)
+        urgencyLevelSpinner = findViewById(R.id.urgencydropdown)
+        submitButton = findViewById(R.id.submitmaintain)
 
         // Populate "Related To" Spinner with poultry app data and add a prompt as the first item
         val relatedToOptions = arrayOf("Select Related To", "Feeding System", "Watering System", "Housing", "Lighting", "Ventilation")
