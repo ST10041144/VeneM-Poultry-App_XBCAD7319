@@ -47,9 +47,9 @@ class ReportActivity : AppCompatActivity() {
                             val totalEggs = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
 
                             // Update the UI with the correct TextView IDs from your layout
-                            binding.flocksHealthText.text = "$totalChickens"  // Assuming you want to show total chickens
-                            binding.eggProductionDetail.text = "$totalEggs Dozen" // Assuming you want to show total eggs as dozens
-                            binding.meatProductionDetail.text = "$totalMeat kg" // Assuming you want to show total meat
+                            binding.leftProgressPercentage.text = "$totalChickens"  // Assuming you want to show total chickens
+                            binding.textView21.text = "$totalEggs Dozen" // Assuming you want to show total eggs as dozens
+                            binding.textView22.text = "$totalMeat kg" // Assuming you want to show total meat
                         } else {
                             showToast("No production data found.")
                         }

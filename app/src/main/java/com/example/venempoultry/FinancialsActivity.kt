@@ -171,10 +171,10 @@ class FinancialFormActivity : AppCompatActivity() {
         dateInput = findViewById(R.id.dateInput)
         transactionTitleInput = findViewById(R.id.transactionTitleInput)
         toInput = findViewById(R.id.toInput)
-        saleExpenseDropdown = findViewById(R.id.saleExpenseDropdown)
+        saleExpenseDropdown = findViewById(R.id.transactionType)
         forDropdown = findViewById(R.id.forDropdown)
         descriptionInput = findViewById(R.id.descriptionInput)
-        submitButton = findViewById(R.id.submitButton)
+        submitButton = findViewById(R.id.productionbutton)
 
         // Initialize Firebase
         auth = FirebaseAuth.getInstance()

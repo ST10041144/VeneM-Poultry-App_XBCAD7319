@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/transactionTitle"
+        android:id="@+id/transactionTitleInput"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="21dp"
@@ -60,7 +60,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transactionTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/transactionTitleInput" />
 
     <Spinner
         android:id="@+id/transactionType"

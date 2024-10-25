@@ -39,7 +39,7 @@
             android:layout_marginBottom="0dp"
             android:src="@drawable/ic_feed" />
 
-        <TextView
+        <EditText
             android:id="@+id/amount_text4"
             android:layout_width="119dp"
             android:layout_height="wrap_content"
@@ -116,8 +116,8 @@
             android:layout_marginBottom="0dp"
             android:src="@drawable/ic_egg" />
 
-        <TextView
-            android:id="@+id/amount_text3"
+        <EditText
+            android:id="@+id/eggsamount"
             android:layout_width="119dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -193,8 +193,8 @@
             android:layout_marginBottom="0dp"
             android:src="@drawable/ic_meat" />
 
-        <TextView
-            android:id="@+id/amount_text2"
+        <EditText
+            android:id="@+id/meatCard"
             android:layout_width="119dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -285,8 +285,8 @@
             android:layout_marginBottom="0dp"
             android:src="@drawable/ic_chicken" />
 
-        <TextView
-            android:id="@+id/amount_text"
+        <EditText
+            android:id="@+id/chickenamount"
             android:layout_width="119dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -314,7 +314,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/plus_button"
+            android:id="@+id/plusbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
