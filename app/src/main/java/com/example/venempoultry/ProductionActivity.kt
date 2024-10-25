@@ -3,7 +3,6 @@ package com.example.venempoultry // Change to your actual package name
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
-import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
 import com.example.venempoultry.databinding.ActivityStaffProductionBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -39,12 +38,12 @@ class ProductionActivity : AppCompatActivity() {
         loadProductionData()
 
         // Set button listeners for updating production values
-        binding.chickens.setOnClickListener { updateCount(binding.chickenamount, "chicken") }
-        binding.meatCard.setOnClickListener { updateCount(binding.meatCard, "meat") }
-        binding.eggsamount.setOnClickListener { updateCount(binding.eggsamount, "eggs") }
+        binding.chickenCard.setOnClickListener { updateCount(binding.chickenAmount, "chicken") }
+        binding.meatCard.setOnClickListener { updateCount(binding.meatAmount, "meat") }
+        binding.eggsCard.setOnClickListener { updateCount(binding.eggsAmount, "eggs") }
 
         // Save the updated data to Firebase when the "Update" button is clicked
-        binding.productionbutton.setOnClickListener {
+        binding.updateButton.setOnClickListener {
             saveProductionDataToFirebase()
         }
     }
@@ -97,12 +96,12 @@ class ProductionActivity : AppCompatActivity() {
             updateTextViews()
         }
     }
-    private fun updateTextViews() {
-        binding.chickenamount.text = Editable.Factory.getInstance().newEditable(chickenCount.toString())
-        binding.meatCard.text = Editable.Factory.getInstance().newEditable("$meatCount kg")
-        binding.eggsamount.text = Editable.Factory.getInstance().newEditable(eggsCount.toString())
-    }
 
+    private fun updateTextViews() {
+        binding.chickenCountText.text = chickenCount.toString()
+        binding.meatCountText.text = "$meatCount kg"
+        binding.eggsCountText.text = eggsCount.toString()
+    }
 
     private fun saveProductionDataToFirebase() {
         // Get the currently authenticated user

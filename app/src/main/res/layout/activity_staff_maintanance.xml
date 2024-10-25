@@ -5,127 +5,142 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    tools:context=".StaffMaintenanceActivity">
 
-
-
+    <!-- Title -->
     <TextView
-        android:id="@+id/formtext"
-        android:layout_width="217dp"
-        android:layout_height="40dp"
-        android:gravity="center"
+        android:id="@+id/maintenanceFormTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Maintenance Form"
-        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/maintenancedate"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_edittext"
-        android:hint=" Date"
-        android:inputType="date"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/formtext" />
-
-    <EditText
-        android:id="@+id/issuetitle"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Date Input -->
+    <EditText
+        android:id="@+id/issueDateEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Date (DD/MM/YYYY)"
+        android:inputType="date"
+        android:padding="16dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/maintenanceFormTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Issue Title Input -->
+    <EditText
+        android:id="@+id/issueTitleEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:hint="Issue Title"
-        android:background="@drawable/rounded_edittext"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/issueDateEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/maintenancedate" />
-
-    <EditText
-        android:id="@+id/possiblesolution"
-        android:layout_width="0dp"
-        android:layout_height="72dp"
-        android:layout_marginTop="19dp"
-        android:hint="Possible Solution"
-        android:background="@drawable/rounded_edittext"
-        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/issuetitle" />
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"/>
 
+    <!-- Related To Label -->
+    <TextView
+        android:id="@+id/relatedToLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Related To"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/issueTitleEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Related To Spinner (dropdown) -->
     <Spinner
-        android:id="@+id/relateddropdown"
+        android:id="@+id/relatedToSpinner"
         android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_edittext"
-        android:hint="Related to"
-        android:textStyle="bold"
-        android:entries="@array/relatedto"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/relatedToLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/possiblesolution" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp" />
 
+    <!-- Urgency Level Label -->
+    <TextView
+        android:id="@+id/urgencyLevelLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Urgency Level"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/relatedToSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Urgency Level Spinner -->
     <Spinner
-        android:id="@+id/urgencydropdown"
+        android:id="@+id/urgencyLevelSpinner"
         android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_edittext"
-        android:hint="Urgency Level"
-        android:textStyle="bold"
-        android:entries="@array/urgencylevel"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/urgencyLevelLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relateddropdown" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"/>
 
+    <!-- Description Input -->
     <EditText
-        android:id="@+id/descriptiontext"
+        android:id="@+id/descriptionInput"
         android:layout_width="0dp"
-        android:layout_height="112dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="wrap_content"
         android:hint="Description"
-        android:background="@drawable/rounded_edittext"
         android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/urgencyLevelSpinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/urgencydropdown" />
-
-    <Button
-        android:id="@+id/submitmaintain"
-        android:layout_width="152dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="@android:color/holo_orange_light"
-        android:text="Submit"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/relateddropdown"
-        app:layout_constraintTop_toTopOf="@+id/relateddropdown"
-        app:srcCompat="@drawable/ic_dropdown" />
+    <!-- Possible Solution Input -->
+    <EditText
+        android:id="@+id/possibleSolutionInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Possible Solution (Optional)"
+        android:inputType="textMultiLine"
+        android:padding="16dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/descriptionInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"/>
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="25dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/urgencydropdown"
-        app:layout_constraintTop_toTopOf="@+id/urgencydropdown"
-        app:srcCompat="@drawable/ic_dropdown" />
-
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Submit"
+        android:backgroundTint="@android:color/holo_orange_light"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/possibleSolutionInput"
+        android:layout_marginHorizontal="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
