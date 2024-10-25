@@ -1,0 +1,88 @@
+version: 2.1
+
+executors:
+  android-executor:
+    docker:
+      - image: circleci/android:api-30  # Android image with SDK 30
+    working_directory: ~/repo
+    environment:
+      _JAVA_OPTIONS: "-Xmx2048m"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+jobs:
+  build:
+    executor: android-executor
+    steps:
+      - checkout  # Checkout the source code
+
+      - run:
+          name: Fix GPG Key Issue for Google Cloud SDK
+          command: |
+            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C0BA5CE6DC6315A3
+            sudo apt-get update
+
+      - run:
+          name: Install JDK 17 from an alternate source
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y wget
+            wget https://download.java.net/openjdk/jdk17/ri/openjdk-17+35_linux-x64_bin.tar.gz
+            sudo tar -xzf openjdk-17+35_linux-x64_bin.tar.gz -C /opt/
+            sudo update-alternatives --install /usr/bin/java java /opt/jdk-17/bin/java 1
+            sudo update-alternatives --install /usr/bin/javac javac /opt/jdk-17/bin/javac 1
+            java -version
+
+      # Update SDKs
+      - run:
+          name: Update SDKs
+          command: sdkmanager "platforms;android-30" "build-tools;30.0.3"
+
+      # Restore Gradle dependencies cache
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
+            - v1-dependencies-
+
+      # Ensure Gradle wrapper has executable permissions
+      - run:
+          name: Grant Gradle executable permissions
+          command: chmod +x ./gradlew
+
+      # Run Gradle clean and build
+      - run:
+          name: Gradle Clean
+          command: ./gradlew clean
+
+      - run:
+          name: Gradle Build
+          command: ./gradlew assembleDebug
+
+      # Save Gradle cache after build
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+          key: v1-dependencies-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
+
+  test:
+    executor: android-executor
+    steps:
+      - checkout
+
+      # Ensure Gradle wrapper has executable permissions before running tests
+      - run:
+          name: Grant Gradle executable permissions
+          command: chmod +x ./gradlew
+
+      - run:
+          name: Gradle Test
+          command: ./gradlew test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
