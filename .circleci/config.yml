@@ -6,6 +6,7 @@ executors:
       - image: circleci/android:api-30  # Android image with SDK 30
     working_directory: ~/repo
     environment:
+      JAVA_HOME: /opt/jdk-17  # Set JAVA_HOME to the expected Java 17 installation path
       _JAVA_OPTIONS: "-Xmx2048m"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
@@ -30,7 +31,12 @@ jobs:
             sudo tar -xzf openjdk-17+35_linux-x64_bin.tar.gz -C /opt/
             sudo update-alternatives --install /usr/bin/java java /opt/jdk-17/bin/java 1
             sudo update-alternatives --install /usr/bin/javac javac /opt/jdk-17/bin/javac 1
-            java -version
+            echo "Java version installed:"
+            /opt/jdk-17/bin/java -version  # Verify installation
+
+      - run:
+          name: Set org.gradle.java.home in gradle.properties
+          command: echo "org.gradle.java.home=/opt/jdk-17" >> ./gradle.properties  # Set Java 17 path
 
       # Update SDKs
       - run:
