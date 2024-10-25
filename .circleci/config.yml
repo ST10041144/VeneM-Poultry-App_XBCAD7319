@@ -6,6 +6,7 @@ executors:
       - image: circleci/android:api-30  # Android image with SDK 30
     working_directory: ~/repo
     environment:
+      JAVA_HOME: /opt/jdk-17  # Set JAVA_HOME to the Java 17 installation path
       _JAVA_OPTIONS: "-Xmx2048m"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
