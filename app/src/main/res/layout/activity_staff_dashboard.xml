@@ -5,16 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ManagerActivity">
+    tools:context=".StaffActivity">
 
     <!-- CardView for health -->
 
+    <!-- CardView for production -->
+
+    <!-- CardView for settings -->
     <LinearLayout
         android:id="@+id/HealthCard"
         android:layout_width="162dp"
         android:layout_height="135dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="48dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
         android:gravity="center"
@@ -38,13 +41,15 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- CardView for production -->
+    <!-- CardView for Maintenance -->
+
+    <!-- Manager and Logout Buttons -->
     <LinearLayout
         android:id="@+id/ProductionCard"
         android:layout_width="162dp"
         android:layout_height="135dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="184dp"
+        android:layout_marginBottom="180dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
         android:gravity="center"
@@ -68,14 +73,12 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-
-    <!-- CardView for settings -->
     <LinearLayout
         android:id="@+id/SettingsCard"
         android:layout_width="162dp"
         android:layout_height="135dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="244dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="248dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
         android:gravity="center"
@@ -99,7 +102,6 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- CardView for Maintenance -->
     <LinearLayout
         android:id="@+id/maintenanceCard"
         android:layout_width="162dp"
@@ -113,8 +115,8 @@
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.259"
-        app:layout_constraintStart_toEndOf="@+id/SettingsCard">
+        app:layout_constraintHorizontal_bias="0.921"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:layout_width="70dp"
@@ -131,35 +133,23 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Manager Button -->
-
-    <!-- Logout Button -->
-
     <Button
         android:id="@+id/managerButton"
-        android:layout_width="136dp"
-        android:layout_height="47dp"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="116dp"
-        android:backgroundTint="#F48F42"
-        android:text="@string/manager"
-        app:layout_constraintBottom_toTopOf="@+id/ProductionCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Manager Section"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="353dp"
-        android:layout_height="56dp"
-        android:layout_margin="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#F48F42"
-        android:text="@string/logout"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Logout"
+        app:layout_constraintBottom_toTopOf="@+id/managerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

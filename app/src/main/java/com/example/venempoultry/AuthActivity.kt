@@ -1,10 +1,13 @@
 package com.example.venempoultry
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -17,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 
 
+
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -25,6 +29,10 @@ class AuthActivity : AppCompatActivity() {
     private lateinit var passwordEditText: EditText
     private lateinit var signInButton: Button
     private lateinit var registerTextView: TextView
+    private lateinit var cbRememberMe: CheckBox
+
+    // SharedPreferences to store the login details
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +41,16 @@ class AuthActivity : AppCompatActivity() {
         // Initialize Firebase and UI elements
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         signInButton = findViewById(R.id.signInButton)
+        cbRememberMe = findViewById(R.id.cbRememberMe)
         registerTextView = findViewById(R.id.registerTextView)
+
+        // Attempt auto-login if credentials are saved and "Remember Me" was checked
+        autoLogin()
 
         // Set sign-in button click listener
         signInButton.setOnClickListener {
@@ -64,6 +77,12 @@ class AuthActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    // If "Remember Me" is checked, save credentials
+                    if (cbRememberMe.isChecked) {
+                        saveCredentials(email, password)
+                    } else {
+                        clearCredentials()
+                    }
                     // User is successfully authenticated, proceed to the dashboard
                     navigateToDashboard()
                 } else {
@@ -85,7 +104,62 @@ class AuthActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    // Save credentials to SharedPreferences
+    private fun saveCredentials(email: String, password: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("email", email)
+        editor.putString("password", password)
+        editor.putBoolean("rememberMe", true)
+        editor.apply()
+    }
+
+    // Load saved credentials from SharedPreferences
+    private fun loadCredentials() {
+        val email = sharedPreferences.getString("email", "")
+        val password = sharedPreferences.getString("password", "")
+        val rememberMe = sharedPreferences.getBoolean("rememberMe", false)
+
+        if (rememberMe && !email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+            emailEditText.setText(email)
+            passwordEditText.setText(password)
+            cbRememberMe.isChecked = true
+        }
+    }
+
+    // Clear saved credentials from SharedPreferences
+    private fun clearCredentials() {
+        val editor = sharedPreferences.edit()
+        editor.remove("email")
+        editor.remove("password")
+        editor.remove("rememberMe")
+        editor.apply()
+    }
+
+    // Auto-login if the saved credentials are available and "Remember Me" was checked
+    private fun autoLogin() {
+        val email = sharedPreferences.getString("email", "")
+        val password = sharedPreferences.getString("password", "")
+        val rememberMe = sharedPreferences.getBoolean("rememberMe", false)
+
+        if (rememberMe && email != null && password != null) {
+            // Automatically attempt login with saved credentials
+            loginUser(email, password)
+        }
+    }
+
+    // Log out the user (clear saved credentials)
+    fun logoutUser() {
+        auth.signOut()  // Sign out from Firebase
+        clearCredentials()  // Clear saved credentials
+        showToast("You have been logged out.")
+        // Optionally, navigate to the login screen again
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }
+
 
 
 

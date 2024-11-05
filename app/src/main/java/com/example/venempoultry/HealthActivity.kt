@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -132,11 +133,11 @@ class HealthActivity : AppCompatActivity() {
 
 class VaccinationsActivity : AppCompatActivity() {
 
-    private lateinit var vaccinationDateInput: TextInputEditText
-    private lateinit var diseaseInput: TextInputEditText
+    private lateinit var vaccinationDateInput: EditText
+    private lateinit var diseaseInput: EditText
     private lateinit var batchAffectedDropdown: AutoCompleteTextView
-    private lateinit var descriptionInput: TextInputEditText
-    private lateinit var medicationInput: TextInputEditText
+    private lateinit var descriptionInput: EditText
+    private lateinit var medicationInput: EditText
     private lateinit var submitButton: Button
 
     private lateinit var database: DatabaseReference
@@ -248,6 +249,8 @@ class VaccinationsActivity : AppCompatActivity() {
         }
     }
 }
+
+
 
 
 

@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,24 +22,31 @@ class StaffActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_staff_dashboard)
+        setContentView(R.layout.activity_staff_dashboard) // Ensure this layout file exists
 
         // Initialize Firebase components
-        database = FirebaseDatabase.getInstance().reference
-        currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            database = FirebaseDatabase.getInstance().reference
+            currentUserID = currentUser.uid
+        } else {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         try {
-            // Initialize CardViews
-            val cardHealth = findViewById<CardView>(R.id.HealthCard) // Updated ID
-            val cardProduction = findViewById<CardView>(R.id.ProductionCard) // Updated ID
-            val cardSettings = findViewById<CardView>(R.id.SettingsCard) // Updated ID
-            val cardMaintenance = findViewById<CardView>(R.id.maintenanceCard) // Updated ID
+            // Initialize LinearLayouts (not CardViews)
+            val cardHealth = findViewById<LinearLayout>(R.id.HealthCard)
+            val cardProduction = findViewById<LinearLayout>(R.id.ProductionCard)
+            val cardSettings = findViewById<LinearLayout>(R.id.SettingsCard)
+            val cardMaintenance = findViewById<LinearLayout>(R.id.maintenanceCard)
 
             // Initialize Buttons
             val managerButton = findViewById<Button>(R.id.managerButton)
             val logoutButton = findViewById<Button>(R.id.logoutButton)
 
-            // Set Click Listeners for each CardView
+            // Set Click Listeners for each LinearLayout
             cardHealth.setOnClickListener { onCardClick(it) }
             cardProduction.setOnClickListener { onCardClick(it) }
             cardSettings.setOnClickListener { onCardClick(it) }

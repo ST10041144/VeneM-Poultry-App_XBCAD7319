@@ -1,133 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#F9FFF9"
     tools:context=".VaccinationsActivity">
 
-    <LinearLayout
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/medication_form"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"/>
+
+    <!-- Date Input Field -->
+    <EditText
+        android:id="@+id/vaccination_date_input"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:background="#F9FFF9"
-        android:gravity="center_horizontal"
-        tools:ignore="UselessParent">
+        android:layout_height="wrap_content"
+        android:hint="@string/date"
+        android:padding="12dp"
+        android:textColorHint="#8A8A8A"
+        android:backgroundTint="#F0F0F0"
+        android:layout_marginBottom="16dp"/>
 
-        <!-- Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/medication_form"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="20dp"/>
+    <!-- Disease Input Field -->
+    <EditText
+        android:id="@+id/disease_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/disease"
+        android:padding="12dp"
+        android:textColorHint="#8A8A8A"
+        android:backgroundTint="#F0F0F0"
+        android:layout_marginBottom="16dp"/>
 
-        <!-- Date Input Field -->
-        <EditText
-            android:id="@+id/vaccination_date_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/date"
-            android:backgroundTint="#F0F0F0"
-            android:padding="12dp"
-            android:textColorHint="#8A8A8A"
-            android:layout_marginBottom="16dp"
-            android:background="#F0F5F0"/>
-
-        <!-- Disease Input Field -->
-        <EditText
-            android:id="@+id/disease_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/disease"
-            android:backgroundTint="#F0F0F0"
-            android:padding="12dp"
-            android:textColorHint="#8A8A8A"
-            android:layout_marginBottom="16dp"
-            android:background="#F0F5F0"/>
-
-        <!-- Batch Affected Spinner -->
-        <Spinner
+    <!-- Batch Affected Dropdown -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+        <AutoCompleteTextView
             android:id="@+id/batch_affected_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#F0F0F0"
             android:padding="12dp"
-            android:spinnerMode="dropdown"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:backgroundTint="#F0F0F0"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Description Input Field -->
-        <EditText
-            android:id="@+id/description_input"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:hint="@string/description"
-            android:backgroundTint="#F0F0F0"
-            android:padding="12dp"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top|start"
-            android:textColorHint="#8A8A8A"
-            android:layout_marginBottom="16dp"
-            android:background="#F0F5F0"/>
+    <!-- Description Input Field -->
+    <EditText
+        android:id="@+id/description_input"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:hint="@string/description"
+        android:padding="12dp"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:gravity="top|start"
+        android:textColorHint="#8A8A8A"
+        android:backgroundTint="#F0F0F0"
+        android:layout_marginBottom="16dp"/>
 
-        <!-- Medication Input Field -->
-        <EditText
-            android:id="@+id/medication_input"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/medication"
-            android:backgroundTint="#F0F0F0"
-            android:padding="12dp"
-            android:textColorHint="#8A8A8A"
-            android:layout_marginBottom="30dp"
-            android:background="#F0F5F0"/>
+    <!-- Medication Input Field -->
+    <EditText
+        android:id="@+id/medication_input"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/medication"
+        android:padding="12dp"
+        android:textColorHint="#8A8A8A"
+        android:backgroundTint="#F0F0F0"
+        android:layout_marginBottom="30dp"/>
 
-        <EditText
-            android:id="@+id/dateCheckup_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/next_checkup_date"
-            android:backgroundTint="#F0F0F0"
-            android:padding="12dp"
-            android:textColorHint="#8A8A8A"
-            android:layout_marginBottom="30dp"
-            android:background="#F0F5F0"/>
-
-        <EditText
-            android:id="@+id/prescribtion_input"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:hint="@string/prescription_instructions"
-            android:backgroundTint="#F0F0F0"
-            android:padding="12dp"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top|start"
-            android:textColorHint="#8A8A8A"
-            android:layout_marginBottom="16dp"
-            android:background="#F0F5F0"/>
-
-        <!-- Submit Button -->
-        <Button
-            android:id="@+id/vaccination_submit_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#D9752D"
-            android:elevation="4dp"
-            android:padding="16dp"
-            android:text="Submit"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/vaccination_submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#D9752D"
+        android:elevation="4dp"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>
