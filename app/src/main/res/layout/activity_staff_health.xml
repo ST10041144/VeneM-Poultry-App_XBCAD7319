@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#F9FFF9"
+    android:background="@color/white"
     tools:context=".HealthActivity">
 
     <!-- Ongoing Medication Regiments -->

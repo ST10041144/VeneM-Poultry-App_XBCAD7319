@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".StaffMaintenanceActivity">
 
     <!-- Title -->
@@ -28,8 +29,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Date (DD/MM/YYYY)"
-        android:inputType="date"
         android:padding="16dp"
+        android:focusable="false"
+        android:inputType="none"
         android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/maintenanceFormTitle"
         app:layout_constraintStart_toStartOf="parent"

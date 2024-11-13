@@ -1,6 +1,7 @@
 package com.example.venempoultry
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.venempoultry.databinding.ActivityManagerReportBinding
@@ -15,13 +16,12 @@ import com.google.firebase.database.ValueEventListener
 class ReportActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityManagerReportBinding
-
-    // Firebase reference
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Initialize view binding
         binding = ActivityManagerReportBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -29,42 +29,52 @@ class ReportActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        // Load data from Firebase and update the UI
+        // Check if the user is authenticated
+        val user = auth.currentUser
+        if (user == null) {
+            // User is not logged in, show an error message or redirect to login screen
+            showToast("Please log in to view the production data.")
+            return
+        }
+
+        // Proceed with loading data from Firebase
         loadReportData()
     }
 
     private fun loadReportData() {
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            // Reference to the user's production data
-            database.child("users").child(userId).child("productionData")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()) {
-                            // Get production data
-                            val totalChickens = snapshot.child("chickenCount").getValue(Int::class.java) ?: 0
-                            val totalMeat = snapshot.child("meatCount").getValue(Int::class.java) ?: 0
-                            val totalEggs = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
+        database.child("productionData")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        // Retrieve the egg and meat production data
+                        val totalEggs = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
+                        val totalMeat = snapshot.child("meatCount").getValue(Int::class.java) ?: 0
 
-                            // Update the UI with the correct TextView IDs from your layout
-                            binding.flocksHealthText.text = "$totalChickens"  // Assuming you want to show total chickens
-                            binding.eggProductionDetail.text = "$totalEggs Dozen" // Assuming you want to show total eggs as dozens
-                            binding.meatProductionDetail.text = "$totalMeat kg" // Assuming you want to show total meat
-                        } else {
-                            showToast("No production data found.")
+                        // Update the UI dynamically
+                        runOnUiThread {
+                            // Update egg production detail
+                            binding.eggProductionDetail.text = "$totalEggs Dozen"
+                            // Update meat production detail
+                            binding.meatProductionDetail.text = "$totalMeat Kg"
                         }
+                    } else {
+                        Log.d("ReportActivity", "No production data found.")
+                        showToast("No production data found.")
                     }
+                }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        showToast("Failed to load production data: ${error.message}")
-                    }
-                })
-        } else {
-            showToast("User not logged in.")
-        }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("ReportActivity", "Failed to load production data: ${error.message}")
+                    showToast("Failed to load production data: ${error.message}")
+                }
+            })
     }
+
+
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
+
+

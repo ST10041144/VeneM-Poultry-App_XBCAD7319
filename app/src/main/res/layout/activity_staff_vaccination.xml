@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="24dp"
     android:gravity="center"
-    android:background="#F9FFF9"
+    android:background="@color/white"
     tools:context=".VaccinationsActivity">
 
     <!-- Title -->

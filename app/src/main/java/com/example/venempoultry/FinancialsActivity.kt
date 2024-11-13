@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.util.Calendar
 
+
 class FinancialsActivity : AppCompatActivity() {
 
     private lateinit var financialEntriesContainer: LinearLayout
@@ -65,7 +66,7 @@ class FinancialsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@FinancialsActivity, "Failed to load data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FinancialsActivity, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -79,19 +80,31 @@ class FinancialsActivity : AppCompatActivity() {
     }
 
     private fun addEntryToContainer(entry: FinancialEntry) {
+        // Inflate the financial entry layout
         val entryLayout = LayoutInflater.from(this).inflate(R.layout.financial_entry_item, financialEntriesContainer, false)
 
+        // Find views within the inflated layout
         val titleTextView: TextView = entryLayout.findViewById(R.id.tvEntryTitle)
         val categoryTextView: TextView = entryLayout.findViewById(R.id.tvEntryCategory)
         val amountTextView: TextView = entryLayout.findViewById(R.id.tvEntryAmount)
 
+        // Format the amount to display with R and two decimal places
+        amountTextView.text = String.format("R%.2f", entry.amount)
+        amountTextView.setTextColor(
+            if (entry.amount >= 0) ContextCompat.getColor(this, android.R.color.holo_green_dark)
+            else ContextCompat.getColor(this, android.R.color.holo_red_dark)
+        )
+
         // Set the text views with entry data
         titleTextView.text = entry.title
-        categoryTextView.text = entry.type // Sale or Expense
-        amountTextView.text = entry.forPurpose // Assuming this is the amount you want to show
+        categoryTextView.text = entry.type
 
+        // Add the entry layout to the container
         financialEntriesContainer.addView(entryLayout)
     }
+
+
+
 
     private fun setupTabListeners() {
         tabAll.setOnClickListener {
@@ -135,6 +148,7 @@ class FinancialsActivity : AppCompatActivity() {
 
 // Define a data class to represent a financial entry
 data class FinancialEntry(
+    val amount: Double = 0.0,       // Field for the amount
     val date: String = "",         // Field for date
     val description: String = "",  // Field for description
     val forPurpose: String = "",    // Field for the amount or purpose of the transaction
@@ -151,6 +165,7 @@ data class FinancialEntry(
 class FinancialFormActivity : AppCompatActivity() {
 
     // Declare views for easier access
+    private lateinit var amountInput: EditText
     private lateinit var dateInput: EditText
     private lateinit var transactionTitleInput: EditText
     private lateinit var toInput: EditText
@@ -163,11 +178,14 @@ class FinancialFormActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_financials_form) // Adjust as necessary
 
         // Initialize views
+        amountInput = findViewById(R.id.amountInput)
         dateInput = findViewById(R.id.dateInput)
         transactionTitleInput = findViewById(R.id.transactionTitleInput)
         toInput = findViewById(R.id.toInput)
@@ -230,7 +248,7 @@ class FinancialFormActivity : AppCompatActivity() {
     }
 
     private fun handleSubmit() {
-        // Retrieve entered data
+        val amount = amountInput.text.toString().toDoubleOrNull()
         val date = dateInput.text.toString()
         val transactionTitle = transactionTitleInput.text.toString()
         val to = toInput.text.toString()
@@ -239,13 +257,14 @@ class FinancialFormActivity : AppCompatActivity() {
         val description = descriptionInput.text.toString()
 
         // Simple validation
-        if (date.isBlank() || transactionTitle.isBlank() || to.isBlank() || description.isBlank()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+        if (amount == null || date.isBlank() || transactionTitle.isBlank() || to.isBlank() || description.isBlank()) {
+            Toast.makeText(this, "Please fill in all fields correctly", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Create a financial entry object
+        // Create the financial entry
         val financialEntry = FinancialEntry(
+            amount = amount,
             date = date,
             title = transactionTitle,
             to = to,
@@ -254,27 +273,22 @@ class FinancialFormActivity : AppCompatActivity() {
             description = description
         )
 
-        // Get the current user ID
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            // Save data to Firebase under the user's node in "users/$uid/financials"
-            database.child("users").child(userId).child("financials").push().setValue(financialEntry)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Financial entry added successfully!", Toast.LENGTH_SHORT).show()
-                    clearForm()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to add entry: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(this, "User not logged in.", Toast.LENGTH_SHORT).show()
-        }
+        // Save to database
+        database.child("financial_entries").push().setValue(financialEntry)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Financial entry added successfully!", Toast.LENGTH_SHORT).show()
+                clearForm()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to add entry: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
 
 
 
     private fun clearForm() {
+        amountInput.text.clear()
         dateInput.text.clear()
         transactionTitleInput.text.clear()
         toInput.text.clear()
@@ -285,6 +299,7 @@ class FinancialFormActivity : AppCompatActivity() {
 
     // Data class for financial entries
     data class FinancialEntry(
+        val amount: Double = 0.0,
         val date: String = "",
         val title: String = "",
         val to: String = "",

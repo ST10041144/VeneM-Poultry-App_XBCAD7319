@@ -1,6 +1,8 @@
 package com.example.venempoultry
 
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,92 +16,176 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
+
 
 class StaffMaintenanceActivity : AppCompatActivity() {
 
+    // UI Components
     private lateinit var issueTitleEditText: EditText
     private lateinit var issueDateEditText: EditText
     private lateinit var relatedToSpinner: Spinner
     private lateinit var urgencyLevelSpinner: Spinner
     private lateinit var submitButton: Button
 
-    private val db = FirebaseFirestore.getInstance()
+    // Firebase Realtime Database instance
+    private val db = FirebaseDatabase.getInstance().reference
+
+    // Spinner Options
+    private val relatedToOptions = arrayOf(
+        "Select Related To", "Feeding System", "Watering System",
+        "Housing", "Lighting", "Ventilation"
+    )
+    private val urgencyLevels = arrayOf(
+        "Select Urgency Level", "Low", "Medium", "High"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_staff_maintanance)
 
+        // Initialize UI components
+        initUI()
+
+        // Set up listeners and spinners
+        setupSpinners()
+        setupDatePicker()
+        setupSubmitButton()
+    }
+
+    // Initialize UI components
+    private fun initUI() {
         issueTitleEditText = findViewById(R.id.issueTitleEditText)
         issueDateEditText = findViewById(R.id.issueDateEditText)
         relatedToSpinner = findViewById(R.id.relatedToSpinner)
         urgencyLevelSpinner = findViewById(R.id.urgencyLevelSpinner)
         submitButton = findViewById(R.id.submitButton)
+    }
 
-        // Populate "Related To" Spinner with poultry app data and add a prompt as the first item
-        val relatedToOptions = arrayOf("Select Related To", "Feeding System", "Watering System", "Housing", "Lighting", "Ventilation")
-        val relatedToAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, relatedToOptions)
+    // Set up spinners with options
+    private fun setupSpinners() {
+        // Setup "Related To" Spinner
+        val relatedToAdapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, relatedToOptions
+        )
         relatedToAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         relatedToSpinner.adapter = relatedToAdapter
-
-        // Set the first item (hint) as disabled so it's not selectable
         relatedToSpinner.setSelection(0)
 
-        // Populate "Urgency Level" Spinner with a prompt as the first item
-        val urgencyLevels = arrayOf("Select Urgency Level", "Low", "Medium", "High")
-        val urgencyLevelAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, urgencyLevels)
+        // Setup "Urgency Level" Spinner
+        val urgencyLevelAdapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, urgencyLevels
+        )
         urgencyLevelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         urgencyLevelSpinner.adapter = urgencyLevelAdapter
-
-        // Set the first item (hint) as disabled so it's not selectable
         urgencyLevelSpinner.setSelection(0)
+    }
 
+    // Show date picker dialog on date EditText click
+    private fun setupDatePicker() {
+        issueDateEditText.setOnClickListener {
+            showDatePickerDialog()
+        }
+    }
+
+    // Submit button click listener
+    private fun setupSubmitButton() {
         submitButton.setOnClickListener {
             val title = issueTitleEditText.text.toString().trim()
             val date = issueDateEditText.text.toString().trim()
             val relatedTo = relatedToSpinner.selectedItem.toString()
             val urgencyLevel = urgencyLevelSpinner.selectedItem.toString()
 
-            if (title.isNotEmpty() && date.isNotEmpty() && relatedTo != "Select Related To" && urgencyLevel != "Select Urgency Level") {
-                // Create a map to store the issue
-                val issue = hashMapOf(
-                    "title" to title,
-                    "date" to date,
-                    "relatedTo" to relatedTo,
-                    "urgencyLevel" to urgencyLevel,
-                    "status" to "Pending"  // Status can be Pending, Resolved, etc.
-                )
+            // Debug log for click event
+            Log.d("StaffMaintenanceActivity", "Submit button clicked")
 
-                // Add the issue to Firestore
-                db.collection("maintenanceIssues")
-                    .add(issue)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Issue logged successfully", Toast.LENGTH_SHORT).show()
-                        // Clear the input fields after submitting
-                        issueTitleEditText.text.clear()
-                        issueDateEditText.text.clear()
-                        relatedToSpinner.setSelection(0)
-                        urgencyLevelSpinner.setSelection(0)
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(this, "Failed to log issue", Toast.LENGTH_SHORT).show()
-                    }
+            if (isInputValid(title, date, relatedTo, urgencyLevel)) {
+                Log.d("StaffMaintenanceActivity", "Input is valid. Attempting to save issue.")
+                saveIssueToDatabase(title, date, relatedTo, urgencyLevel)
             } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Log.d("StaffMaintenanceActivity", "Input is invalid.")
+                showToast("Please fill in all fields")
             }
         }
     }
+
+    // Check if input fields are valid
+    private fun isInputValid(
+        title: String, date: String,
+        relatedTo: String, urgencyLevel: String
+    ): Boolean {
+        return title.isNotEmpty() &&
+                date.isNotEmpty() &&
+                relatedTo != "Select Related To" &&
+                urgencyLevel != "Select Urgency Level"
+    }
+
+    // Display DatePickerDialog
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        DatePickerDialog(
+            this, { _, selectedYear, selectedMonth, selectedDay ->
+                val formattedDate = String.format(
+                    "%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear
+                )
+                issueDateEditText.setText(formattedDate)
+            }, year, month, day
+        ).show()
+    }
+
+    // Save issue to Firebase Realtime Database
+    private fun saveIssueToDatabase(
+        title: String, date: String,
+        relatedTo: String, urgencyLevel: String
+    ) {
+        val issue = hashMapOf(
+            "title" to title,
+            "date" to date,
+            "relatedTo" to relatedTo,
+            "urgencyLevel" to urgencyLevel,
+            "status" to "Pending"  // Default status
+        )
+
+        val newIssueRef = db.child("maintenanceIssues").push()  // Generate unique ID
+        newIssueRef.setValue(issue)
+            .addOnSuccessListener {
+                showToast("Issue logged successfully")
+                clearInputFields()
+            }
+            .addOnFailureListener { e ->
+                showToast("Failed to log issue: ${e.localizedMessage}")
+            }
+    }
+
+    // Clear input fields after successful submission
+    private fun clearInputFields() {
+        issueTitleEditText.text.clear()
+        issueDateEditText.text.clear()
+        relatedToSpinner.setSelection(0)
+        urgencyLevelSpinner.setSelection(0)
+    }
+
+    // Show a toast message
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }
-
-
-
 
 
 class ManagerMaintenanceActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MaintenanceAdapter
-    private val db = FirebaseFirestore.getInstance()
+    private val db = FirebaseDatabase.getInstance().reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,22 +200,31 @@ class ManagerMaintenanceActivity : AppCompatActivity() {
     }
 
     private fun loadMaintenanceIssues() {
-        // Get the maintenance issues from Firestore
-        db.collection("maintenanceIssues")
-            .get()
-            .addOnSuccessListener { result ->
-                val issues = result.toObjects(MaintenanceIssue::class.java)
-                adapter.updateData(issues)
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to load maintenance issues", Toast.LENGTH_SHORT).show()
-            }
+        // Get the maintenance issues from Realtime Database
+        db.child("maintenanceIssues")  // Points to the "maintenanceIssues" node
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val issues = mutableListOf<MaintenanceIssue>()
+                        for (issueSnapshot in snapshot.children) {
+                            val issue = issueSnapshot.getValue(MaintenanceIssue::class.java)
+                            if (issue != null) {
+                                issues.add(issue)
+                            }
+                        }
+                        // Update RecyclerView with the fetched issues
+                        adapter.updateData(issues)
+                    } else {
+                        Toast.makeText(this@ManagerMaintenanceActivity, "No issues found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@ManagerMaintenanceActivity, "Failed to load maintenance issues", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
-
-
 }
-
-
 
 class MaintenanceAdapter(private var issues: List<MaintenanceIssue>) : RecyclerView.Adapter<MaintenanceAdapter.MaintenanceViewHolder>() {
 
@@ -176,8 +271,5 @@ data class MaintenanceIssue(
     val date: String = "",
     val status: String = "Pending"
 )
-
-
-
 
 

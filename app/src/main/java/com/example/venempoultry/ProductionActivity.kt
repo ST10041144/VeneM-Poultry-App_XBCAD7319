@@ -1,6 +1,7 @@
-package com.example.venempoultry // Change to your actual package name
+package com.example.venempoultry
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ProductionActivity : AppCompatActivity() {
 
@@ -23,16 +26,14 @@ class ProductionActivity : AppCompatActivity() {
 
     // Firebase Database reference
     private lateinit var database: DatabaseReference
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStaffProductionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize Firebase Database and Auth
+        // Initialize Firebase Database
         database = FirebaseDatabase.getInstance().reference
-        auth = FirebaseAuth.getInstance()
 
         // Load current production data from Firebase
         loadProductionData()
@@ -49,94 +50,83 @@ class ProductionActivity : AppCompatActivity() {
     }
 
     private fun loadProductionData() {
-        // Get the currently authenticated user
-        val user = auth.currentUser
+        database.child("productionData")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        chickenCount = snapshot.child("chickenCount").getValue(Int::class.java) ?: 0
+                        meatCount = snapshot.child("meatCount").getValue(Int::class.java) ?: 0
+                        eggsCount = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
 
-        if (user != null) {
-            val userId = user.uid
-
-            // Fetch production data from Firebase
-            database.child("users").child(userId).child("productionData")
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()) {
-                            chickenCount = snapshot.child("chickenCount").getValue(Int::class.java) ?: 0
-                            meatCount = snapshot.child("meatCount").getValue(Int::class.java) ?: 0
-                            eggsCount = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
-                        }
+                        // Update the UI with the fetched data
                         updateTextViews()
+                    } else {
+                        // Initialize production data if not present
+                        saveProductionDataToFirebase()
                     }
+                }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(this@ProductionActivity, "Failed to load data.", Toast.LENGTH_SHORT).show()
-                    }
-                })
-        } else {
-            // Handle case where user is not logged in
-            showToast("User is not logged in.")
-        }
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@ProductionActivity, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun updateCount(editText: EditText, type: String) {
         val input = editText.text.toString()
         if (input.isNotEmpty()) {
-            val amount = input.toInt()
-
-            // Update the count based on the type (chicken, meat, eggs)
+            val amount = input.toInt() // Parse the input
             when (type) {
-                "chicken" -> chickenCount += amount
-                "meat" -> meatCount += amount
-                "eggs" -> eggsCount += amount
+                "chicken" -> chickenCount = amount
+                "meat" -> meatCount = amount
+                "eggs" -> eggsCount = amount
             }
-
-            // Clear the input after updating
-            editText.text.clear()
-
-            // Update the TextViews to reflect new counts
-            updateTextViews()
+            editText.text.clear() // Clear the input field after processing
+            updateTextViews() // Update the UI with the new values
+        } else {
+            Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun updateTextViews() {
-        binding.chickenCountText.text = chickenCount.toString()
+        // Log the values for debugging
+        Log.d("ProductionActivity", "Chicken Count: $chickenCount")
+        Log.d("ProductionActivity", "Meat Count: $meatCount")
+        Log.d("ProductionActivity", "Eggs Count: $eggsCount")
+
+        // Update UI elements
+        binding.chickenCountText.text = "$chickenCount"
         binding.meatCountText.text = "$meatCount kg"
-        binding.eggsCountText.text = eggsCount.toString()
+        binding.eggsCountText.text = "$eggsCount"
     }
 
+
     private fun saveProductionDataToFirebase() {
-        // Get the currently authenticated user
-        val user = auth.currentUser
+        val lastUpdateDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val productionData = mapOf(
+            "chickenCount" to chickenCount,
+            "meatCount" to meatCount,
+            "eggsCount" to eggsCount,
+            "lastUpdateDate" to lastUpdateDate
+        )
 
-        if (user != null) {
-            val userId = user.uid
-
-            // Create a map of the production data
-            val productionData = mapOf(
-                "chickenCount" to chickenCount,
-                "meatCount" to meatCount,
-                "eggsCount" to eggsCount
-            )
-
-            // Save data under the user's ID in the Firebase database
-            database.child("users").child(userId).child("productionData")
-                .setValue(productionData)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // Display success message
-                        showToast("Production data updated successfully!")
-                    } else {
-                        // Handle the error
-                        showToast("Failed to update data: ${task.exception?.message}")
-                    }
+        database.child("productionData")
+            .setValue(productionData)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    showToast("Production data updated successfully!")
+                } else {
+                    showToast("Failed to update data: ${task.exception?.message}")
                 }
-        } else {
-            // Handle case where user is not logged in
-            showToast("User is not logged in.")
-        }
+            }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
+
+
+
 
