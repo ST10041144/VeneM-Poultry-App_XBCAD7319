@@ -24,14 +24,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var signInButton: Button
     private lateinit var registerTextView: TextView
     private lateinit var cbRememberMe: CheckBox
 
-    // SharedPreferences to store the login details
+    // SharedPreferences to store the remember me option
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +39,6 @@ class AuthActivity : AppCompatActivity() {
 
         // Initialize Firebase and UI elements
         auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
         sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
         emailEditText = findViewById(R.id.emailEditText)
@@ -48,6 +46,9 @@ class AuthActivity : AppCompatActivity() {
         signInButton = findViewById(R.id.signInButton)
         cbRememberMe = findViewById(R.id.cbRememberMe)
         registerTextView = findViewById(R.id.registerTextView)
+
+        // Set Firebase authentication persistence to SESSION
+        //auth.setPersistenceEnabled(true)
 
         // Attempt auto-login if credentials are saved and "Remember Me" was checked
         autoLogin()
@@ -77,11 +78,11 @@ class AuthActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // If "Remember Me" is checked, save credentials
+                    // If "Remember Me" is checked, save the option
                     if (cbRememberMe.isChecked) {
-                        saveCredentials(email, password)
+                        saveRememberMeOption(true)
                     } else {
-                        clearCredentials()
+                        saveRememberMeOption(false)
                     }
                     // User is successfully authenticated, proceed to the dashboard
                     navigateToDashboard()
@@ -105,53 +106,33 @@ class AuthActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    // Save credentials to SharedPreferences
-    private fun saveCredentials(email: String, password: String) {
+    // Save the "Remember Me" option to SharedPreferences
+    private fun saveRememberMeOption(rememberMe: Boolean) {
         val editor = sharedPreferences.edit()
-        editor.putString("email", email)
-        editor.putString("password", password)
-        editor.putBoolean("rememberMe", true)
+        editor.putBoolean("rememberMe", rememberMe)
         editor.apply()
     }
 
-    // Load saved credentials from SharedPreferences
-    private fun loadCredentials() {
-        val email = sharedPreferences.getString("email", "")
-        val password = sharedPreferences.getString("password", "")
-        val rememberMe = sharedPreferences.getBoolean("rememberMe", false)
-
-        if (rememberMe && !email.isNullOrEmpty() && !password.isNullOrEmpty()) {
-            emailEditText.setText(email)
-            passwordEditText.setText(password)
-            cbRememberMe.isChecked = true
-        }
+    // Load "Remember Me" option from SharedPreferences
+    private fun loadRememberMeOption(): Boolean {
+        return sharedPreferences.getBoolean("rememberMe", false)
     }
 
-    // Clear saved credentials from SharedPreferences
-    private fun clearCredentials() {
-        val editor = sharedPreferences.edit()
-        editor.remove("email")
-        editor.remove("password")
-        editor.remove("rememberMe")
-        editor.apply()
-    }
-
-    // Auto-login if the saved credentials are available and "Remember Me" was checked
+    // Auto-login if "Remember Me" was checked in previous sessions
     private fun autoLogin() {
-        val email = sharedPreferences.getString("email", "")
-        val password = sharedPreferences.getString("password", "")
-        val rememberMe = sharedPreferences.getBoolean("rememberMe", false)
-
-        if (rememberMe && email != null && password != null) {
-            // Automatically attempt login with saved credentials
-            loginUser(email, password)
+        if (loadRememberMeOption()) {
+            val user = auth.currentUser
+            if (user != null) {
+                // User is already signed in, so navigate to the dashboard
+                navigateToDashboard()
+            }
         }
     }
 
-    // Log out the user (clear saved credentials)
+    // Log out the user (clear saved "Remember Me" option)
     fun logoutUser() {
         auth.signOut()  // Sign out from Firebase
-        clearCredentials()  // Clear saved credentials
+        saveRememberMeOption(false)  // Clear "Remember Me" option
         showToast("You have been logged out.")
         // Optionally, navigate to the login screen again
         val intent = Intent(this, AuthActivity::class.java)
@@ -159,7 +140,6 @@ class AuthActivity : AppCompatActivity() {
         finish()
     }
 }
-
 
 
 
