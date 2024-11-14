@@ -180,7 +180,6 @@
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             android:background="@drawable/roundedd_button"
-            android:cardElevation="8dp"
             android:radius="16dp">
 
             <LinearLayout
@@ -215,7 +214,6 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:background="@drawable/roundedd_button"
-            android:cardElevation="8dp"
             android:radius="16dp">
 
             <LinearLayout
