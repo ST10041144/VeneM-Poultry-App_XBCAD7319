@@ -8,32 +8,37 @@
     <EditText
         android:id="@+id/editTextSpecies"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Species" />
+        android:layout_height="49dp"
+        android:background="@drawable/rounded_edittext"
+        android:hint=" Species" />
 
     <EditText
         android:id="@+id/editTextBatchSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Batch Size"
+        android:layout_height="48dp"
+        android:background="@drawable/rounded_edittext"
+        android:hint=" Batch Size"
         android:inputType="number" />
 
     <EditText
         android:id="@+id/editTextAgeInWeeks"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Age in Weeks"
+        android:layout_height="45dp"
+        android:background="@drawable/rounded_edittext"
+        android:hint=" Age in Weeks"
         android:inputType="number" />
 
     <Button
         android:id="@+id/buttonAddFlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#FA711B"
         android:text="Add Flock" />
 
     <Button
         android:id="@+id/buttonFetchFlocks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#FA711B"
         android:text="Fetch Flocks" />
 </LinearLayout>

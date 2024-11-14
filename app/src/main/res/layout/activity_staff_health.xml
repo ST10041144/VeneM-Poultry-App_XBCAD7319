@@ -1,23 +1,21 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/white"
+    android:background="#F6F5F5"
     tools:context=".HealthActivity">
 
-    <!-- Ongoing Medication Regiments -->
+    <!-- Ongoing Medication Regimens Card -->
     <LinearLayout
         android:id="@+id/medicationCard"
-        android:layout_width="372dp"
-        android:layout_height="157dp"
-        android:layout_gravity="center"
-        android:layout_margin="6dp"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/orange_border"
-        android:backgroundTint="#FFA500"
-        android:elevation="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/card_background"
+        android:elevation="8dp"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -26,15 +24,14 @@
             android:layout_height="wrap_content"
             android:text="@string/ongoing_medication_regiments"
             android:textColor="#0A70C1"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/medicationTextView"
@@ -42,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/valuntion_vaccination"
-                android:textColor="#000000"
+                android:textColor="#333333"
                 android:textSize="16sp" />
 
             <TextView
@@ -50,22 +47,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/_26_dec"
-                android:textColor="#000000"
+                android:textColor="#555555"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Monitored Flock Batches -->
+    <!-- Monitored Flock Batches Card -->
     <LinearLayout
         android:id="@+id/flockBatchesCard"
-        android:layout_width="372dp"
-        android:layout_height="157dp"
-        android:layout_gravity="center"
-        android:layout_margin="6dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/orange_border"
-        android:backgroundTint="#FFA500"
-        android:elevation="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/card_background"
+        android:elevation="8dp"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -74,16 +68,15 @@
             android:layout_height="wrap_content"
             android:text="@string/monitored_flock_batches"
             android:textColor="#0A70C1"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- Batch A and B -->
+        <!-- Batch A -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/batchATextView"
@@ -91,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/batch_a"
-                android:textColor="#000000"
+                android:textColor="#333333"
                 android:textSize="16sp" />
 
             <TextView
@@ -99,16 +92,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/valuntion"
-                android:textColor="#000000"
+                android:textColor="#555555"
                 android:textSize="16sp" />
         </LinearLayout>
 
+        <!-- Batch B -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/batchBTextView"
@@ -116,28 +109,25 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/batch_b"
-                android:textColor="#000000"
+                android:textColor="#333333"
                 android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/ozempic"
-                android:textColor="#000000"
+                android:textColor="#555555"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Ongoing Medication Regiments -->
     <LinearLayout
-        android:layout_width="372dp"
-        android:layout_height="157dp"
-        android:layout_gravity="center"
-        android:layout_margin="6dp"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/orange_border"
-        android:backgroundTintMode="src_atop"
-        android:elevation="4dp"
+        android:id="@+id/nextCheckupCard"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/card_background"
+        android:elevation="8dp"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -146,102 +136,110 @@
             android:layout_height="wrap_content"
             android:text="@string/next_checkup_dates"
             android:textColor="#0A70C1"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingTop="8dp">
 
             <TextView
-                android:id="@+id/batchNameCheckup"
+                android:id="@+id/nextCheckupBatch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/batch_a"
-                android:textColor="#000000"
+                android:textColor="#333333"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/dateCheckup"
+                android:id="@+id/nextCheckupDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/_13_jan"
-                android:textColor="#000000"
+                android:hint="@string/_26_dec"
+                android:textColor="#555555"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Bottom Buttons (Vaccinations and Medication Cards) -->
+    <!-- Vaccinations and Medication Cards -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="20dp">
 
         <!-- Vaccinations Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/vaccinationsCard"
-            android:layout_width="162dp"
-            android:layout_height="135dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/roundedd_button"
-            android:elevation="8dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:cardElevation="8dp"
+            android:radius="16dp">
 
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/vaccine" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:text="@string/vaccine"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/vaccine"
+                    android:tint="#FFA500"
+                    tools:ignore="UseAppTint" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vaccine"
+                    android:textColor="#0A70C1"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- Medication Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/medicationCardView"
-            android:layout_width="162dp"
-            android:layout_height="135dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
             android:background="@drawable/roundedd_button"
-            android:elevation="8dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:cardElevation="8dp"
+            android:radius="16dp">
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="70dp"
-                android:src="@drawable/vaccine" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:text="@string/medication"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/vaccine"
+                    android:tint="#FFA500"
+                    tools:ignore="UseAppTint" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/medication"
+                    android:textColor="#0A70C1"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
-
     </LinearLayout>
-
 </LinearLayout>

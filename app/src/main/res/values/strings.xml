@@ -34,6 +34,12 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="logout">Logout</string>
     <string name="manager">Manager</string>
+    <string name="amount">Amount</string>
+    <string name="submit">Submit</string>
+    <string name="search">Search</string>
+    <string name="all">All</string>
+    <string name="expenses">Expenses</string>
+    <string name="sales">Sales</string>
     <string-array name="transaction_type">
         <item>Sales/Expenses</item>
         <item>Sales</item>

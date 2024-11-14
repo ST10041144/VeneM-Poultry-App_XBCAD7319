@@ -13,7 +13,7 @@
         android:id="@+id/searchEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Search"
+        android:hint="@string/search"
         android:padding="8dp"
         android:background="@android:drawable/edit_text"
         android:inputType="text"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="Add"
         android:textColor="@android:color/white"
-        android:backgroundTint="@android:color/holo_orange_dark"
+        android:backgroundTint="@color/UI"
         android:padding="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,9 +56,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="All"
+            android:text="@string/all"
             android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/holo_orange_light" />
+            android:backgroundTint="@color/UI" />
 
         <!-- Sales Tab -->
         <Button
@@ -66,9 +66,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Sales"
+            android:text="@string/sales"
             android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/holo_orange_light" />
+            android:backgroundTint="@color/UI" />
 
         <!-- Expenses Tab -->
         <Button
@@ -76,9 +76,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Expenses"
+            android:text="@string/expenses"
             android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/holo_orange_light" />
+            android:backgroundTint="@color/UI" />
     </LinearLayout>
 
     <!-- Financial Entries ScrollView -->
