@@ -46,20 +46,22 @@
 
             <TextView
                 android:id="@+id/chickenCountText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="45"
-                android:textSize="18sp"
+                android:layout_width="184dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
-                android:paddingStart="16dp"/>
+                android:paddingStart="16dp"
+                android:text="45"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/chickenAmount"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:hint="Amount"
+                android:hint="@string/enter_amount"
+                android:textSize="15sp"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:background="#00FFFFFF"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -99,8 +101,10 @@
             <EditText
                 android:id="@+id/meatAmount"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:hint="Amount"
+                android:layout_height="38dp"
+                android:background="#00FFFFFF"
+                android:hint="@string/enter_amount"
+                android:textSize="15sp"
                 android:inputType="number" />
 
         </LinearLayout>
@@ -142,9 +146,11 @@
                 android:id="@+id/eggsAmount"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:hint="Amount"
+                android:hint="@string/enter_amount"
+                android:textSize="15sp"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:background="#00FFFFFF"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -154,9 +160,9 @@
         android:id="@+id/updateButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Update Database"
+        android:text="@string/update"
         android:textColor="@color/white"
-        android:backgroundTint="@android:color/holo_orange_light"
+        android:backgroundTint="@color/UI"
         app:layout_constraintTop_toBottomOf="@id/eggsCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

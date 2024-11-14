@@ -40,6 +40,8 @@
     <string name="all">All</string>
     <string name="expenses">Expenses</string>
     <string name="sales">Sales</string>
+    <string name="update">Update</string>
+    <string name="enter_amount">  Enter Amount</string>
     <string-array name="transaction_type">
         <item>Sales/Expenses</item>
         <item>Sales</item>
