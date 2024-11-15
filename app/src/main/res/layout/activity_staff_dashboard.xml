@@ -32,7 +32,7 @@
 
     <LinearLayout
         android:id="@+id/HealthCard"
-        android:layout_width="180dp"
+        android:layout_width="170dp"
         android:layout_height="180dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
@@ -60,7 +60,7 @@
 
     <LinearLayout
         android:id="@+id/ProductionCard"
-        android:layout_width="180dp"
+        android:layout_width="170dp"
         android:layout_height="180dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/roundedd_button"
@@ -87,7 +87,7 @@
 
     <LinearLayout
         android:id="@+id/SettingsCard"
-        android:layout_width="180dp"
+        android:layout_width="170dp"
         android:layout_height="180dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="72dp"
@@ -115,7 +115,7 @@
 
     <LinearLayout
         android:id="@+id/maintenanceCard"
-        android:layout_width="180dp"
+        android:layout_width="170dp"
         android:layout_height="180dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
