@@ -53,6 +53,7 @@
             android:id="@+id/batch_affected_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Select Batch"
             android:backgroundTint="#F0F0F0"
             android:padding="12dp"
             tools:ignore="SpeakableTextPresentCheck" />

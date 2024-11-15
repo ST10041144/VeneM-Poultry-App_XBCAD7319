@@ -3,11 +3,14 @@ package com.example.venempoultry
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,15 +24,25 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.util.Calendar
 
+
+
+
 class HealthActivity : AppCompatActivity() {
 
     private lateinit var vaccinationsCard: CardView
     private lateinit var medicationCard: CardView
+    private lateinit var nextCheckupCard: LinearLayout
 
-    private lateinit var medicationTextView: TextView
-    private lateinit var medicationDateTextView: TextView
-    private lateinit var batchATextView: TextView
-    private lateinit var batchBTextView: TextView
+    // UI Containers
+    private lateinit var medicationListContainer: LinearLayout
+    private lateinit var flockBatchListContainer: LinearLayout
+    private lateinit var checkupDatesContainer: LinearLayout
+
+    // Hidden form for updating checkup date
+    private lateinit var updateCheckupForm: LinearLayout
+    private lateinit var batchDropdown: AutoCompleteTextView
+    private lateinit var dateInput: EditText
+    private lateinit var saveButton: Button
 
     // Firebase Database and Auth reference
     private lateinit var database: DatabaseReference
@@ -46,88 +59,180 @@ class HealthActivity : AppCompatActivity() {
         // Initialize views
         vaccinationsCard = findViewById(R.id.vaccinationsCard)
         medicationCard = findViewById(R.id.medicationCardView)
-        medicationTextView = findViewById(R.id.medicationTextView)
-        medicationDateTextView = findViewById(R.id.medicationDateTextView)
-        batchATextView = findViewById(R.id.batchATextView)
-        batchBTextView = findViewById(R.id.batchBTextView)
+        nextCheckupCard = findViewById(R.id.nextCheckupCard)
+        medicationListContainer = findViewById(R.id.medicationListContainer)
+        flockBatchListContainer = findViewById(R.id.flockBatchListContainer)
+        checkupDatesContainer = findViewById(R.id.checkupDatesContainer)
 
-        // Fetch data from Firebase and populate the UI
-        fetchDataFromFirebase()
+        // Hidden Form Initialization
+        updateCheckupForm = findViewById(R.id.updateCheckupForm)
+        batchDropdown = findViewById(R.id.batchDropdown)
+        dateInput = findViewById(R.id.dateInput)
+        saveButton = findViewById(R.id.saveButton)
 
-        // Set up click listeners for Vaccinations and Medication CardViews
+        // Set up UI actions
+        setupBatchDropdown()
+        setupDatePicker()
         setCardViewClickListeners()
+        saveButton.setOnClickListener {
+            val selectedBatch = batchDropdown.text.toString()
+            val selectedDate = dateInput.text.toString()
+            if (selectedBatch.isNotEmpty() && selectedDate.isNotEmpty()) {
+                saveCheckupDate(selectedBatch, selectedDate)
+            } else {
+                Toast.makeText(this, "Please select both batch and date", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Fetch data for all sections
+        fetchMedicationData()
+        fetchVaccineData()
+        fetchCheckupDates()
     }
 
-    private fun fetchDataFromFirebase() {
-        val currentUser = auth.currentUser
+    // Toggle visibility of the update form
+    private fun toggleCheckupFormVisibility() {
+        updateCheckupForm.visibility = if (updateCheckupForm.visibility == View.GONE) View.VISIBLE else View.GONE
+    }
 
-        if (currentUser != null) {
-            val userId = currentUser.uid
+    // Setup Batch Dropdown
+    private fun setupBatchDropdown() {
+        val batches = listOf("Batch A", "Batch B", "Batch C", "Batch D")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, batches)
+        batchDropdown.setAdapter(adapter)
+    }
 
-            // Fetch Medication Regimens data
-            database.child("users").child(userId).child("medications").addListenerForSingleValueEvent(object : ValueEventListener {
+    // Setup Date Picker
+    private fun setupDatePicker() {
+        dateInput.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val datePickerDialog = DatePickerDialog(this, { _, year, month, day ->
+                dateInput.setText("$day/${month + 1}/$year")
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+            datePickerDialog.show()
+        }
+    }
+
+    // Fetch and display ongoing medication regimens
+    private fun fetchMedicationData() {
+        val userId = auth.currentUser?.uid ?: return
+        medicationListContainer.removeAllViews()
+
+        database.child("users").child(userId).child("medications")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
-                        // Get the first medication entry (can be modified for multiple entries)
-                        val firstMedication = snapshot.children.firstOrNull()
-
-                        if (firstMedication != null) {
-                            val medicationName = firstMedication.child("medicationName").getValue(String::class.java) ?: "No data"
-                            val medicationDate = firstMedication.child("date").getValue(String::class.java) ?: "No data"
-                            medicationTextView.text = medicationName
-                            medicationDateTextView.text = medicationDate
-                        } else {
-                            medicationTextView.text = "No medication data"
-                            medicationDateTextView.text = ""
+                        for (medicationSnapshot in snapshot.children) {
+                            val name = medicationSnapshot.child("medicationName").getValue(String::class.java) ?: "No Name"
+                            val date = medicationSnapshot.child("date").getValue(String::class.java) ?: "No Date"
+                            val itemLayout = createTextViewLayout(name, date)
+                            medicationListContainer.addView(itemLayout)
                         }
-                    } else {
-                        medicationTextView.text = "No data to show"
-                        medicationDateTextView.text = ""
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@HealthActivity, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@HealthActivity, "Error fetching medications: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
-
-            // Fetch Monitored Flock Batches data
-            database.child("users").child(userId).child("flockBatches").addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val batchA = snapshot.child("batchA").getValue(String::class.java) ?: "No data"
-                        val batchB = snapshot.child("batchB").getValue(String::class.java) ?: "No data"
-                        batchATextView.text = batchA
-                        batchBTextView.text = batchB
-                    } else {
-                        batchATextView.text = "No data to show"
-                        batchBTextView.text = ""
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@HealthActivity, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
-        }
     }
 
-    private fun setCardViewClickListeners() {
-        // Redirect to VaccinationsActivity when the Vaccinations card is clicked
-        vaccinationsCard.setOnClickListener {
-            val intent = Intent(this, VaccinationsActivity::class.java)
-            startActivity(intent)
-        }
+    // Fetch and display monitored flock batches
+    private fun fetchVaccineData() {
+        val userId = auth.currentUser?.uid ?: return
+        flockBatchListContainer.removeAllViews()
 
-        // Redirect to MedicationActivity when the Medication card is clicked
-        medicationCard.setOnClickListener {
-            val intent = Intent(this, MedicationActivity::class.java)
-            startActivity(intent)
+        database.child("users").child(userId).child("vaccinations")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (vaccineSnapshot in snapshot.children) {
+                            val batch = vaccineSnapshot.child("batchAffected").getValue(String::class.java) ?: "No Batch"
+                            val medication = vaccineSnapshot.child("medication").getValue(String::class.java) ?: "No Medication"
+                            val date = vaccineSnapshot.child("date").getValue(String::class.java) ?: "No Date"
+                            val itemLayout = createTextViewLayout(batch, "$medication - $date")
+                            flockBatchListContainer.addView(itemLayout)
+                        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@HealthActivity, "Error fetching vaccinations: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    // Fetch and display next checkup dates
+    private fun fetchCheckupDates() {
+        val userId = auth.currentUser?.uid ?: return
+        checkupDatesContainer.removeAllViews()
+
+        database.child("users").child(userId).child("nextCheckupDates")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (checkupSnapshot in snapshot.children) {
+                            val batch = checkupSnapshot.child("batch").getValue(String::class.java) ?: "No Batch"
+                            val date = checkupSnapshot.child("date").getValue(String::class.java) ?: "No Date"
+                            val itemLayout = createTextViewLayout(batch, date)
+                            checkupDatesContainer.addView(itemLayout)
+                        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@HealthActivity, "Error fetching checkup dates: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    // Helper function to create item layout
+    private fun createTextViewLayout(text1: String, text2: String): LinearLayout {
+        val layout = LinearLayout(this)
+        layout.orientation = LinearLayout.HORIZONTAL
+        val textView1 = TextView(this).apply {
+            text = text1
+            setTextColor(Color.BLACK)
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
         }
+        val textView2 = TextView(this).apply {
+            setTextColor(Color.BLACK) // Set text color to black
+            text = text2
+        }
+        layout.addView(textView1)
+        layout.addView(textView2)
+        return layout
+    }
+
+    // Save the checkup date for the selected batch
+    private fun saveCheckupDate(selectedBatch: String, selectedDate: String) {
+        val userId = auth.currentUser?.uid ?: return
+        val checkupData = mapOf(
+            "batch" to selectedBatch,
+            "date" to selectedDate
+        )
+
+        // Save the data to Firebase Database under the user's "nextCheckupDates" node
+        database.child("users").child(userId).child("nextCheckupDates").push()
+            .setValue(checkupData)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Checkup date saved successfully!", Toast.LENGTH_SHORT).show()
+                    fetchCheckupDates() // Refresh the list of checkup dates
+                    toggleCheckupFormVisibility() // Hide the form after saving
+                } else {
+                    Toast.makeText(this, "Error saving checkup date: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+
+    // Set click listeners
+    private fun setCardViewClickListeners() {
+        nextCheckupCard.setOnClickListener { toggleCheckupFormVisibility() }
+        vaccinationsCard.setOnClickListener { startActivity(Intent(this, VaccinationsActivity::class.java)) }
+        medicationCard.setOnClickListener { startActivity(Intent(this, MedicationActivity::class.java)) }
     }
 }
+
+
 
 
 
@@ -216,15 +321,11 @@ class VaccinationsActivity : AppCompatActivity() {
         // Get the current user
         val user = auth.currentUser
 
-        // Ensure user is logged in before submitting data
         if (user != null) {
             val userId = user.uid
-
-            // Create a unique ID for each vaccination entry
             val vaccinationId = database.child("vaccinations").push().key
 
             if (vaccinationId != null) {
-                // Create a map of the data
                 val vaccinationData = mapOf(
                     "date" to date,
                     "disease" to disease,
@@ -233,12 +334,17 @@ class VaccinationsActivity : AppCompatActivity() {
                     "medication" to medication
                 )
 
-                // Save to Firebase under the user's UID
                 database.child("users").child(userId).child("vaccinations").child(vaccinationId)
                     .setValue(vaccinationData)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Vaccination data submitted successfully", Toast.LENGTH_SHORT).show()
+
+                            // Refresh HealthActivity
+                            val intent = Intent(this, HealthActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                            finish()
                         } else {
                             Toast.makeText(this, "Failed to submit data: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                         }
@@ -248,10 +354,8 @@ class VaccinationsActivity : AppCompatActivity() {
             Toast.makeText(this, "User is not logged in", Toast.LENGTH_LONG).show()
         }
     }
+
 }
-
-
-
 
 
 class MedicationActivity : AppCompatActivity() {
@@ -319,15 +423,11 @@ class MedicationActivity : AppCompatActivity() {
         // Get the current user
         val user = auth.currentUser
 
-        // Ensure user is logged in before submitting data
         if (user != null) {
             val userId = user.uid
-
-            // Create a unique ID for each medication entry
             val medicationId = database.child("medications").push().key
 
             if (medicationId != null) {
-                // Create a map of the data
                 val medicationData = mapOf(
                     "date" to date,
                     "medicationName" to medicationName,
@@ -335,12 +435,17 @@ class MedicationActivity : AppCompatActivity() {
                     "prescription" to prescription
                 )
 
-                // Save to Firebase under the user's UID
                 database.child("users").child(userId).child("medications").child(medicationId)
                     .setValue(medicationData)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Medication data submitted successfully", Toast.LENGTH_SHORT).show()
+
+                            // Refresh HealthActivity
+                            val intent = Intent(this, HealthActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                            finish()
                         } else {
                             Toast.makeText(this, "Failed to submit data: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                         }
@@ -350,6 +455,7 @@ class MedicationActivity : AppCompatActivity() {
             Toast.makeText(this, "User is not logged in", Toast.LENGTH_LONG).show()
         }
     }
+
 }
 
 

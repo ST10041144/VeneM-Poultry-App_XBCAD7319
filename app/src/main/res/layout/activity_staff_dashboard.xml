@@ -141,7 +141,7 @@
         android:layout_marginBottom="24dp"
         android:text="Manager Section"
         android:textColor="@color/white"
-        android:backgroundTint="@android:color/holo_orange_light"
+        android:backgroundTint="@color/UI"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -151,7 +151,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@android:color/holo_orange_light"
+        android:backgroundTint="@color/UI"
         android:text="Logout"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/managerButton"

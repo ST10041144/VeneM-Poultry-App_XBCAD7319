@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/medicationCard"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:background="@drawable/card_background"
         android:elevation="8dp"
@@ -27,36 +27,21 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <!-- Container for displaying multiple medication entries -->
         <LinearLayout
+            android:id="@+id/medicationListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="8dp">
-
-            <TextView
-                android:id="@+id/medicationTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/valuntion_vaccination"
-                android:textColor="#333333"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/medicationDateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/_26_dec"
-                android:textColor="#555555"
-                android:textSize="16sp" />
-        </LinearLayout>
+            android:orientation="vertical"
+            android:paddingTop="8dp" />
     </LinearLayout>
+
 
     <!-- Monitored Flock Batches Card -->
     <LinearLayout
         android:id="@+id/flockBatchesCard"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:background="@drawable/card_background"
         android:elevation="8dp"
@@ -71,65 +56,27 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- Batch A -->
+        <!-- Container for displaying multiple flock batch entries -->
         <LinearLayout
+            android:id="@+id/flockBatchListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="8dp">
-
-            <TextView
-                android:id="@+id/batchATextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/batch_a"
-                android:textColor="#333333"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/medicationView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/valuntion"
-                android:textColor="#555555"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <!-- Batch B -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="8dp">
-
-            <TextView
-                android:id="@+id/batchBTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/batch_b"
-                android:textColor="#333333"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/ozempic"
-                android:textColor="#555555"
-                android:textSize="16sp" />
-        </LinearLayout>
+            android:orientation="vertical"
+            android:paddingTop="8dp" />
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/nextCheckupCard"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:background="@drawable/card_background"
         android:elevation="8dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -139,30 +86,50 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <!-- Container for displaying multiple checkup dates -->
         <LinearLayout
+            android:id="@+id/checkupDatesContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="8dp">
+            android:orientation="vertical"
+            android:paddingTop="8dp" />
 
-            <TextView
-                android:id="@+id/nextCheckupBatch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/batch_a"
-                android:textColor="#333333"
-                android:textSize="16sp" />
+        <!-- Hidden Form Layout for Updating Checkup Date -->
+        <LinearLayout
+            android:id="@+id/updateCheckupForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:visibility="gone">
 
-            <TextView
-                android:id="@+id/nextCheckupDate"
-                android:layout_width="wrap_content"
+            <AutoCompleteTextView
+                android:id="@+id/batchDropdown"
+                android:layout_width="match_parent"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                android:hint="@string/_26_dec"
-                android:textColor="#555555"
-                android:textSize="16sp" />
+                android:hint="Select Batch" />
+
+            <EditText
+                android:id="@+id/dateInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Select Date"
+                android:focusable="false"
+                android:textColor="@color/black"
+                android:clickable="true" />
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="match_parent"
+                android:backgroundTint="@color/UI"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:text="Save" />
         </LinearLayout>
     </LinearLayout>
+
+
 
     <!-- Vaccinations and Medication Cards -->
     <LinearLayout
