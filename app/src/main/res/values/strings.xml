@@ -42,6 +42,9 @@
     <string name="sales">Sales</string>
     <string name="update">Update</string>
     <string name="enter_amount">  Enter Amount</string>
+    <string name="login">Login</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="not_yet_registered_signup_now">Not yet registered? SignUp Now</string>
     <string-array name="transaction_type">
         <item>Sales/Expenses</item>
         <item>Sales</item>
