@@ -4,28 +4,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".StaffActivity">
 
-    <!-- CardView for health -->
+    <!-- Title -->
+    <TextView
+        android:id="@+id/dashboardTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dashboard"
+        android:textColor="@color/black"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
-    <!-- CardView for production -->
+    <!-- Health Card -->
 
-    <!-- CardView for settings -->
+    <!-- Production Card -->
+
+    <!-- Settings Card -->
+
+    <!-- Maintenance Card -->
+
     <LinearLayout
         android:id="@+id/HealthCard"
-        android:layout_width="162dp"
-        android:layout_height="135dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="48dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/SettingsCard"
-        app:layout_constraintEnd_toStartOf="@+id/ProductionCard">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dashboardTitle">
 
         <ImageView
             android:layout_width="70dp"
@@ -35,29 +52,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="@string/health"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- CardView for Maintenance -->
-
-    <!-- Manager and Logout Buttons -->
     <LinearLayout
         android:id="@+id/ProductionCard"
-        android:layout_width="162dp"
-        android:layout_height="135dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="180dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/maintenanceCard"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/HealthCard">
 
         <ImageView
             android:layout_width="70dp"
@@ -67,7 +79,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="@string/production"
             android:textColor="@android:color/black"
             android:textSize="20sp"
@@ -76,17 +87,17 @@
 
     <LinearLayout
         android:id="@+id/SettingsCard"
-        android:layout_width="162dp"
-        android:layout_height="135dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="248dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="72dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/HealthCard">
 
         <ImageView
             android:layout_width="70dp"
@@ -96,7 +107,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="@string/settings"
             android:textColor="@android:color/black"
             android:textSize="20sp"
@@ -105,19 +115,16 @@
 
     <LinearLayout
         android:id="@+id/maintenanceCard"
-        android:layout_width="162dp"
-        android:layout_height="135dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginBottom="244dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/SettingsCard"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.921"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_marginEnd="16dp">
 
         <ImageView
             android:layout_width="70dp"
@@ -127,35 +134,40 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="@string/maintenance"
-            android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
     </LinearLayout>
+
+    <!-- Manager Button -->
+
+    <!-- Logout Button -->
 
     <Button
         android:id="@+id/managerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_width="324dp"
+        android:layout_height="57dp"
+        android:layout_marginBottom="124dp"
+        android:backgroundTint="@color/UI"
         android:text="Manager Section"
         android:textColor="@color/white"
-        android:backgroundTint="@color/UI"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_width="152dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/UI"
         android:text="Logout"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/managerButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.938"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
