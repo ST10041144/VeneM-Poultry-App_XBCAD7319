@@ -50,11 +50,11 @@ class InventoryActivity : AppCompatActivity() {
                         val eggsCount = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
                         val lastUpdateDate = snapshot.child("lastUpdateDate").getValue(String::class.java) ?: "N/A"
 
-                        tvChickenBatches.text = chickenCount.toString()
+                        tvChickenBatches.text = "$chickenCount batches"
                         tvChickenBatchDate.text = lastUpdateDate
                         tvMeatProduction.text = "$meatCount kg"
                         tvMeatProductionDate.text = lastUpdateDate
-                        tvEggProduction.text = eggsCount.toString()
+                        tvEggProduction.text = "$eggsCount dozen"
                         tvEggProductionDate.text = lastUpdateDate
                     } else {
                         showToast("No production data found.")
