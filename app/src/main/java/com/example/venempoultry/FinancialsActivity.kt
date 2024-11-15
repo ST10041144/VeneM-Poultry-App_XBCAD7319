@@ -90,10 +90,19 @@ class FinancialsActivity : AppCompatActivity() {
 
         // Format the amount to display with R and two decimal places
         amountTextView.text = String.format("R%.2f", entry.amount)
-        amountTextView.setTextColor(
-            if (entry.amount >= 0) ContextCompat.getColor(this, android.R.color.holo_green_dark)
-            else ContextCompat.getColor(this, android.R.color.holo_red_dark)
-        )
+
+        // Apply color based on transaction type (Sales or Expense)
+        when (entry.type.toLowerCase()) {
+            "sale" -> {
+                amountTextView.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark)) // Green for sales
+            }
+            "expense" -> {
+                amountTextView.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark)) // Red for expenses
+            }
+            else -> {
+                amountTextView.setTextColor(Color.BLACK) // Default color if type is neither "Sale" nor "Expense"
+            }
+        }
 
         // Set the text views with entry data
         titleTextView.text = entry.title
@@ -102,6 +111,7 @@ class FinancialsActivity : AppCompatActivity() {
         // Add the entry layout to the container
         financialEntriesContainer.addView(entryLayout)
     }
+
 
 
 
@@ -124,6 +134,7 @@ class FinancialsActivity : AppCompatActivity() {
             val expenseEntries = allEntries.filter { it.type.equals("Expense", ignoreCase = true) }
             displayEntries(expenseEntries) // Show only expense entries
             highlightSelectedTab(tabExpenses)
+
         }
     }
 
@@ -142,7 +153,7 @@ class FinancialsActivity : AppCompatActivity() {
         tabExpenses.setBackgroundColor(Color.TRANSPARENT)
 
         // Highlight the selected tab
-        selectedTab.setBackgroundColor(ContextCompat.getColor(this, R.color.black)) // Define this color in your resources
+        selectedTab.setBackgroundColor(ContextCompat.getColor(this, R.color.orange)) // Define this color in your resources
     }
 }
 
