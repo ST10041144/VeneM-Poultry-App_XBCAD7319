@@ -156,7 +156,6 @@ class FinancialsActivity : AppCompatActivity() {
         selectedTab.setBackgroundColor(ContextCompat.getColor(this, R.color.orange)) // Define this color in your resources
     }
 }
-
 // Define a data class to represent a financial entry
 data class FinancialEntry(
     val amount: Double = 0.0,       // Field for the amount
@@ -167,11 +166,6 @@ data class FinancialEntry(
     val to: String = "",           // Field for the recipient
     val type: String = ""          // Field for Sale/Expense type
 )
-
-
-
-
-
 
 class FinancialFormActivity : AppCompatActivity() {
 
