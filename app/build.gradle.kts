@@ -96,6 +96,7 @@ dependencies {
     implementation (libs.androidx.constraintlayout)
 
     //Charts
-
+    //implementation(libs.mpandroidchart)//Pie chart
+    //implementation (libs.material.v190) // tabs
 
 }
