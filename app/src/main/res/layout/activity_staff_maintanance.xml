@@ -9,25 +9,26 @@
     tools:context=".StaffMaintenanceActivity">
 
     <!-- Title -->
+
+    <!-- Date Input -->
     <TextView
         android:id="@+id/maintenanceFormTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
         android:text="Maintenance Form"
-        android:textStyle="bold"
-        android:textSize="24sp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Date Input -->
     <EditText
         android:id="@+id/issueDateEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/card_background"
         android:hint="Date (DD/MM/YYYY)"
         android:padding="16dp"
         android:focusable="false"
@@ -44,6 +45,7 @@
         android:id="@+id/issueTitleEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/card_background"
         android:hint="Issue Title"
         android:padding="16dp"
         android:textColor="@android:color/black"
@@ -58,18 +60,20 @@
         android:id="@+id/relatedToLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Related To"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/issueTitleEditText"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintTop_toBottomOf="@id/issueTitleEditText" />
 
     <!-- Related To Spinner (dropdown) -->
     <Spinner
         android:id="@+id/relatedToSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/card_background"
         android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/relatedToLabel"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,12 +86,13 @@
         android:id="@+id/urgencyLevelLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Urgency Level"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/relatedToSpinner"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintTop_toBottomOf="@id/relatedToSpinner" />
 
     <!-- Urgency Level Spinner -->
     <Spinner
@@ -95,6 +100,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:background="@drawable/card_background"
         app:layout_constraintTop_toBottomOf="@id/urgencyLevelLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -107,6 +113,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Description"
+        android:background="@drawable/card_background"
         android:inputType="textMultiLine"
         android:padding="16dp"
         android:textColor="@android:color/black"
@@ -121,6 +128,7 @@
         android:id="@+id/possibleSolutionInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/card_background"
         android:hint="Possible Solution (Optional)"
         android:inputType="textMultiLine"
         android:padding="16dp"
@@ -134,15 +142,15 @@
     <!-- Submit Button -->
     <Button
         android:id="@+id/submitButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Submit"
+        android:layout_width="199dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/UI"
+        android:text="Submit"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/possibleSolutionInput"
-        android:layout_marginHorizontal="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/possibleSolutionInput" />
 </androidx.constraintlayout.widget.ConstraintLayout>

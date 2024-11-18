@@ -11,10 +11,9 @@
     tools:context=".AuthActivity">
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="165dp"
-        android:background="@drawable/login_bg">
-    </ImageView>
+        android:layout_width="190dp"
+        android:layout_height="142dp"
+        android:background="@drawable/login_bg"></ImageView>
 
 
     <androidx.cardview.widget.CardView
@@ -26,70 +25,77 @@
         android:background="@drawable/custom_edittext">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_width="340dp"
+            android:layout_height="452dp"
             android:layout_gravity="center_horizontal"
             android:background="@color/white"
+            android:orientation="vertical"
             android:padding="24dp">
 
 
             <TextView
+                android:id="@+id/loginText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
-                android:id="@+id/loginText"
-                android:textSize="36sp"
+                android:text="@string/login"
                 android:textAlignment="center"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/emailEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/emailEditText"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/custom_edittext"
                 android:drawableLeft="@drawable/ic_person"
                 android:drawablePadding="8dp"
                 android:hint="Email"
-                android:textColorHint="@color/black"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background"
-                android:layout_marginTop="40dp"/>
+                android:textColorHint="@color/black" />
 
             <EditText
+                android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/passwordEditText"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/custom_edittext"
                 android:drawableLeft="@drawable/ic_password"
                 android:drawablePadding="8dp"
                 android:hint="Password"
-                android:textColorHint="@color/black"
-                android:padding="8dp"
                 android:inputType="textPassword"
+                android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background"
-                android:layout_marginTop="20dp"/>
+                android:textColorHint="@color/black" />
 
             <CheckBox
                 android:id="@+id/cbRememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Remember Me" />
+                android:text="@string/remember_me"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:src="@drawable/fingerprint"
+android:layout_marginStart="60dp"
+                tools:ignore="ContentDescription" />
 
             <Button
+                android:id="@+id/signInButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/signInButton"
-                android:text="Login"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/UI"
+                android:text="@string/login"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:layout_marginTop="30dp"
-                android:backgroundTint="@color/orange"
-                app:cornerRadius = "20dp"/>
+                app:cornerRadius="20dp" />
 
         </LinearLayout>
 
@@ -99,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="Not yet registered? SignUp Now"
+        android:text="@string/not_yet_registered_signup_now"
         android:textSize="14sp"
         android:textAlignment="center"
         android:id="@+id/registerTextView"

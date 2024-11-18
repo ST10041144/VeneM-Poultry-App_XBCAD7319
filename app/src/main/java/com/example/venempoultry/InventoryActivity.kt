@@ -50,7 +50,7 @@ class InventoryActivity : AppCompatActivity() {
                         val eggsCount = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
                         val lastUpdateDate = snapshot.child("lastUpdateDate").getValue(String::class.java) ?: "N/A"
 
-                        tvChickenBatches.text = "$chickenCount batches"
+                        tvChickenBatches.text = "$chickenCount Chickens"
                         tvChickenBatchDate.text = lastUpdateDate
                         tvMeatProduction.text = "$meatCount kg"
                         tvMeatProductionDate.text = lastUpdateDate

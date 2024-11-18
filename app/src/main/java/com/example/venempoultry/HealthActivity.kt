@@ -118,7 +118,7 @@ class HealthActivity : AppCompatActivity() {
         val userId = auth.currentUser?.uid ?: return
         medicationListContainer.removeAllViews()
 
-        database.child("users").child(userId).child("medications")
+        database.child("medications")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -141,7 +141,7 @@ class HealthActivity : AppCompatActivity() {
         val userId = auth.currentUser?.uid ?: return
         flockBatchListContainer.removeAllViews()
 
-        database.child("users").child(userId).child("vaccinations")
+        database.child("vaccinations")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -165,7 +165,7 @@ class HealthActivity : AppCompatActivity() {
         val userId = auth.currentUser?.uid ?: return
         checkupDatesContainer.removeAllViews()
 
-        database.child("users").child(userId).child("nextCheckupDates")
+        database.child("nextCheckupDates")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -210,7 +210,7 @@ class HealthActivity : AppCompatActivity() {
         )
 
         // Save the data to Firebase Database under the user's "nextCheckupDates" node
-        database.child("users").child(userId).child("nextCheckupDates").push()
+        database.child("nextCheckupDates").push()
             .setValue(checkupData)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -231,9 +231,6 @@ class HealthActivity : AppCompatActivity() {
         medicationCard.setOnClickListener { startActivity(Intent(this, MedicationActivity::class.java)) }
     }
 }
-
-
-
 
 
 class VaccinationsActivity : AppCompatActivity() {
@@ -334,7 +331,7 @@ class VaccinationsActivity : AppCompatActivity() {
                     "medication" to medication
                 )
 
-                database.child("users").child(userId).child("vaccinations").child(vaccinationId)
+                database.child("vaccinations").child(vaccinationId)
                     .setValue(vaccinationData)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -435,7 +432,7 @@ class MedicationActivity : AppCompatActivity() {
                     "prescription" to prescription
                 )
 
-                database.child("users").child(userId).child("medications").child(medicationId)
+                database.child("medications").child(medicationId)
                     .setValue(medicationData)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
