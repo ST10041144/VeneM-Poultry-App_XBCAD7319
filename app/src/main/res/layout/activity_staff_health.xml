@@ -153,6 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:background="@drawable/card_background"
                 android:gravity="center"
                 android:padding="16dp">
 
@@ -188,6 +189,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:background="@drawable/card_background"
                 android:padding="16dp">
 
                 <ImageView
