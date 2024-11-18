@@ -79,4 +79,21 @@
         <item>Medium</item>
         <item>Low</item>
     </string-array>
+    <string name="transaction_title_hint">Transaction Title</string>
+    <string name="to_hint">To</string>
+    <string name="maintenance_form_title">Maintenance Form</string>
+    <string name="date_hint">Date (DD/MM/YYYY)</string>
+    <string name="issue_title_hint">Issue Title</string>
+    <string name="related_to_label">Related To</string>
+    <string name="urgency_level_label">Urgency Level</string>
+    <string name="description_hint">Description</string>
+    <string name="possible_solution_hint">Possible Solution (Optional)</string>
+    <string name="submit_button">Submit</string>
+    <string name="overall_health">Overall Health</string>
+    <string name="flocks">Flocks</string>
+    <string name="eggs">Eggs</string>
+    <string name="egg_production_this_week">Egg Production this Week:</string>
+    <string name="meat_production_this_week">Meat Production this week:</string>
+    <string name="dozen_eggs">35 Dozen</string>
+    <string name="meat_weight">2 Kg</string>
 </resources>
