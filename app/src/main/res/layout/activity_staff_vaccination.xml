@@ -11,22 +11,24 @@
     tools:context=".VaccinationsActivity">
 
     <!-- Title -->
+
+    <!-- Date Input Field -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
         android:text="@string/medication_form"
-        android:textSize="24sp"
-        android:textStyle="bold"
         android:textColor="#000000"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-    <!-- Date Input Field -->
     <EditText
         android:id="@+id/vaccination_date_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/date"
+        android:textColor="@color/black"
         android:padding="12dp"
         android:textColorHint="#8A8A8A"
         android:backgroundTint="#F0F0F0"
