@@ -63,7 +63,7 @@ class ReportActivity : AppCompatActivity() {
                         runOnUiThread {
                             binding.eggProductionDetail.text = "$totalEggs Eggs" // Display total eggs
                             binding.circularProgressBarRight.progress = eggsPercentage.toInt() // Update the progress bar
-                            binding.eggsProgressPercentage.text = "${eggsPercentage.toInt()}%" // Display the percentage
+                            binding.rightProgressPercentage.text = "${eggsPercentage.toInt()}%" // Display the percentage
                         }
 
 
@@ -107,9 +107,9 @@ class ReportActivity : AppCompatActivity() {
 
                         // Update the UI for flock health data
                         runOnUiThread {
-                            binding.FlockHealthDetails.text = "$totalChickens Chickens"
+                            binding.flocksHealthText.text = "$totalChickens Chickens"
                             binding.circularProgressBarLeft.progress = chickenPercentage.toInt() // Update the left progress bar
-                            binding.FlockHealthDetails.text = "${chickenPercentage.toInt()}%" // Update the flock health percentage text
+                            binding.flocksHealthText.text = "${chickenPercentage.toInt()}%" // Update the flock health percentage text
                         }
                     } else {
                         Log.d("ReportActivity", "No flock health data found.")
