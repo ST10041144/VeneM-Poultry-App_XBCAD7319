@@ -48,7 +48,8 @@ jobs:
       # Verify JAVA_HOME
       - run:
           name: Verify JAVA_HOME
-          command: echo "JAVA_HOME is set to: ${JAVA_HOME}"
+          command: |
+            echo "JAVA_HOME is set to: $JAVA_HOME"
 
       # Update SDKs
       - run:
