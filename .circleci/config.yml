@@ -6,7 +6,7 @@ executors:
       - image: circleci/android:api-30  # Android image with SDK 30
     working_directory: ~/repo
     environment:
-      JAVA_HOME: /usr/lib/jvm/java-8-temurin  # Corrected JAVA_HOME to match manual installation path
+      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64  # Set to Java 11
       _JAVA_OPTIONS: "-Xmx2048m"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
@@ -30,18 +30,18 @@ jobs:
           command: |
             sudo apt-get install -y wget tar
 
-      # Download and install Java 8 directly
+      # Download and install Java 11 (AdoptOpenJDK / Temurin)
       - run:
-          name: Install Java 8 (Temurin)
+          name: Install Java 11 (Temurin)
           command: |
-            wget -O temurin.tar.gz https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u372-b07/OpenJDK8U-jdk_x64_linux_hotspot_8u372b07.tar.gz
+            wget -O temurin.tar.gz https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_x64_linux_hotspot_11.0.19_7.tar.gz
             sudo mkdir -p /usr/lib/jvm
             sudo tar -xzf temurin.tar.gz -C /usr/lib/jvm
-            sudo mv /usr/lib/jvm/jdk8u372-b07 /usr/lib/jvm/java-8-temurin
-            sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8-temurin/bin/java 1
-            sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-8-temurin/bin/javac 1
-            sudo update-alternatives --set java /usr/lib/jvm/java-8-temurin/bin/java
-            sudo update-alternatives --set javac /usr/lib/jvm/java-8-temurin/bin/javac
+            sudo mv /usr/lib/jvm/jdk-11.0.19+7 /usr/lib/jvm/java-11-temurin
+            sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-11-temurin/bin/java 1
+            sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-11-temurin/bin/javac 1
+            sudo update-alternatives --set java /usr/lib/jvm/java-11-temurin/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-11-temurin/bin/javac
             echo "Java version set to:"
             java -version
 
