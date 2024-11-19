@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center"
     android:background="@color/white"
     tools:context=".VaccinationsActivity">
 
@@ -15,10 +14,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:gravity="center"
+        android:layout_gravity="center"
         android:text="@string/medication_form"
         android:textColor="#0A70C1"
-        android:textSize="24sp"
+        android:textSize="36sp"
         android:textStyle="bold" />
 
     <!-- Date Input Field -->
@@ -64,15 +63,15 @@
     <EditText
         android:id="@+id/description_input"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/input_background"
+        android:gravity="top|start"
         android:hint="@string/description"
-        android:padding="12dp"
         android:inputType="textMultiLine"
         android:minLines="3"
-        android:gravity="top|start"
-        android:textColorHint="#8A8A8A"
-        android:background="@drawable/input_background"
-        android:layout_marginBottom="16dp" />
+        android:padding="12dp"
+        android:textColorHint="#8A8A8A" />
 
     <!-- Medication Input Field -->
     <EditText
