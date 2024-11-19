@@ -6,7 +6,7 @@ executors:
       - image: circleci/android:api-30  # Android image with SDK 30
     working_directory: ~/repo
     environment:
-      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64  # Set JAVA_HOME to Java 8 path
+      JAVA_HOME: /usr/lib/jvm/java-8-temurin  # Corrected JAVA_HOME to match manual installation path
       _JAVA_OPTIONS: "-Xmx2048m"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
@@ -44,6 +44,11 @@ jobs:
             sudo update-alternatives --set javac /usr/lib/jvm/java-8-temurin/bin/javac
             echo "Java version set to:"
             java -version
+
+      # Verify JAVA_HOME
+      - run:
+          name: Verify JAVA_HOME
+          command: echo "JAVA_HOME is set to: $JAVA_HOME"
 
       # Update SDKs
       - run:
