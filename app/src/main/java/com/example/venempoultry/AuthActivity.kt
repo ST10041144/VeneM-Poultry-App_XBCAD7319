@@ -6,20 +6,15 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
-
-
+import java.util.concurrent.Executor
 
 class AuthActivity : AppCompatActivity() {
 
@@ -29,9 +24,12 @@ class AuthActivity : AppCompatActivity() {
     private lateinit var signInButton: Button
     private lateinit var registerTextView: TextView
     private lateinit var cbRememberMe: CheckBox
+    private lateinit var biometricsButton: ImageView
 
-    // SharedPreferences to store the remember me option
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var executor: Executor
+    private lateinit var biometricPrompt: BiometricPrompt
+    private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +44,12 @@ class AuthActivity : AppCompatActivity() {
         signInButton = findViewById(R.id.signInButton)
         cbRememberMe = findViewById(R.id.cbRememberMe)
         registerTextView = findViewById(R.id.registerTextView)
+        biometricsButton = findViewById(R.id.BiometricsButton)
 
-        // Set Firebase authentication persistence to SESSION
-        //auth.setPersistenceEnabled(true)
-
-        // Attempt auto-login if credentials are saved and "Remember Me" was checked
+        // Auto-login if "Remember Me" is checked
         autoLogin()
 
-        // Set sign-in button click listener
+        // Regular login flow
         signInButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
@@ -62,29 +58,101 @@ class AuthActivity : AppCompatActivity() {
                 showToast("Email and Password cannot be empty")
                 return@setOnClickListener
             }
-
             loginUser(email, password)
         }
 
-        // Set register text view click listener
+        // Navigate to registration activity
         registerTextView.setOnClickListener {
             val intent = Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
         }
+
+        // Initialize biometrics
+        setupBiometrics()
+
+        // Set biometric login on click
+        biometricsButton.setOnClickListener {
+            checkBiometricSupportAndAuthenticate()
+        }
     }
 
-    // Method to log in the user
+    private fun setupBiometrics() {
+        executor = ContextCompat.getMainExecutor(this)
+        biometricPrompt = BiometricPrompt(
+            this,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    val user = auth.currentUser
+                    if (user != null) {
+                        showToast("Biometric Authentication Successful")
+                        navigateToDashboard()
+                    } else {
+                        showToast("Re-authenticating with biometrics...")
+                        reAuthenticateWithBiometrics()
+                    }
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    showToast("Biometric Authentication Failed")
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    showToast("Authentication Error: $errString")
+                }
+            })
+
+        promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Login using Biometrics")
+            .setSubtitle("Authenticate with your fingerprint")
+            .setNegativeButtonText("Cancel")
+            .build()
+    }
+
+    private fun checkBiometricSupportAndAuthenticate() {
+        val biometricManager = BiometricManager.from(this)
+        when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> biometricPrompt.authenticate(promptInfo)
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> showToast("Biometric hardware not available")
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> showToast("Biometric hardware currently unavailable")
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> showToast(
+                "No biometric credentials enrolled. Please set up fingerprint in your device settings."
+            )
+            else -> showToast("Biometric authentication is not supported on this device.")
+        }
+    }
+
+    private fun reAuthenticateWithBiometrics() {
+        val email = sharedPreferences.getString("email", null)
+        val password = sharedPreferences.getString("password", null)
+
+        if (!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        showToast("Re-authentication Successful")
+                        navigateToDashboard()
+                    } else {
+                        showToast("Re-authentication Failed: ${task.exception?.message}")
+                    }
+                }
+        } else {
+            showToast("No credentials stored for biometric login")
+        }
+    }
+
     private fun loginUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // If "Remember Me" is checked, save the option
                     if (cbRememberMe.isChecked) {
-                        saveRememberMeOption(true)
+                        saveCredentials(email, password)
                     } else {
-                        saveRememberMeOption(false)
+                        clearCredentials()
                     }
-                    // User is successfully authenticated, proceed to the dashboard
                     navigateToDashboard()
                 } else {
                     val errorMessage = task.exception?.localizedMessage ?: "Login failed"
@@ -94,52 +162,44 @@ class AuthActivity : AppCompatActivity() {
             }
     }
 
-    // Method to navigate to the dashboard after successful login
     private fun navigateToDashboard() {
-        val intent = Intent(this, StaffActivity::class.java)  // Redirect to your main dashboard
+        val intent = Intent(this, StaffActivity::class.java)
         startActivity(intent)
-        finish()  // Close the login activity
+        finish()
     }
 
-    // Helper method to display toast messages
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    // Save the "Remember Me" option to SharedPreferences
-    private fun saveRememberMeOption(rememberMe: Boolean) {
+    private fun saveCredentials(email: String, password: String) {
         val editor = sharedPreferences.edit()
-        editor.putBoolean("rememberMe", rememberMe)
+        editor.putString("email", email)
+        editor.putString("password", password)
         editor.apply()
     }
 
-    // Load "Remember Me" option from SharedPreferences
-    private fun loadRememberMeOption(): Boolean {
-        return sharedPreferences.getBoolean("rememberMe", false)
+    private fun clearCredentials() {
+        val editor = sharedPreferences.edit()
+        editor.remove("email")
+        editor.remove("password")
+        editor.apply()
     }
 
-    // Auto-login if "Remember Me" was checked in previous sessions
     private fun autoLogin() {
-        if (loadRememberMeOption()) {
-            val user = auth.currentUser
-            if (user != null) {
-                // User is already signed in, so navigate to the dashboard
-                navigateToDashboard()
+        if (cbRememberMe.isChecked) {
+            val email = sharedPreferences.getString("email", null)
+            val password = sharedPreferences.getString("password", null)
+            if (!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+                loginUser(email, password)
             }
         }
     }
-
-    // Log out the user (clear saved "Remember Me" option)
-    fun logoutUser() {
-        auth.signOut()  // Sign out from Firebase
-        saveRememberMeOption(false)  // Clear "Remember Me" option
-        showToast("You have been logged out.")
-        // Optionally, navigate to the login screen again
-        val intent = Intent(this, AuthActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
 }
+
+
+
+
 
 
 

@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.preference.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.database.ktx)
-    //implementation(libs.androidx.biometric.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -95,8 +95,8 @@ dependencies {
 
     implementation (libs.androidx.constraintlayout)
 
-    //Charts
-    //implementation(libs.mpandroidchart)//Pie chart
-    //implementation (libs.material.v190) // tabs
+    //biometrics
+    implementation (libs.androidx.biometric.v120alpha05)
+
 
 }
