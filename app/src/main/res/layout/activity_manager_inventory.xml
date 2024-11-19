@@ -163,7 +163,9 @@
         android:padding="16dp"
         android:background="@drawable/card_background"
         android:elevation="4dp"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:layout_width="50dp"
@@ -184,7 +186,18 @@
                 android:layout_height="wrap_content"
                 android:text="10 Kg"
                 android:textSize="18sp"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <EditText
+                android:id="@+id/editFeedQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Enter Quantity"
+                android:textColor="@android:color/black"
+                android:inputType="numberDecimal"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tvFeedDate"
@@ -195,5 +208,6 @@
                 android:textColor="@android:color/darker_gray"/>
         </LinearLayout>
     </LinearLayout>
+
 
 </LinearLayout>

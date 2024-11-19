@@ -17,6 +17,7 @@
         android:padding="8dp"
         android:background="@android:drawable/edit_text"
         android:inputType="text"
+        android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/addButton"
