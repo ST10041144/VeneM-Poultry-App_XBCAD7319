@@ -1,44 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/white">
 
+    <!-- Species Input -->
     <EditText
         android:id="@+id/editTextSpecies"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:background="@drawable/rounded_edittext"
-        android:hint=" Species" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_background"
+        android:hint="@string/species"
+        android:textColor="@color/black"
+        android:padding="12dp"
+        android:textColorHint="#8A8A8A"
+        android:layout_marginBottom="16dp" />
 
+    <!-- Batch Size Input -->
     <EditText
         android:id="@+id/editTextBatchSize"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/rounded_edittext"
-        android:hint=" Batch Size"
-        android:inputType="number" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_background"
+        android:hint="@string/batch_size"
+        android:textColor="@color/black"
+        android:inputType="number"
+        android:padding="12dp"
+        android:textColorHint="#8A8A8A"
+        android:layout_marginBottom="16dp" />
 
+    <!-- Age in Weeks Input -->
     <EditText
         android:id="@+id/editTextAgeInWeeks"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@drawable/rounded_edittext"
-        android:hint=" Age in Weeks"
-        android:inputType="number" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_background"
+        android:hint="@string/age_in_weeks"
+        android:inputType="number"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textColorHint="#8A8A8A"
+        android:layout_marginBottom="24dp" />
 
+    <!-- Add Flock Button -->
     <Button
         android:id="@+id/buttonAddFlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#FA711B"
-        android:text="Add Flock" />
+        android:text="@string/add_flock"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        />
 
+    <!-- Fetch Flocks Button -->
     <Button
         android:id="@+id/buttonFetchFlocks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#FA711B"
-        android:text="Fetch Flocks" />
+        android:text="@string/fetch_flocks"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:padding="16dp"
+     />
 </LinearLayout>

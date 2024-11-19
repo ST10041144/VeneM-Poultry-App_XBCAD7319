@@ -11,18 +11,17 @@
     tools:context=".VaccinationsActivity">
 
     <!-- Title -->
-
-    <!-- Date Input Field -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="@string/medication_form"
-        android:textColor="#000000"
+        android:textColor="#0A70C1"
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <!-- Date Input Field -->
     <EditText
         android:id="@+id/vaccination_date_input"
         android:layout_width="match_parent"
@@ -31,8 +30,8 @@
         android:textColor="@color/black"
         android:padding="12dp"
         android:textColorHint="#8A8A8A"
-        android:backgroundTint="#F0F0F0"
-        android:layout_marginBottom="16dp"/>
+        android:background="@drawable/input_background"
+        android:layout_marginBottom="16dp" />
 
     <!-- Disease Input Field -->
     <EditText
@@ -42,8 +41,8 @@
         android:hint="@string/disease"
         android:padding="12dp"
         android:textColorHint="#8A8A8A"
-        android:backgroundTint="#F0F0F0"
-        android:layout_marginBottom="16dp"/>
+        android:background="@drawable/input_background"
+        android:layout_marginBottom="16dp" />
 
     <!-- Batch Affected Dropdown -->
     <com.google.android.material.textfield.TextInputLayout
@@ -55,9 +54,9 @@
             android:id="@+id/batch_affected_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Select Batch"
-            android:backgroundTint="#F0F0F0"
+            android:hint="@string/select_batch"
             android:padding="12dp"
+            android:background="@drawable/input_background"
             tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,8 +71,8 @@
         android:minLines="3"
         android:gravity="top|start"
         android:textColorHint="#8A8A8A"
-        android:backgroundTint="#F0F0F0"
-        android:layout_marginBottom="16dp"/>
+        android:background="@drawable/input_background"
+        android:layout_marginBottom="16dp" />
 
     <!-- Medication Input Field -->
     <EditText
@@ -83,8 +82,8 @@
         android:hint="@string/medication"
         android:padding="12dp"
         android:textColorHint="#8A8A8A"
-        android:backgroundTint="#F0F0F0"
-        android:layout_marginBottom="30dp"/>
+        android:background="@drawable/input_background"
+        android:layout_marginBottom="30dp" />
 
     <!-- Submit Button -->
     <Button

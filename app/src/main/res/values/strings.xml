@@ -96,4 +96,14 @@
     <string name="meat_production_this_week">Meat Production this week:</string>
     <string name="dozen_eggs">35 Dozen</string>
     <string name="meat_weight">2 Kg</string>
+    <string name="select_batch">Select Batch</string>
+    <string name="add_flock">Add Flock</string>
+    <string name="fetch_flocks">Fetch Flocks</string>
+    <string name="age_in_weeks">Age in Weeks</string>
+    <string name="batch_size">Batch Size</string>
+    <string name="species">Species</string>
+    <string name="issue_title">Issue Title</string>
+    <string name="status_pending">Status: Pending</string>
+    <string name="category">Category</string>
+    <string name="_0_00">$0.00</string>
 </resources>

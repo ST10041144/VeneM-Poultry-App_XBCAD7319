@@ -135,7 +135,6 @@
         android:backgroundTint="@color/UI"
         android:text="@string/submit"
         android:textColor="@android:color/white"
-        android:cornerRadius="25dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descriptionInput" />

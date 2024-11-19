@@ -29,16 +29,16 @@
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:text="Transaction Title" />
+                android:text="@string/transaction_title_hint" />
 
             <!-- Category -->
             <TextView
                 android:id="@+id/tvEntryCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/black"
                 android:textSize="15sp"
-                android:text="Category" />
+                android:text="@string/category" />
         </LinearLayout>
 
         <!-- Section for Amount Display -->
@@ -50,6 +50,6 @@
             android:textColor="#3F51B5"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:hint="$0.00" />
+            android:hint="@string/_0_00" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
