@@ -16,23 +16,25 @@ jobs:
     steps:
       - checkout
 
-      # Fix GPG Key Issue for Google Cloud SDK
+      # Install dependencies for Java installation
       - run:
-          name: Fix GPG Key Issue for Google Cloud SDK
+          name: Install Required Packages
           command: |
-            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
             sudo apt-get update
+            sudo apt-get install -y wget tar
 
-      # Install Java 8 using AdoptOpenJDK
+      # Download and install Java 8 directly
       - run:
-          name: Install Java 8 from AdoptOpenJDK
+          name: Install Java 8 (Temurin)
           command: |
-            curl -s https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
-            echo "deb https://packages.adoptium.net/artifactory/deb stable main" | sudo tee /etc/apt/sources.list.d/adoptopenjdk.list
-            sudo apt-get update
-            sudo apt-get install -y adoptopenjdk-8-hotspot
-            sudo update-alternatives --set java /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin/java
-            sudo update-alternatives --set javac /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin/javac
+            wget -O temurin.tar.gz https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u372-b07/OpenJDK8U-jdk_x64_linux_hotspot_8u372b07.tar.gz
+            sudo mkdir -p /usr/lib/jvm
+            sudo tar -xzf temurin.tar.gz -C /usr/lib/jvm
+            sudo mv /usr/lib/jvm/jdk8u372-b07 /usr/lib/jvm/java-8-temurin
+            sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8-temurin/bin/java 1
+            sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-8-temurin/bin/javac 1
+            sudo update-alternatives --set java /usr/lib/jvm/java-8-temurin/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-8-temurin/bin/javac
             echo "Java version set to:"
             java -version
 
