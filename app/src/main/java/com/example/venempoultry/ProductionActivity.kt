@@ -6,7 +6,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.venempoultry.databinding.ActivityStaffProductionBinding
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -104,9 +103,9 @@ class ProductionActivity : AppCompatActivity() {
         Log.d("ProductionActivity", "Eggs Count: $eggsCount")
 
         // Update UI elements
-        binding.chickenCountText.text = "$chickenCount"
+        binding.chickenCountText.text = "$chickenCount chickens"
         binding.meatCountText.text = "$meatCount kg"
-        binding.eggsCountText.text = "$eggsCount"
+        binding.eggsCountText.text = "$eggsCount dozen"
     }
 
 
