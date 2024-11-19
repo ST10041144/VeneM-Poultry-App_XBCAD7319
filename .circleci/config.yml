@@ -6,7 +6,7 @@ executors:
       - image: circleci/android:api-30  # Android image with SDK 30
     working_directory: ~/repo
     environment:
-      JAVA_HOME: /opt/jdk-17  # Set JAVA_HOME to the expected Java 17 installation path
+      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64  # Set to Java 11
       _JAVA_OPTIONS: "-Xmx2048m"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
@@ -14,36 +14,49 @@ jobs:
   build:
     executor: android-executor
     steps:
-      - checkout  # Checkout the source code
+      - checkout
 
+      # Add missing GPG key for Google Cloud SDK
       - run:
-          name: Fix GPG Key Issue for Google Cloud SDK
+          name: Add GPG key for Google Cloud SDK
           command: |
-            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C0BA5CE6DC6315A3
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            echo "deb https://packages.cloud.google.com/apt cloud-sdk-buster main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
             sudo apt-get update
 
+      # Install dependencies for Java installation
       - run:
-          name: Install JDK 17 from an alternate source
+          name: Install Required Packages
           command: |
-            sudo apt-get update
-            sudo apt-get install -y wget
-            wget https://download.java.net/openjdk/jdk17/ri/openjdk-17+35_linux-x64_bin.tar.gz
-            sudo tar -xzf openjdk-17+35_linux-x64_bin.tar.gz -C /opt/
-            sudo update-alternatives --install /usr/bin/java java /opt/jdk-17/bin/java 1
-            sudo update-alternatives --install /usr/bin/javac javac /opt/jdk-17/bin/javac 1
-            echo "Java version installed:"
-            /opt/jdk-17/bin/java -version  # Verify installation
+            sudo apt-get install -y wget tar
 
+      # Download and install Java 11 (AdoptOpenJDK / Temurin)
       - run:
-          name: Set org.gradle.java.home in gradle.properties
-          command: echo "org.gradle.java.home=/opt/jdk-17" >> ./gradle.properties  # Set Java 17 path
+          name: Install Java 11 (Temurin)
+          command: |
+            wget -O temurin.tar.gz https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_x64_linux_hotspot_11.0.19_7.tar.gz
+            sudo mkdir -p /usr/lib/jvm
+            sudo tar -xzf temurin.tar.gz -C /usr/lib/jvm
+            sudo mv /usr/lib/jvm/jdk-11.0.19+7 /usr/lib/jvm/java-11-temurin
+            sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-11-temurin/bin/java 1
+            sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-11-temurin/bin/javac 1
+            sudo update-alternatives --set java /usr/lib/jvm/java-11-temurin/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-11-temurin/bin/javac
+            echo "Java version set to:"
+            java -version
+
+      # Verify JAVA_HOME
+      - run:
+          name: Verify JAVA_HOME
+          command: |
+            echo "JAVA_HOME is set to: $JAVA_HOME"
 
       # Update SDKs
       - run:
           name: Update SDKs
           command: sdkmanager "platforms;android-30" "build-tools;30.0.3"
 
-      # Restore Gradle dependencies cache
+      # Restore Gradle cache
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
@@ -75,7 +88,7 @@ jobs:
     steps:
       - checkout
 
-      # Ensure Gradle wrapper has executable permissions before running tests
+      # Ensure Gradle wrapper has executable permissions
       - run:
           name: Grant Gradle executable permissions
           command: chmod +x ./gradlew
