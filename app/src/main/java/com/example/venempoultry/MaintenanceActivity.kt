@@ -22,6 +22,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
+import androidx.core.app.NotificationCompat
 
 
 class StaffMaintenanceActivity : AppCompatActivity() {
@@ -159,11 +165,39 @@ class StaffMaintenanceActivity : AppCompatActivity() {
         newIssueRef.setValue(issue)
             .addOnSuccessListener {
                 showToast("Issue logged successfully")
+                // Send notification after successful submission
+                sendNotification("New maintenance issue submitted: $title")
                 clearInputFields()
             }
             .addOnFailureListener { e ->
                 showToast("Failed to log issue: ${e.localizedMessage}")
             }
+    }
+
+    // Send a notification
+    private fun sendNotification(messageBody: String) {
+        val channelId = "maintenance_channel"
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Create notification channel if on Android 8.0 or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Maintenance Notifications",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Create and show the notification
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setContentTitle("New Maintenance Issue")
+            .setContentText(messageBody)
+            .setSmallIcon(R.drawable.ic_notification)
+            .build()
+
+        notificationManager.notify(0, notification)
     }
 
     // Clear input fields after successful submission

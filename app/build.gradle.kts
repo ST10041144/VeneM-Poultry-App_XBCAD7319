@@ -98,5 +98,8 @@ dependencies {
     //biometrics
     implementation (libs.androidx.biometric.v120alpha05)
 
+    // notifications
+    implementation ("com.google.firebase:firebase-messaging:23.1.1")
+
 
 }

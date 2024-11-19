@@ -23,6 +23,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.util.Calendar
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
+import androidx.core.app.NotificationCompat
+
 
 
 
@@ -214,14 +221,54 @@ class HealthActivity : AppCompatActivity() {
             .setValue(checkupData)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    // Show a Toast message
                     Toast.makeText(this, "Checkup date saved successfully!", Toast.LENGTH_SHORT).show()
-                    fetchCheckupDates() // Refresh the list of checkup dates
-                    toggleCheckupFormVisibility() // Hide the form after saving
+
+                    // Trigger the notification after successfully saving the data
+                    sendNotification("Checkup date saved for $selectedBatch on $selectedDate")
+
+                    // Refresh the list of checkup dates
+                    fetchCheckupDates()
+
+                    // Hide the form after saving
+                    toggleCheckupFormVisibility()
                 } else {
                     Toast.makeText(this, "Error saving checkup date: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
+
+    // Function to send a notification
+    private fun sendNotification(message: String) {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channelId = "health_notifications"
+
+        // Create the Notification Channel for Android Oreo and higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Health Notifications",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Notifications related to health checkups"
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Build the notification
+        val notification: Notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(android.R.drawable.ic_menu_info_details) // Use an appropriate icon here
+            .setContentTitle("Health Checkup Notification")
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        // Show the notification
+        notificationManager.notify(1, notification)
+    }
+
+
 
 
     // Set click listeners
