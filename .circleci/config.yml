@@ -16,11 +16,18 @@ jobs:
     steps:
       - checkout
 
+      # Add missing GPG key for Google Cloud SDK
+      - run:
+          name: Add GPG key for Google Cloud SDK
+          command: |
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            echo "deb https://packages.cloud.google.com/apt cloud-sdk-buster main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+            sudo apt-get update
+
       # Install dependencies for Java installation
       - run:
           name: Install Required Packages
           command: |
-            sudo apt-get update
             sudo apt-get install -y wget tar
 
       # Download and install Java 8 directly
