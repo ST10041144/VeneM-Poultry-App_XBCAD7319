@@ -9,128 +9,138 @@
     android:padding="16dp">
 
     <!-- Title -->
+    <!-- Title element can be added here if needed -->
 
-
+    <!-- Amount Input -->
     <EditText
         android:id="@+id/amountInput"
-        android:layout_width="118dp"
+        android:layout_width="0dp"
         android:layout_height="52dp"
         android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/input_background"
         android:clickable="true"
         android:cursorVisible="true"
         android:focusable="true"
         android:gravity="center"
-        android:textColor="@color/black"
         android:hint="@string/amount"
         android:inputType="numberDecimal"
         android:longClickable="true"
+        android:textColor="#3F51B5"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.44"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Date Input -->
     <EditText
         android:id="@+id/dateInput"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/card_background"
-        android:hint="Date"
-        android:inputType="none"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/input_background"
+        android:hint="@string/date"
         android:textAlignment="textStart"
         android:textColor="@color/black"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/amountInput"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountInput" />
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <!-- Transaction Title Input -->
     <EditText
         android:id="@+id/transactionTitleInput"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="21dp"
-        android:background="@drawable/card_background"
-        android:hint="Transaction Title"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/input_background"
+        android:hint="@string/transaction_title_hint"
         android:textColor="@color/black"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:inputType="text"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/dateInput"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateInput" />
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <!-- To Input -->
     <EditText
         android:id="@+id/toInput"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/card_background"
-        android:hint="To"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/input_background"
+        android:hint="@string/to_hint"
         android:textColor="@color/black"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:inputType="text"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/transactionTitleInput"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transactionTitleInput" />
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <!-- Transaction Type Spinner -->
     <Spinner
         android:id="@+id/transactionType"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="19dp"
-        android:background="@drawable/card_background"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/input_background"
         android:entries="@array/transaction_type"
-        android:hint="To"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/toInput"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toInput" />
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <!-- For Dropdown Spinner -->
     <Spinner
         android:id="@+id/forDropdown"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="19dp"
-        android:background="@drawable/card_background"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/input_background"
         android:entries="@array/transaction_for_options"
-        android:hint="For"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/transactionType"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transactionType" />
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <!-- Description Input -->
     <EditText
         android:id="@+id/descriptionInput"
         android:layout_width="0dp"
         android:layout_height="150dp"
-        android:layout_marginTop="44dp"
-        android:background="@drawable/card_background"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/input_background"
         android:hint="Description"
         android:textColor="@color/black"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:inputType="textMultiLine"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/forDropdown"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/forDropdown" />
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <!-- Submit Button -->
     <Button
         android:id="@+id/productionbutton"
-        android:layout_width="199dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/UI"
-        android:text="Submit"
+        android:text="@string/submit"
         android:textColor="@android:color/white"
+        android:cornerRadius="25dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descriptionInput" />
 
+    <!-- Dropdown Indicators -->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
