@@ -16,6 +16,13 @@ jobs:
     steps:
       - checkout
 
+      # Fix GPG Key Issue for Google Cloud SDK
+      - run:
+          name: Fix GPG Key Issue for Google Cloud SDK
+          command: |
+            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            sudo apt-get update
+
       # Install Java 8
       - run:
           name: Install Java 8
