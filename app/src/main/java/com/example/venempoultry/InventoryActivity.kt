@@ -22,6 +22,13 @@ import java.util.Locale
 
 class InventoryActivity : AppCompatActivity() {
 
+    private lateinit var tvChickenBatches: TextView
+    private lateinit var tvChickenBatchDate: TextView
+    private lateinit var tvMeatProduction: TextView
+    private lateinit var tvMeatProductionDate: TextView
+    private lateinit var tvEggProduction: TextView
+    private lateinit var tvEggProductionDate: TextView
+
     private lateinit var tvFeedQuantity: TextView
     private lateinit var editFeedQuantity: EditText
     private lateinit var tvFeedDate: TextView
@@ -33,6 +40,12 @@ class InventoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_manager_inventory)
 
         // Initialize views
+        tvChickenBatches = findViewById(R.id.tvChickenBatches)
+        tvChickenBatchDate = findViewById(R.id.tvChickenBatchDate)
+        tvMeatProduction = findViewById(R.id.tvMeatProduction)
+        tvMeatProductionDate = findViewById(R.id.tvMeatProductionDate)
+        tvEggProduction = findViewById(R.id.tvEggProduction)
+        tvEggProductionDate = findViewById(R.id.tvEggProductionDate)
         tvFeedQuantity = findViewById(R.id.tvFeedQuantity)
         editFeedQuantity = findViewById(R.id.editFeedQuantity)
         tvFeedDate = findViewById(R.id.tvFeedDate)
@@ -68,10 +81,19 @@ class InventoryActivity : AppCompatActivity() {
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
+                        val chickenCount = snapshot.child("chickenCount").getValue(Int::class.java) ?: 0
+                        val meatCount = snapshot.child("meatCount").getValue(Int::class.java) ?: 0
+                        val eggsCount = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
                         val feedQuantity = snapshot.child("feedQuantity").getValue(String::class.java) ?: "0 Kg"
                         val lastUpdateDate = snapshot.child("lastUpdateDate").getValue(String::class.java) ?: "N/A"
 
                         // Update the UI
+                        tvChickenBatches.text = "$chickenCount Chickens"
+                        tvChickenBatchDate.text = lastUpdateDate
+                        tvMeatProduction.text = "$meatCount kg"
+                        tvMeatProductionDate.text = lastUpdateDate
+                        tvEggProduction.text = "$eggsCount dozen"
+                        tvEggProductionDate.text = lastUpdateDate
                         tvFeedQuantity.text = feedQuantity
                         tvFeedDate.text = "Latest: $lastUpdateDate"
                     } else {

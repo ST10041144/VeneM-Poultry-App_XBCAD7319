@@ -75,18 +75,26 @@ class ProductionActivity : AppCompatActivity() {
     private fun updateCount(editText: EditText, type: String) {
         val input = editText.text.toString()
         if (input.isNotEmpty()) {
-            val amount = input.toInt() // Parse the input
-            when (type) {
-                "chicken" -> chickenCount = amount
-                "meat" -> meatCount = amount
-                "eggs" -> eggsCount = amount
+            val amount = input.toIntOrNull()
+            if (amount != null) {
+                when (type) {
+                    "chicken" -> chickenCount = amount
+                    "meat" -> meatCount = amount
+                    "eggs" -> eggsCount = amount
+                }
+                editText.text.clear() // Clear the input field
+                updateTextViews() // Update the UI with the new values
+
+                // Save the updated production data to Firebase immediately
+                saveProductionDataToFirebase()
+            } else {
+                Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
             }
-            editText.text.clear() // Clear the input field after processing
-            updateTextViews() // Update the UI with the new values
         } else {
-            Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please enter a value", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     private fun updateTextViews() {
@@ -102,6 +110,7 @@ class ProductionActivity : AppCompatActivity() {
     }
 
 
+
     private fun saveProductionDataToFirebase() {
         val lastUpdateDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val productionData = mapOf(
@@ -111,6 +120,10 @@ class ProductionActivity : AppCompatActivity() {
             "lastUpdateDate" to lastUpdateDate
         )
 
+        // Log the production data for debugging
+        Log.d("ProductionActivity", "Saving production data: $productionData")
+
+        // Update Firebase
         database.child("productionData")
             .setValue(productionData)
             .addOnCompleteListener { task ->
