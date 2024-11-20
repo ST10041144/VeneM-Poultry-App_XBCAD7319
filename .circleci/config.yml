@@ -1,107 +1,62 @@
 version: 2.1
+orbs:
+  android: circleci/android@2.4.0
 
 executors:
   android-executor:
     docker:
-      - image: circleci/android:api-30  # Android image with SDK 30
-    working_directory: ~/repo
+      - image: cimg/android:2024.09
     environment:
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64  # Set to Java 11
-      _JAVA_OPTIONS: "-Xmx2048m"
-      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+      JVM_OPTS: -Xmx3200m
 
 jobs:
   build:
     executor: android-executor
     steps:
       - checkout
-
-      # Add missing GPG key for Google Cloud SDK
-      - run:
-          name: Add GPG key for Google Cloud SDK
-          command: |
-            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            echo "deb https://packages.cloud.google.com/apt cloud-sdk-buster main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-            sudo apt-get update
-
-      # Install dependencies for Java installation
-      - run:
-          name: Install Required Packages
-          command: |
-            sudo apt-get install -y wget tar
-
-      # Download and install Java 11 (AdoptOpenJDK / Temurin)
-      - run:
-          name: Install Java 11 (Temurin)
-          command: |
-            wget -O temurin.tar.gz https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_x64_linux_hotspot_11.0.19_7.tar.gz
-            sudo mkdir -p /usr/lib/jvm
-            sudo tar -xzf temurin.tar.gz -C /usr/lib/jvm
-            sudo mv /usr/lib/jvm/jdk-11.0.19+7 /usr/lib/jvm/java-11-temurin
-            sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-11-temurin/bin/java 1
-            sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-11-temurin/bin/javac 1
-            sudo update-alternatives --set java /usr/lib/jvm/java-11-temurin/bin/java
-            sudo update-alternatives --set javac /usr/lib/jvm/java-11-temurin/bin/javac
-            echo "Java version set to:"
-            java -version
-
-      # Verify JAVA_HOME
-      - run:
-          name: Verify JAVA_HOME
-          command: |
-            echo "JAVA_HOME is set to: $JAVA_HOME"
-
-      # Update SDKs
-      - run:
-          name: Update SDKs
-          command: sdkmanager "platforms;android-30" "build-tools;30.0.3"
-
-      # Restore Gradle cache
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
-            - v1-dependencies-
-
-      # Ensure Gradle wrapper has executable permissions
+            - v1-gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run:
-          name: Grant Gradle executable permissions
-          command: chmod +x ./gradlew
-
-      # Run Gradle clean and build
-      - run:
-          name: Gradle Clean
-          command: ./gradlew clean
-
-      - run:
-          name: Gradle Build
+          name: Build APK
           command: ./gradlew assembleDebug
-
-      # Save Gradle cache after build
       - save_cache:
           paths:
             - ~/.gradle/caches
             - ~/.gradle/wrapper
-          key: v1-dependencies-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+      - store_artifacts:
+          path: app/build/outputs/apk/debug/app-debug.apk
+          destination: app-debug.apk
+      - store_test_results:
+          path: app/build/test-results
 
-  test:
+  unit_tests:
     executor: android-executor
     steps:
       - checkout
-
-      # Ensure Gradle wrapper has executable permissions
+      - restore_cache:
+          keys:
+            - v1-gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run:
-          name: Grant Gradle executable permissions
-          command: chmod +x ./gradlew
-
-      - run:
-          name: Gradle Test
-          command: ./gradlew test
+          name: Run Unit Tests
+          command: ./gradlew testDebugUnitTest
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+      - store_test_results:
+          path: app/build/test-results/testDebugUnitTest
+      - store_artifacts:
+          path: app/build/reports/tests/testDebugUnitTest
+          destination: unit_test_reports
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - test:
+      - unit_tests
+      - build:
           requires:
-            - build
+            - unit_tests
