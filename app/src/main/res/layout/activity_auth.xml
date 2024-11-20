@@ -21,12 +21,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
-        app:cardElevation="20dp"
+        app:cardElevation="30dp"
         android:background="@drawable/custom_edittext">
 
         <LinearLayout
             android:layout_width="340dp"
-            android:layout_height="452dp"
+            android:layout_height="500dp"
+            android:layout_marginTop="-25dp"
             android:layout_gravity="center_horizontal"
             android:background="@color/white"
             android:orientation="vertical"
@@ -99,6 +100,13 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
 

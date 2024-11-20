@@ -1,8 +1,9 @@
 {
   "project_info": {
     "project_number": "203323443652",
+    "firebase_url": "https://venempoultry-default-rtdb.firebaseio.com",
     "project_id": "venempoultry",
-    "storage_bucket": "venempoultry.appspot.com"
+    "storage_bucket": "venempoultry.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +13,20 @@
           "package_name": "com.example.venempoultry"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "203323443652-opscf45rgqhg0fqqlnbep3tgqjf2gb80.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.venempoultry",
+            "certificate_hash": "f176362721c2169dd3601a261dcf751a3e3625c9"
+          }
+        },
+        {
+          "client_id": "203323443652-46oje9n653l5tm1b3qr9idpgb95thd5l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBmw-GIzlS-vVH6eZlI8pJxZ9Ruzz6GN0s"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203323443652-46oje9n653l5tm1b3qr9idpgb95thd5l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

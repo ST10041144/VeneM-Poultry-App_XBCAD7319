@@ -2,6 +2,7 @@
     <string name="app_name">VeneM Poultry</string>
     <string name="welcome_back">Welcome Back!!</string>
     <string name="use_touch_id">Use Touch ID to sign into account</string>
+    <string name="default_Web_Id" translatable="false">203323443652-posnaabpporrlvr9j26oc4p6h581k44u.apps.googleusercontent.com</string>
     <string name="or_use_email_and_password_instead">or use email and password instead.</string>
     <string name="enter_farmer_id">Enter Farmer ID</string>
     <string name="enter_password">Enter Password</string>

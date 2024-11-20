@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VeneMPoultry"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.gms.appid"
+            android:value="@string/default_Web_Id"/>
+
         <activity
             android:name=".AuthActivity"
             android:exported="true">

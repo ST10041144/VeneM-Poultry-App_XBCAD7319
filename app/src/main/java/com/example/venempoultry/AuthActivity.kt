@@ -11,7 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.concurrent.Executor
@@ -19,12 +25,16 @@ import java.util.concurrent.Executor
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val RC_SIGN_IN = 123
+
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var signInButton: Button
     private lateinit var registerTextView: TextView
     private lateinit var cbRememberMe: CheckBox
     private lateinit var biometricsButton: ImageView
+    private lateinit var googleSignInButton: SignInButton
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var executor: Executor
@@ -35,7 +45,7 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        // Initialize Firebase and UI elements
+        // Initialize Firebase Auth and UI elements
         auth = FirebaseAuth.getInstance()
         sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
@@ -45,11 +55,12 @@ class AuthActivity : AppCompatActivity() {
         cbRememberMe = findViewById(R.id.cbRememberMe)
         registerTextView = findViewById(R.id.registerTextView)
         biometricsButton = findViewById(R.id.BiometricsButton)
+        googleSignInButton = findViewById(R.id.sign_in_button)
 
         // Auto-login if "Remember Me" is checked
         autoLogin()
 
-        // Regular login flow
+        // Email/Password login
         signInButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
@@ -67,15 +78,55 @@ class AuthActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Configure Google Sign-In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_Web_Id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        // Set Google Sign-In onClickListener
+        googleSignInButton.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
+
         // Initialize biometrics
         setupBiometrics()
 
-        // Set biometric login on click
+        // Set biometric login onClickListener
         biometricsButton.setOnClickListener {
             checkBiometricSupportAndAuthenticate()
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account?.idToken!!)
+            } catch (e: ApiException) {
+                showToast("Google Sign-In failed: ${e.message}")
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    showToast("Google Sign-In Successful")
+                    navigateToDashboard()
+                } else {
+                    showToast("Authentication Failed: ${task.exception?.message}")
+                }
+            }
+    }
+
+    // Retain the original methods below
     private fun setupBiometrics() {
         executor = ContextCompat.getMainExecutor(this)
         biometricPrompt = BiometricPrompt(
@@ -196,11 +247,6 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 }
-
-
-
-
-
 
 
 class RegistrationActivity : AppCompatActivity() {
