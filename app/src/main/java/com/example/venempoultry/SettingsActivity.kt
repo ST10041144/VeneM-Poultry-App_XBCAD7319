@@ -2,7 +2,6 @@ package com.example.venempoultry
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -11,25 +10,24 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.Switch
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import java.util.*
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var biometricsSwitch: Switch
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var languageSpinner: Spinner
-    private lateinit var logoutLayout: LinearLayout
+    private lateinit var logoutTextView: TextView  // Corrected to LogoutTextView
 
-    private var isUserChangingLanguage = false // Flag to check if the user is changing the language
+    private lateinit var sharedPreferences: SharedPreferences
+    private val languages = arrayOf("English", "Afrikaans", "Zulu")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,74 +41,32 @@ class SettingsActivity : AppCompatActivity() {
         // Find views
         biometricsSwitch = findViewById(R.id.biometrics_switch)
         languageSpinner = findViewById(R.id.languageSpinner)
-        logoutLayout = findViewById(R.id.logoutLayout)
+        logoutTextView = findViewById(R.id.logoutTextView)  // Corrected to match your naming
 
-        // Load current settings
-        loadBiometricSetting()
-        loadLanguageSetting()
-
-        // Set up listeners for biometrics
-        biometricsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            updateBiometricSettingInDatabase(isChecked)
-        }
+        // Load language settings
+        setupLanguageSpinner()
 
         // Set logout click listener
-        logoutLayout.setOnClickListener {
+        logoutTextView.setOnClickListener {
             confirmLogout()
         }
     }
 
-    private fun loadBiometricSetting() {
-        database.child("settings").child("biometrics").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val biometricsEnabled = snapshot.getValue(Boolean::class.java) ?: true
-                biometricsSwitch.isChecked = biometricsEnabled
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                showToast("Failed to load biometric setting")
-            }
-        })
-    }
-
-    private fun updateBiometricSettingInDatabase(isEnabled: Boolean) {
-        database.child("settings").child("biometrics").setValue(isEnabled)
-            .addOnSuccessListener {
-                showToast("Biometric setting updated")
-            }
-            .addOnFailureListener {
-                showToast("Failed to update biometric setting")
-            }
-    }
-
-    private fun loadLanguageSetting() {
-        val languages = arrayOf("English", "Afrikaans", "Zulu")
+    private fun setupLanguageSpinner() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, languages)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         languageSpinner.adapter = adapter
 
-        database.child("settings").child("language").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val selectedLanguage = snapshot.getValue(String::class.java) ?: "English"
-                val selectedPosition = languages.indexOf(selectedLanguage)
-                languageSpinner.setSelection(selectedPosition)
+        // Load saved language
+        val currentLanguage = sharedPreferences.getString("language", "English") ?: "English"
+        languageSpinner.setSelection(languages.indexOf(currentLanguage))
 
-                isUserChangingLanguage = true
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                showToast("Failed to load language setting")
-            }
-        })
-
+        // Handle language change
         languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                if (isUserChangingLanguage) {
-                    val selectedLanguage = languages[position]
-                    val currentLanguage = sharedPreferences.getString("language", "English") ?: "English"
-                    if (selectedLanguage != currentLanguage) {
-                        confirmLanguageChange(selectedLanguage)
-                    }
+                val selectedLanguage = languages[position]
+                if (selectedLanguage != currentLanguage) {
+                    confirmLanguageChange(selectedLanguage)
                 }
             }
 
@@ -123,53 +79,31 @@ class SettingsActivity : AppCompatActivity() {
             .setTitle("Change Language")
             .setMessage("Are you sure you want to change the language to $language?")
             .setPositiveButton("OK") { _, _ ->
-                updateLanguageSettingInDatabase(language)
+                changeLanguage(language)
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun updateLanguageSettingInDatabase(language: String) {
-        database.child("settings").child("language").setValue(language)
-            .addOnSuccessListener {
-                saveLanguagePreference(language)
-                showToast("Language updated to $language")
-                updateLocale(language)
-            }
-            .addOnFailureListener {
-                showToast("Failed to update language setting")
-            }
-    }
-
-    private fun saveLanguagePreference(language: String) {
+    private fun changeLanguage(language: String) {
+        // Save the selected language to preferences
         sharedPreferences.edit().putString("language", language).apply()
-    }
 
-    private fun updateLocale(language: String) {
+        // Update locale
         val localeCode = when (language) {
             "Afrikaans" -> "af"
             "Zulu" -> "zu"
             else -> "en"
         }
-
-        val newLocale = java.util.Locale(localeCode)
-        java.util.Locale.setDefault(newLocale)
-
-        val resources = resources
+        val newLocale = Locale(localeCode)
+        Locale.setDefault(newLocale)
         val config = resources.configuration
         config.setLocale(newLocale)
         resources.updateConfiguration(config, resources.displayMetrics)
 
-       // refreshUIComponents()
+        // Inform the user of the change
+        showToast("Language changed to $language. Changes will take effect after you leave this page.")
     }
-
-    //private fun refreshUIComponents() {
-        // Update locale-dependent UI components
-        //supportActionBar?.title = getString(R.string.settings_title)
-        //biometricsSwitch.text = getString(R.string.biometrics_label)
-
-        // Add any additional UI components here
-    //}
 
     private fun confirmLogout() {
         AlertDialog.Builder(this)
@@ -184,7 +118,6 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun logoutUser() {
         auth.signOut()
-        startActivity(Intent(this, AuthActivity::class.java))
         finish()
     }
 
