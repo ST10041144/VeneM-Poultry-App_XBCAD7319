@@ -43,8 +43,6 @@ class SettingsActivity : AppCompatActivity() {
         // Find views
         biometricsSwitch = findViewById(R.id.biometrics_switch)
         languageSpinner = findViewById(R.id.languageSpinner)
-
-        // Find the logout layout (LinearLayout)
         logoutLayout = findViewById(R.id.logoutLayout)
 
         // Load current settings
@@ -58,21 +56,9 @@ class SettingsActivity : AppCompatActivity() {
 
         // Set logout click listener
         logoutLayout.setOnClickListener {
-            // Handle the logout action here
-            FirebaseAuth.getInstance().signOut()
-
-            // Optionally, clear user preferences (if necessary)
-            // sharedPreferences.edit().clear().apply()
-
-            // Navigate to the login screen
-            startActivity(Intent(this, AuthActivity::class.java))
-
-            // Finish the current activity to prevent returning back
-            finish()
+            confirmLogout()
         }
     }
-
-
 
     private fun loadBiometricSetting() {
         database.child("settings").child("biometrics").addListenerForSingleValueEvent(object : ValueEventListener {
@@ -103,14 +89,12 @@ class SettingsActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         languageSpinner.adapter = adapter
 
-        // Load saved language from database or preferences
         database.child("settings").child("language").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val selectedLanguage = snapshot.getValue(String::class.java) ?: "English"
                 val selectedPosition = languages.indexOf(selectedLanguage)
                 languageSpinner.setSelection(selectedPosition)
 
-                // Allow user to change the language after it's loaded
                 isUserChangingLanguage = true
             }
 
@@ -119,12 +103,10 @@ class SettingsActivity : AppCompatActivity() {
             }
         })
 
-        languageSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+        languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 if (isUserChangingLanguage) {
                     val selectedLanguage = languages[position]
-
-                    // Check if the selected language is different from the current setting
                     val currentLanguage = sharedPreferences.getString("language", "English") ?: "English"
                     if (selectedLanguage != currentLanguage) {
                         confirmLanguageChange(selectedLanguage)
@@ -133,7 +115,7 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
-        })
+        }
     }
 
     private fun confirmLanguageChange(language: String) {
@@ -160,9 +142,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun saveLanguagePreference(language: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString("language", language)
-        editor.apply()
+        sharedPreferences.edit().putString("language", language).apply()
     }
 
     private fun updateLocale(language: String) {
@@ -176,24 +156,27 @@ class SettingsActivity : AppCompatActivity() {
         configuration.setLocale(java.util.Locale(localeCode))
         resources.updateConfiguration(configuration, resources.displayMetrics)
 
-        recreate() // Restart activity to apply changes
+        recreate()
+    }
+
+    private fun confirmLogout() {
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to log out?")
+            .setPositiveButton("Yes") { _, _ ->
+                logoutUser()
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+    private fun logoutUser() {
+        auth.signOut()
+        startActivity(Intent(this, AuthActivity::class.java))
+        finish()
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
-    // Logout functionality
-    private fun logoutUser() {
-        // Sign out the user from Firebase
-        auth.signOut()
-
-        // Navigate to the Login Activity
-        val intent = Intent(this, AuthActivity::class.java)
-        startActivity(intent)
-
-        // Optionally, finish the current activity to prevent returning to the settings screen when pressing back
-        finish()
-    }
 }
-
