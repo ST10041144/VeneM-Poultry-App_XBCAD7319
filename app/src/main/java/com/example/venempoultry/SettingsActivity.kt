@@ -32,7 +32,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var userNameTextView: TextView
     private lateinit var userEmailTextView: TextView
 
-    private var isUserChangingLanguage = false  // Flag to check if the user is changing the language
+    private var isUserChangingLanguage = false // Flag to check if the user is changing the language
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,13 +50,11 @@ class SettingsActivity : AppCompatActivity() {
         userNameTextView = findViewById(R.id.userNameTextView)
         userEmailTextView = findViewById(R.id.userEmailTextView)
 
-
         // Load user profile data
         loadUserProfile()
         // Load current settings
         loadBiometricSetting()
         loadLanguageSetting()
-
 
         // Set up listeners for biometrics
         biometricsSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -186,7 +184,11 @@ class SettingsActivity : AppCompatActivity() {
         configuration.setLocale(java.util.Locale(localeCode))
         resources.updateConfiguration(configuration, resources.displayMetrics)
 
-        recreate()
+        // Relaunch the StaffActivity to apply the changes
+        val intent = Intent(this, StaffActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun confirmLogout() {
