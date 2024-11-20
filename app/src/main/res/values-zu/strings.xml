@@ -1,0 +1,158 @@
+<resources>
+    <string name="app_name">VeneM Poultry</string>
+    <string name="welcome_back">Siyakwamukela!</string>
+    <string name="use_touch_id">Sebenzisa i-Touch ID ukuze ufake i-akhawunti</string>
+    <string name="or_use_email_and_password_instead">noma sebenzisa i-imeyili nephasiwedi esikhundleni salokho.</string>
+    <string name="enter_farmer_id">Faka i-Farmer ID</string>
+    <string name="enter_password">Faka iPhasiwedi</string>
+    <string name="sign_in">Ngena</string>
+    <string name="health">Impilo</string>
+    <string name="production">Ukukhiqiza</string>
+    <string name="settings">Izilungiselelo</string>
+    <string name="maintenance">Ukulungisa</string>
+    <string name="vaccine">Isifo</string>
+    <string name="medication">Imithi</string>
+    <string name="valuntion_vaccination">Ukuthela Isifo</string>
+    <string name="monitored_flock_batches">Amaqembu Ezinyoni Ezilalelwayo</string>
+    <string name="_26_dec">26 Disemba</string>
+    <string name="ongoing_medication_regiments">Izinhlelo Zokupha Imithi Eqhubekayo</string>
+    <string name="batch_a">Iqembu A</string>
+    <string name="batch_b">Iqembu B</string>
+    <string name="valuntion">Ukuthela</string>
+    <string name="ozempic">I-Ozempic</string>
+    <string name="_13_jan">13 Januwari</string>
+    <string name="next_checkup_dates">Izinsuku Zokuhlola Ezilandelayo</string>
+    <string name="vaccination_form">Ifomu Lokuthela</string>
+    <string name="date">Usuku</string>
+    <string name="disease">Isifo</string>
+    <string name="description">Incazelo</string>
+    <string name="next_checkup_date">Usuku Lokuhlola Olulandelayo</string>
+    <string name="prescription_instructions">Imiyalelo Yokuphumelela Imithi</string>
+    <string name="medication_form">Ifomu Lemithi</string>
+    <string name="welcome_venem_poultry">Siyakwamukela e-VeneM Poultry</string>
+    <string name="use_touch_id_to_sign_create_account">Sebenzisa i-Touch ID ukuze usayine udale i-akhawunti</string>
+    <string name="forgot_password">Ulibale iPhasiwedi?</string>
+    <string name="logout">Phuma</string>
+    <string name="manager">Umphathi</string>
+    <string name="amount">Faka Inani</string>
+    <string name="submit">Thumela</string>
+    <string name="search">Sesha</string>
+    <string name="all">Konke</string>
+    <string name="expenses">Izindleko</string>
+    <string name="sales">Imithengiso</string>
+    <string name="update">Buyekeza</string>
+    <string name="enter_amount">Faka Inani</string>
+    <string name="login">Ngena</string>
+    <string name="remember_me">Khunjulwa</string>
+    <string name="not_yet_registered_signup_now">Awukabhalisi? Bhalisa Manje</string>
+
+    <string-array name="transaction_type">
+        <item>Imithengiso/Izindleko</item>
+        <item>Imithengiso</item>
+        <item>Izindleko</item>
+    </string-array>
+
+    <string-array name="transaction_for_options">
+        <item>Ngenxa</item>
+        <item>Izindleko Zebhizinisi</item>
+        <item>Izindleko Zomuntu Siye</item>
+        <item>Isipho</item>
+        <item>Insizakalo</item>
+        <item>Ukuhamba</item>
+        <item>Ukudla Okufunekayo</item>
+        <item>Ukuzijabulisa</item>
+        <item>Imisebenzi Yezinsizakalo Zomphakathi</item>
+        <item>Inqoloba/Imali Yokwakha Indlu</item>
+        <item>Okunye</item>
+    </string-array>
+    <string-array name="relatedto">
+        <item>Ehlobene Nayo</item>
+        <item>Ukulungisa</item>
+        <item>Ukulungisa</item>
+        <item>Ukuhlanza</item>
+        <item>Ukufaka</item>
+        <item>Okunye</item>
+    </string-array>
+
+    <string-array name="urgencylevel">
+        <item>Izinga Lokuphazamiseka</item>
+        <item>Phezulu</item>
+        <item>Phambili</item>
+        <item>Phansi</item>
+    </string-array>
+    <string name="transaction_title_hint">Isihloko Sezinto Zokwenza Imali</string>
+    <string name="to_hint">Kuya</string>
+    <string name="maintenance_form_title">Ifomu Lokulungisa</string>
+    <string name="date_hint">Usuku (DD/MM/YYYY)</string>
+    <string name="issue_title_hint">Isihloko Sokuphuma Kwezinkinga</string>
+    <string name="related_to_label">Ehlobene Nayo</string>
+    <string name="urgency_level_label">Izinga Lokuphazamiseka</string>
+    <string name="description_hint">Incazelo</string>
+    <string name="possible_solution_hint">Isinqumo Esokwenzeka (Okungeyo Yamdingeko)</string>
+    <string name="submit_button">Thumela</string>
+    <string name="overall_health">Impilo Yonke</string>
+    <string name="flocks">Amaqembu Ezinyoni</string>
+    <string name="eggs">Amaqanda</string>
+    <string name="egg_production_this_week">Ukukhiqizwa Kwamaqanda Lale Sonto:</string>
+    <string name="meat_production_this_week">Ukukhiqizwa Kwenyama Lale Sonto:</string>
+    <string name="dozen_eggs">Amaqanda Angama-35</string>
+    <string name="meat_weight">Amakhilogremu Angama-2</string>
+    <string name="select_batch">Khetha Iqembu</string>
+    <string name="add_flock">Engeza Iqembu Lenyoni</string>
+    <string name="fetch_flocks">Thola Amaqembu Ezinyoni</string>
+    <string name="age_in_weeks">Iminyaka Engamaviki</string>
+    <string name="batch_size">Ubungako Beqembu</string>
+    <string name="species">Uhlobo</string>
+    <string name="issue_title">Isihloko Sokuphuma Kwezinkinga</string>
+    <string name="status_pending">Isimo: Silindile</string>
+    <string name="category">Isigaba</string>
+    <string name="_0_00">R0.00</string>
+    <string name="add">Engeza</string>
+    <string name="total_inventory">Inani Lonke</string>
+    <string name="chicken_image">Isithombe Sezokho</string>
+    <string name="_45_batches">Amaqembu Angama-45</string>
+    <string name="latest_22_september">Okwakamuva: 22 Septhemba</string>
+    <string name="meat_image">Isithombe Senyama</string>
+    <string name="_30_kg">Amakhilogremu Angama-30</string>
+    <string name="eggs_image">Isithombe Samaqanda</string>
+    <string name="_35_dozen">Amaqanda Angama-35</string>
+    <string name="feed_image">Isithombe Sokudla</string>
+    <string name="_10_kg">Amakhilogremu Angama-10</string>
+    <string name="enter_quantity">Faka Inani</string>
+    <string name="maintenance_issues">Izinkinga Zokulungisa</string>
+    <string name="register_account">Bhalisa i-Akhawunti</string>
+    <string name="full_name">Igama Eligcwele</string>
+    <string name="email">Imeyili</string>
+    <string name="password">Iphasiwedi</string>
+    <string name="confirm_password">Qinisekisa iPhasiwedi</string>
+    <string name="farmer">Umlimi</string>
+    <string name="register">Bhalisa</string>
+    <string name="already_registered_sign_in">Sele Ubhalisile? Ngena</string>
+    <string name="select_date">Khetha Usuku</string>
+    <string name="save">Gcina</string>
+    <string name="dashboard">Ibhodi Yokuphatha</string>
+    <string name="reports">Imibiko</string>
+    <string name="inventory">Inani Esikhoyo</string>
+    <string name="finances">Imali</string>
+    <string name="profile_image">Isithombe Sephrofayili</string>
+    <string name="andrew_tate">U-Andrew Tate</string>
+    <string name="drewtate_what_com">drewTate@what.com</string>
+    <string name="edit_profile">Hlela Iphrofayili</string>
+    <string name="auto_backup">Isipele Sokuzisindisa</string>
+    <string name="language">Ulimi</string>
+    <string name="english">IsiNgisi</string>
+    <string name="notifications">Izaziso</string>
+    <string name="help">Usizo</string>
+    <string name="contact">Xhumana</string>
+    <string name="manager_section">Isigaba Somphathi</string>
+    <string name="prescription">Umtholampara</string>
+    <string name="medication_name">Igama Lemithi</string>
+    <string name="total_production">Ukukhiqizwa Kwakho Konke</string>
+    <string name="_20">20</string>
+    <string name="_45">45</string>
+    <string name="biometrics">I-Biometrics</string>
+    <string name="date_01_01_2024">Usuku: 01/01/2024</string>
+    <string name="_70">70%</string>
+    <string name="_50">50%</string>
+    <string name="Feeding_dates">Izinsuku Zokudla</string>
+</resources>

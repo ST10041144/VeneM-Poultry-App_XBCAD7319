@@ -56,7 +56,7 @@
             android:gravity="center"
             android:text="@string/_70"
             android:textSize="16sp"
-            android:textColor="#FF9800"
+            android:textColor="#FF5722"
             android:textStyle="bold"/>
 
         <!-- Right Circular Progress Bar -->
@@ -86,7 +86,7 @@
             android:gravity="center"
             android:text="@string/_50"
             android:textSize="16sp"
-            android:textColor="#FF9800"
+            android:textColor="#FF5722"
             android:textStyle="bold"/>
 
         <TextView
@@ -211,13 +211,13 @@
         android:id="@+id/textView18"
         android:layout_width="299dp"
         android:layout_height="35dp"
-        android:layout_marginTop="48dp"
-        android:textColor="@color/black"
+        android:layout_marginTop="36dp"
         android:text="@string/meat_production_this_week"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.241"
+        app:layout_constraintHorizontal_bias="0.142"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

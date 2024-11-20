@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="app_name">VeneM Poultry</string>
+        <string name="welcome_back">Welkom Terug!!</string>
+        <string name="use_touch_id">Gebruik Touch ID om aan te meld</string>
+        <string name="or_use_email_and_password_instead">of gebruik e-pos en wagwoord</string>
+        <string name="enter_farmer_id">Voer Boer ID in</string>
+        <string name="enter_password">Voer Wagwoord in</string>
+        <string name="sign_in">Aanmeld</string>
+        <string name="health">Gesondheid</string>
+        <string name="production">Produksie</string>
+        <string name="settings">Instellings</string>
+        <string name="maintenance">Onderhoud</string>
+        <string name="vaccine">Entstof</string>
+        <string name="medication">Medikasie</string>
+        <string name="valuntion_vaccination">Waardasie Entstof</string>
+        <string name="monitored_flock_batches">Gemonitoreerde Kudde Groepe</string>
+        <string name="_26_dec">26 Des</string>
+        <string name="ongoing_medication_regiments">Aan die gang Medikasie Regimes</string>
+        <string name="batch_a">Batch A</string>
+        <string name="batch_b">Batch B</string>
+        <string name="valuntion">Waardasie</string>
+        <string name="ozempic">Ozempic</string>
+        <string name="_13_jan">13 Jan</string>
+        <string name="next_checkup_dates">Volgende Checkup Datums</string>
+        <string name="vaccination_form">Entstof Vorm</string>
+        <string name="date">Datum</string>
+        <string name="disease">Siekte</string>
+        <string name="description">Beskrywing</string>
+        <string name="next_checkup_date">Volgende Checkup Datum</string>
+        <string name="prescription_instructions">Voorskrif Instruksies</string>
+        <string name="medication_form">Medikasie Vorm</string>
+        <string name="welcome_venem_poultry">Welkom by VeneM Pluimvee</string>
+        <string name="use_touch_id_to_sign_create_account">Gebruik Touch ID om aan te meld en rekening te skep</string>
+        <string name="forgot_password">Wagwoord Vergeet?</string>
+        <string name="logout">Uitlog</string>
+        <string name="manager">Bestuurder</string>
+        <string name="amount">Voer Bedrag In</string>
+        <string name="submit">Stuur</string>
+        <string name="search">Soek</string>
+        <string name="all">Alles</string>
+        <string name="expenses">Uitgawes</string>
+        <string name="sales">Verkope</string>
+        <string name="update">Opdateer</string>
+        <string name="enter_amount">Voer Bedrag In</string>
+        <string name="login">Aanmeld</string>
+        <string name="remember_me">Onthou My</string>
+        <string name="not_yet_registered_signup_now">Nog nie geregistreer nie? Registreer Nou</string>
+
+        <string-array name="transaction_type">
+            <item>Verkope/Uitgawes</item>
+            <item>Verkope</item>
+            <item>Uitgawe</item>
+        </string-array>
+
+    <string-array name="transaction_for_options">
+        <item>Vir</item>
+        <item>Besigheids Uitgawes</item>
+        <item>Persoonlike Uitgawes</item>
+        <item>Geskenk</item>
+        <item>Diens</item>
+        <item>Reis</item>
+        <item>Kruideniersware</item>
+        <item>Vermaak</item>
+        <item>Dienste</item>
+        <item>Huur/Bond</item>
+        <item>Ander</item>
+    </string-array>
+    <string-array name="relatedto">
+        <item>Verwant aan</item>
+        <item>Onderhoud</item>
+        <item>Herstel</item>
+        <item>Skoonmaak</item>
+        <item>Installasie</item>
+        <item>Ander</item>
+    </string-array>
+
+    <string-array name="urgencylevel">
+        <item>Haastigheidsvlak</item>
+        <item>Hoog</item>
+        <item>Medium</item>
+        <item>Laag</item>
+    </string-array>
+    <string name="transaction_title_hint">Transaksie Titel</string>
+    <string name="to_hint">Aan</string>
+    <string name="maintenance_form_title">Onderhoud Vorm</string>
+    <string name="date_hint">Datum (DD/MM/YYYY)</string>
+    <string name="issue_title_hint">Probleem Titel</string>
+    <string name="related_to_label">Verwant Aan</string>
+    <string name="urgency_level_label">Haastigheidsvlak</string>
+    <string name="description_hint">Beskrywing</string>
+    <string name="possible_solution_hint">Moontlike Oplossing (Opsioneel)</string>
+    <string name="submit_button">Stuur</string>
+    <string name="overall_health">Algehele Gesondheid</string>
+    <string name="flocks">Kuddes</string>
+    <string name="eggs">Eiere</string>
+    <string name="egg_production_this_week">Eierproduksie Hierdie Week:</string>
+    <string name="meat_production_this_week">Vleisproduksie Hierdie Week:</string>
+    <string name="dozen_eggs">35 Dosyn</string>
+    <string name="meat_weight">2 Kg</string>
+    <string name="select_batch">Kies Groep</string>
+    <string name="add_flock">Voeg Kudde by</string>
+    <string name="fetch_flocks">Haal Kuddes</string>
+    <string name="age_in_weeks">Ouderdom in Weke</string>
+    <string name="batch_size">Groep Grootte</string>
+    <string name="species">Spesie</string>
+    <string name="issue_title">Probleem Titel</string>
+    <string name="status_pending">Status: Hangend</string>
+    <string name="category">Kategorie</string>
+    <string name="_0_00">R0.00</string>
+    <string name="add">Voeg by</string>
+    <string name="total_inventory">Totale Inventaris</string>
+    <string name="chicken_image">Hoender Beeld</string>
+    <string name="_45_batches">45 Groepe</string>
+    <string name="latest_22_september">Laaste: 22 September</string>
+    <string name="meat_image">Vleis Beeld</string>
+    <string name="_30_kg">30 Kg</string>
+    <string name="eggs_image">Eier Beeld</string>
+    <string name="_35_dozen">35 Dosyn</string>
+    <string name="feed_image">Voer Beeld</string>
+    <string name="_10_kg">10 Kg</string>
+    <string name="enter_quantity">Voer Hoeveelheid In</string>
+    <string name="maintenance_issues">Onderhoud Kwessies</string>
+    <string name="register_account">Registreer Rekening</string>
+    <string name="full_name">Volle Naam</string>
+    <string name="email">E-pos</string>
+    <string name="password">Wagwoord</string>
+    <string name="confirm_password">Bevestig Wagwoord</string>
+    <string name="farmer">Boer</string>
+    <string name="register">Registreer</string>
+    <string name="already_registered_sign_in">Reeds Geregistreer? Teken In</string>
+    <string name="select_date">Kies Datum</string>
+    <string name="save">Stoor</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="reports">Verslae</string>
+    <string name="inventory">Inventaris</string>
+    <string name="finances">Finansies</string>
+    <string name="profile_image">Profielfoto</string>
+    <string name="andrew_tate">Andrew Tate</string>
+    <string name="drewtate_what_com">drewTate@what.com</string>
+    <string name="edit_profile">Wysig Profiel</string>
+    <string name="auto_backup">Otomatis B rugsteun</string>
+    <string name="language">Taal</string>
+    <string name="english">Engels</string>
+    <string name="notifications">Kennisgewings</string>
+    <string name="help">Hulp</string>
+    <string name="contact">Kontak</string>
+    <string name="manager_section">Bestuurder Afdeling</string>
+    <string name="prescription">Voorskrif</string>
+    <string name="medication_name">Medikasie Naam</string>
+    <string name="total_production">Totale Produksie</string>
+    <string name="_20">20</string>
+    <string name="_45">45</string>
+    <string name="biometrics">Biometrie</string>
+    <string name="date_01_01_2024">Datum: 01/01/2024</string>
+    <string name="_70">70%</string>
+    <string name="_50">50%</string>
+    <string name="Feeding_dates">Voer Datums</string>
+    </resources>
+
+
