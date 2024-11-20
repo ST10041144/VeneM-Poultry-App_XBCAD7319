@@ -9,18 +9,6 @@
     tools:context=".StaffActivity">
 
     <!-- Title -->
-    <TextView
-        android:id="@+id/dashboardTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dashboard"
-        android:textColor="@color/black"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
 
     <!-- Health Card -->
 
@@ -35,14 +23,14 @@
         android:layout_width="170dp"
         android:layout_height="180dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
         android:background="@drawable/roundedd_button"
         android:elevation="8dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dashboardTitle">
+        tools:layout_editor_absoluteY="104dp"
+        tools:ignore="MissingConstraints">
 
         <ImageView
             android:layout_width="70dp"
@@ -148,9 +136,9 @@
         android:id="@+id/managerButton"
         android:layout_width="324dp"
         android:layout_height="57dp"
-        android:layout_marginBottom="124dp"
+        android:layout_marginBottom="96dp"
         android:backgroundTint="@color/UI"
-        android:text="Manager Section"
+        android:text="@string/manager_section"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -159,15 +147,16 @@
 
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="152dp"
-        android:layout_height="48dp"
+        android:layout_width="126dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/UI"
-        android:text="Logout"
+        android:text="@string/logout"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

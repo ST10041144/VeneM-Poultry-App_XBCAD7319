@@ -10,11 +10,11 @@
         android:id="@+id/textView13"
         android:layout_width="213dp"
         android:layout_height="35dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="32dp"
         android:text="@string/overall_health"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +22,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="369dp"
-        android:layout_height="182dp"
+        android:layout_height="135dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,9 +54,9 @@
             android:layout_alignStart="@id/circularProgressBarLeft"
             android:layout_alignEnd="@id/circularProgressBarLeft"
             android:gravity="center"
-            android:text="70%"
+            android:text="@string/_70"
             android:textSize="16sp"
-            android:textColor="#FFA500"
+            android:textColor="#3F51B5"
             android:textStyle="bold"/>
 
         <!-- Right Circular Progress Bar -->
@@ -84,9 +84,9 @@
             android:layout_alignStart="@id/circularProgressBarRight"
             android:layout_alignEnd="@id/circularProgressBarRight"
             android:gravity="center"
-            android:text="50%"
+            android:text="@string/_50"
             android:textSize="16sp"
-            android:textColor="#FFA500"
+            android:textColor="#3F51B5"
             android:textStyle="bold"/>
 
         <TextView
@@ -94,9 +94,10 @@
             android:layout_width="83dp"
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="30dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
             android:textColor="@color/black"
             android:text="@string/flocks"
             android:textAlignment="center"
@@ -107,8 +108,9 @@
             android:id="@+id/textView20"
             android:layout_width="83dp"
             android:layout_height="30dp"
+            android:layout_marginBottom="10dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="30dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
@@ -122,23 +124,23 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout3"
-        android:layout_width="372dp"
-        android:layout_height="134dp"
+        android:layout_width="370dp"
+        android:layout_height="117dp"
         android:layout_marginTop="68dp"
+        android:background="@drawable/card_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/card_background"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
 
         <ImageView
             android:id="@+id/imageView12"
-            android:layout_width="86dp"
-            android:layout_height="92dp"
+            android:layout_width="84dp"
+            android:layout_height="75dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="253dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginEnd="270dp"
+            android:layout_marginBottom="26dp"
             app:srcCompat="@drawable/ic_egg" />
 
         <TextView
@@ -147,33 +149,33 @@
             android:layout_height="43dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="217dp"
-            android:layout_marginBottom="54dp"
-            android:textColor="@color/black"
+            android:layout_marginStart="160dp"
+            android:layout_marginBottom="35dp"
             android:text="@string/dozen_eggs"
             android:textAlignment="center"
+            android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="372dp"
-        android:layout_height="134dp"
+        android:layout_width="373dp"
+        android:layout_height="123dp"
         android:layout_marginTop="84dp"
+        android:background="@drawable/card_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.564"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/card_background"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
 
         <ImageView
             android:id="@+id/imageView13"
-            android:layout_width="104dp"
-            android:layout_height="94dp"
+            android:layout_width="87dp"
+            android:layout_height="83dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="233dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="256dp"
+            android:layout_marginBottom="20dp"
             app:srcCompat="@drawable/ic_meat" />
 
         <TextView
@@ -182,11 +184,11 @@
             android:layout_height="49dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="232dp"
-            android:layout_marginBottom="38dp"
-            android:textColor="@color/black"
+            android:layout_marginStart="173dp"
+            android:layout_marginBottom="33dp"
             android:text="@string/meat_weight"
             android:textAlignment="center"
+            android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -195,9 +197,9 @@
         android:id="@+id/textView17"
         android:layout_width="304dp"
         android:layout_height="30dp"
-        android:layout_marginTop="36dp"
-        android:textColor="@color/black"
+        android:layout_marginTop="24dp"
         android:text="@string/egg_production_this_week"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -209,9 +211,9 @@
         android:id="@+id/textView18"
         android:layout_width="299dp"
         android:layout_height="35dp"
-        android:layout_marginTop="48dp"
-        android:textColor="@color/black"
+        android:layout_marginTop="40dp"
         android:text="@string/meat_production_this_week"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
