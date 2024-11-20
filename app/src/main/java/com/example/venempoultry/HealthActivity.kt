@@ -39,11 +39,13 @@ class HealthActivity : AppCompatActivity() {
     private lateinit var vaccinationsCard: CardView
     private lateinit var medicationCard: CardView
     private lateinit var nextCheckupCard: LinearLayout
+    private lateinit var feedingDatesCard: LinearLayout
 
     // UI Containers
     private lateinit var medicationListContainer: LinearLayout
     private lateinit var flockBatchListContainer: LinearLayout
     private lateinit var checkupDatesContainer: LinearLayout
+    private lateinit var feedingDatesContainer: LinearLayout
 
     // Hidden form for updating checkup date
     private lateinit var updateCheckupForm: LinearLayout
@@ -67,25 +69,29 @@ class HealthActivity : AppCompatActivity() {
         vaccinationsCard = findViewById(R.id.vaccinationsCard)
         medicationCard = findViewById(R.id.medicationCardView)
         nextCheckupCard = findViewById(R.id.nextCheckupCard)
+        feedingDatesCard = findViewById(R.id.FeedingDatesCard)
         medicationListContainer = findViewById(R.id.medicationListContainer)
         flockBatchListContainer = findViewById(R.id.flockBatchListContainer)
         checkupDatesContainer = findViewById(R.id.checkupDatesContainer)
+        feedingDatesContainer = findViewById(R.id.FeedingDatesContainer)
 
         // Hidden Form Initialization
-        updateCheckupForm = findViewById(R.id.updateCheckupForm)
-        batchDropdown = findViewById(R.id.batchDropdown)
-        dateInput = findViewById(R.id.dateInput)
-        saveButton = findViewById(R.id.saveButton)
+        updateCheckupForm = findViewById(R.id.updateFeedingForm)
+        batchDropdown = findViewById(R.id.FeedingDropdown)
+        dateInput = findViewById(R.id.FeedingdateInput)
+        saveButton = findViewById(R.id.saveFeedButton)
 
         // Set up UI actions
         setupBatchDropdown()
         setupDatePicker()
         setCardViewClickListeners()
+
+        // Button for saving the checkup date
         saveButton.setOnClickListener {
             val selectedBatch = batchDropdown.text.toString()
             val selectedDate = dateInput.text.toString()
             if (selectedBatch.isNotEmpty() && selectedDate.isNotEmpty()) {
-                saveCheckupDate(selectedBatch, selectedDate)
+                saveFeedingDate(selectedBatch, selectedDate)
             } else {
                 Toast.makeText(this, "Please select both batch and date", Toast.LENGTH_SHORT).show()
             }
@@ -95,29 +101,20 @@ class HealthActivity : AppCompatActivity() {
         fetchMedicationData()
         fetchVaccineData()
         fetchCheckupDates()
+        fetchFeedingDates()
     }
 
-    // Toggle visibility of the update form
-    private fun toggleCheckupFormVisibility() {
+    // Toggle visibility of the feeding dates update form
+    private fun toggleFeedingFormVisibility() {
         updateCheckupForm.visibility = if (updateCheckupForm.visibility == View.GONE) View.VISIBLE else View.GONE
     }
 
-    // Setup Batch Dropdown
-    private fun setupBatchDropdown() {
-        val batches = listOf("Batch A", "Batch B", "Batch C", "Batch D")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, batches)
-        batchDropdown.setAdapter(adapter)
-    }
-
-    // Setup Date Picker
-    private fun setupDatePicker() {
-        dateInput.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val datePickerDialog = DatePickerDialog(this, { _, year, month, day ->
-                dateInput.setText("$day/${month + 1}/$year")
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-            datePickerDialog.show()
-        }
+    // Set click listeners
+    private fun setCardViewClickListeners() {
+        nextCheckupCard.setOnClickListener { toggleFeedingFormVisibility() }
+        vaccinationsCard.setOnClickListener { startActivity(Intent(this, VaccinationsActivity::class.java)) }
+        medicationCard.setOnClickListener { startActivity(Intent(this, MedicationActivity::class.java)) }
+        feedingDatesCard.setOnClickListener { toggleFeedingFormVisibility() }
     }
 
     // Fetch and display ongoing medication regimens
@@ -190,6 +187,30 @@ class HealthActivity : AppCompatActivity() {
             })
     }
 
+    // Fetch and display feeding dates
+    private fun fetchFeedingDates() {
+        val userId = auth.currentUser?.uid ?: return
+        feedingDatesContainer.removeAllViews()
+
+        database.child("feedingDates")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (feedingSnapshot in snapshot.children) {
+                            val batch = feedingSnapshot.child("batch").getValue(String::class.java) ?: "No Batch"
+                            val date = feedingSnapshot.child("date").getValue(String::class.java) ?: "No Date"
+                            val itemLayout = createTextViewLayout(batch, date)
+                            feedingDatesContainer.addView(itemLayout)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@HealthActivity, "Error fetching feeding dates: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
     // Helper function to create item layout
     private fun createTextViewLayout(text1: String, text2: String): LinearLayout {
         val layout = LinearLayout(this)
@@ -200,7 +221,7 @@ class HealthActivity : AppCompatActivity() {
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
         }
         val textView2 = TextView(this).apply {
-            setTextColor(Color.BLACK) // Set text color to black
+            setTextColor(Color.BLACK)
             text = text2
         }
         layout.addView(textView1)
@@ -208,76 +229,47 @@ class HealthActivity : AppCompatActivity() {
         return layout
     }
 
-    // Save the checkup date for the selected batch
-    private fun saveCheckupDate(selectedBatch: String, selectedDate: String) {
+    // Save the feeding date for the selected batch
+    private fun saveFeedingDate(selectedBatch: String, selectedDate: String) {
         val userId = auth.currentUser?.uid ?: return
-        val checkupData = mapOf(
+        val feedingData = mapOf(
             "batch" to selectedBatch,
             "date" to selectedDate
         )
 
-        // Save the data to Firebase Database under the user's "nextCheckupDates" node
-        database.child("nextCheckupDates").push()
-            .setValue(checkupData)
+        // Save the data to Firebase Database under the user's "feedingDates" node
+        database.child("feedingDates").push()
+            .setValue(feedingData)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Show a Toast message
-                    Toast.makeText(this, "Checkup date saved successfully!", Toast.LENGTH_SHORT).show()
-
-                    // Trigger the notification after successfully saving the data
-                    sendNotification("Checkup date saved for $selectedBatch on $selectedDate")
-
-                    // Refresh the list of checkup dates
-                    fetchCheckupDates()
-
-                    // Hide the form after saving
-                    toggleCheckupFormVisibility()
+                    Toast.makeText(this, "Feeding date saved successfully!", Toast.LENGTH_SHORT).show()
+                    fetchFeedingDates()  // Refresh the feeding dates list
+                    toggleFeedingFormVisibility()  // Hide the form after saving
                 } else {
-                    Toast.makeText(this, "Error saving checkup date: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error saving feeding date: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-
-    // Function to send a notification
-    private fun sendNotification(message: String) {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = "health_notifications"
-
-        // Create the Notification Channel for Android Oreo and higher
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Health Notifications",
-                NotificationManager.IMPORTANCE_DEFAULT
-            ).apply {
-                description = "Notifications related to health checkups"
-            }
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        // Build the notification
-        val notification: Notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(android.R.drawable.ic_menu_info_details) // Use an appropriate icon here
-            .setContentTitle("Health Checkup Notification")
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
-
-        // Show the notification
-        notificationManager.notify(1, notification)
+    // Setup Batch Dropdown
+    private fun setupBatchDropdown() {
+        val batches = listOf("Batch A", "Batch B", "Batch C", "Batch D")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, batches)
+        batchDropdown.setAdapter(adapter)
     }
 
+    // Setup Date Picker for feeding dates
+    private fun setupDatePicker() {
+        val calendar = Calendar.getInstance()
+        val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            val date = "$dayOfMonth/${month + 1}/$year"
+            dateInput.setText(date)
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
 
-
-
-    // Set click listeners
-    private fun setCardViewClickListeners() {
-        nextCheckupCard.setOnClickListener { toggleCheckupFormVisibility() }
-        vaccinationsCard.setOnClickListener { startActivity(Intent(this, VaccinationsActivity::class.java)) }
-        medicationCard.setOnClickListener { startActivity(Intent(this, MedicationActivity::class.java)) }
+        dateInput.setOnClickListener { datePicker.show() }
     }
 }
+
 
 
 class VaccinationsActivity : AppCompatActivity() {

@@ -129,6 +129,70 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/FeedingDatesCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/card_background"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Feeding_dates"
+            android:textColor="#0A70C1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Container for displaying multiple checkup dates -->
+        <LinearLayout
+            android:id="@+id/FeedingDatesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp" />
+
+        <!-- Hidden Form Layout for Updating Checkup Date -->
+        <LinearLayout
+            android:id="@+id/updateFeedingForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:visibility="gone"> <!-- This ensures the form is hidden initially -->
+
+            <AutoCompleteTextView
+                android:id="@+id/FeedingDropdown"
+                android:layout_width="match_parent"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_batch" />
+
+            <EditText
+                android:id="@+id/FeedingdateInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_date"
+                android:focusable="false"
+                android:textColor="@color/black"
+                android:clickable="true" />
+
+            <Button
+                android:id="@+id/saveFeedButton"
+                android:layout_width="match_parent"
+                android:backgroundTint="@color/UI"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:text="@string/save" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 
     <!-- Vaccinations and Medication Cards -->
