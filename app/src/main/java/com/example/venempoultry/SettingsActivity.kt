@@ -29,7 +29,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var languageSpinner: Spinner
     private lateinit var logoutLayout: LinearLayout
 
-    private var isUserChangingLanguage = false  // Flag to check if the user is changing the language
+    private var isUserChangingLanguage = false // Flag to check if the user is changing the language
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,12 +152,24 @@ class SettingsActivity : AppCompatActivity() {
             else -> "en"
         }
 
-        val configuration = resources.configuration
-        configuration.setLocale(java.util.Locale(localeCode))
-        resources.updateConfiguration(configuration, resources.displayMetrics)
+        val newLocale = java.util.Locale(localeCode)
+        java.util.Locale.setDefault(newLocale)
 
-        recreate()
+        val resources = resources
+        val config = resources.configuration
+        config.setLocale(newLocale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+       // refreshUIComponents()
     }
+
+    //private fun refreshUIComponents() {
+        // Update locale-dependent UI components
+        //supportActionBar?.title = getString(R.string.settings_title)
+        //biometricsSwitch.text = getString(R.string.biometrics_label)
+
+        // Add any additional UI components here
+    //}
 
     private fun confirmLogout() {
         AlertDialog.Builder(this)
