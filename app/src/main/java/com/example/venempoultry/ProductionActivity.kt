@@ -31,7 +31,8 @@ class ProductionActivity : AppCompatActivity() {
         binding = ActivityStaffProductionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize Firebase Database
+
+        // Initialize Firebase Database reference
         database = FirebaseDatabase.getInstance().reference
 
         // Load current production data from Firebase
@@ -57,19 +58,47 @@ class ProductionActivity : AppCompatActivity() {
                         meatCount = snapshot.child("meatCount").getValue(Int::class.java) ?: 0
                         eggsCount = snapshot.child("eggsCount").getValue(Int::class.java) ?: 0
 
+                        // Safely handle "lastUpdateDate"
+                        val lastUpdateDate = snapshot.child("lastUpdateDate").getValue(String::class.java)
+                            ?: "" // Default value if null or incorrect type
+
+                        val productionData = mapOf(
+                            "chickenCount" to chickenCount,
+                            "meatCount" to meatCount,
+                            "eggsCount" to eggsCount,
+                            "lastUpdateDate" to lastUpdateDate
+                        )
+
+                        // Save the fetched data to local cache
+                        saveToLocalCache(productionData)
+
                         // Update the UI with the fetched data
                         updateTextViews()
                     } else {
-                        // Initialize production data if not present
-                        saveProductionDataToFirebase()
+                        Log.w("ProductionActivity", "No production data found. Loading from cache...")
+                        loadFromCacheAndUpdateUI()
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
+                    Log.e("ProductionActivity", "Failed to load data: ${error.message}", error.toException())
                     Toast.makeText(this@ProductionActivity, "Failed to load data: ${error.message}", Toast.LENGTH_SHORT).show()
+
+                    // Load cached data if Firebase fails
+                    loadFromCacheAndUpdateUI()
                 }
             })
     }
+
+
+    private fun loadFromCacheAndUpdateUI() {
+        val cachedData = loadFromLocalCache()
+        chickenCount = cachedData["chickenCount"] as Int
+        meatCount = cachedData["meatCount"] as Int
+        eggsCount = cachedData["eggsCount"] as Int
+        updateTextViews()
+    }
+
 
     private fun updateCount(editText: EditText, type: String) {
         val input = editText.text.toString()
@@ -87,28 +116,24 @@ class ProductionActivity : AppCompatActivity() {
                 // Save the updated production data to Firebase immediately
                 saveProductionDataToFirebase()
             } else {
+                Log.w("ProductionActivity", "Invalid input: $input")
                 Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
             }
         } else {
+            Log.w("ProductionActivity", "Empty input field")
             Toast.makeText(this, "Please enter a value", Toast.LENGTH_SHORT).show()
         }
     }
 
-
-
     private fun updateTextViews() {
-        // Log the values for debugging
-        Log.d("ProductionActivity", "Chicken Count: $chickenCount")
-        Log.d("ProductionActivity", "Meat Count: $meatCount")
-        Log.d("ProductionActivity", "Eggs Count: $eggsCount")
+        // Log the updated values for debugging
+        Log.d("ProductionActivity", "Updating UI with - Chicken: $chickenCount, Meat: $meatCount, Eggs: $eggsCount")
 
         // Update UI elements
         binding.chickenCountText.text = "$chickenCount chickens"
         binding.meatCountText.text = "$meatCount kg"
         binding.eggsCountText.text = "$eggsCount dozen"
     }
-
-
 
     private fun saveProductionDataToFirebase() {
         val lastUpdateDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -119,7 +144,10 @@ class ProductionActivity : AppCompatActivity() {
             "lastUpdateDate" to lastUpdateDate
         )
 
-        // Log the production data for debugging
+        // Save to local cache
+        saveToLocalCache(productionData)
+
+        // Log for debugging
         Log.d("ProductionActivity", "Saving production data: $productionData")
 
         // Update Firebase
@@ -128,16 +156,43 @@ class ProductionActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     showToast("Production data updated successfully!")
+                    Log.d("ProductionActivity", "Data saved successfully")
                 } else {
+                    Log.e("ProductionActivity", "Failed to save data: ${task.exception?.message}")
                     showToast("Failed to update data: ${task.exception?.message}")
                 }
             }
     }
 
+    private fun saveToLocalCache(data: Map<String, Any>) {
+        val sharedPreferences = getSharedPreferences("ProductionCache", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        data.forEach { (key, value) ->
+            when (value) {
+                is Int -> editor.putInt(key, value)
+                is String -> editor.putString(key, value)
+            }
+        }
+        editor.apply()
+    }
+
+    private fun loadFromLocalCache(): Map<String, Any> {
+        val sharedPreferences = getSharedPreferences("ProductionCache", MODE_PRIVATE)
+        val cachedData = mutableMapOf<String, Any>()
+        cachedData["chickenCount"] = sharedPreferences.getInt("chickenCount", 0)
+        cachedData["meatCount"] = sharedPreferences.getInt("meatCount", 0)
+        cachedData["eggsCount"] = sharedPreferences.getInt("eggsCount", 0)
+        cachedData["lastUpdateDate"] = sharedPreferences.getString("lastUpdateDate", "") ?: ""
+        return cachedData
+    }
+
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
+
 
 
 

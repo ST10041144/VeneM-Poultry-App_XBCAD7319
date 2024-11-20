@@ -1,5 +1,6 @@
 package com.example.venempoultry
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
@@ -227,30 +228,26 @@ class ManagerMaintenanceActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = MaintenanceAdapter(emptyList())  // Initialize with empty list
+        adapter = MaintenanceAdapter(emptyMap())  // Initialize with empty map
         recyclerView.adapter = adapter
 
         loadMaintenanceIssues()
     }
 
     private fun loadMaintenanceIssues() {
-        // Get the maintenance issues from Realtime Database
-        db.child("maintenanceIssues")  // Points to the "maintenanceIssues" node
+        db.child("maintenanceIssues")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val issues = mutableListOf<MaintenanceIssue>()
-                        for (issueSnapshot in snapshot.children) {
-                            val issue = issueSnapshot.getValue(MaintenanceIssue::class.java)
-                            if (issue != null) {
-                                issues.add(issue)
-                            }
+                    val issuesMap = mutableMapOf<String, MaintenanceIssue>()
+                    for (issueSnapshot in snapshot.children) {
+                        val key = issueSnapshot.key // Get the unique key for the issue
+                        val issue = issueSnapshot.getValue(MaintenanceIssue::class.java)
+                        if (key != null && issue != null) {
+                            issuesMap[key] = issue
                         }
-                        // Update RecyclerView with the fetched issues
-                        adapter.updateData(issues)
-                    } else {
-                        Toast.makeText(this@ManagerMaintenanceActivity, "No issues found", Toast.LENGTH_SHORT).show()
                     }
+                    // Pass the issues map to the adapter
+                    adapter.updateData(issuesMap)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -258,9 +255,13 @@ class ManagerMaintenanceActivity : AppCompatActivity() {
                 }
             })
     }
+
 }
 
-class MaintenanceAdapter(private var issues: List<MaintenanceIssue>) : RecyclerView.Adapter<MaintenanceAdapter.MaintenanceViewHolder>() {
+class MaintenanceAdapter(private var issuesMap: Map<String, MaintenanceIssue>) :
+    RecyclerView.Adapter<MaintenanceAdapter.MaintenanceViewHolder>() {
+
+    private val issuesList: MutableList<Pair<String, MaintenanceIssue>> = issuesMap.toList().toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaintenanceViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_maintenance_issue, parent, false)
@@ -268,28 +269,67 @@ class MaintenanceAdapter(private var issues: List<MaintenanceIssue>) : RecyclerV
     }
 
     override fun onBindViewHolder(holder: MaintenanceViewHolder, position: Int) {
-        val issue = issues[position]
+        val (key, issue) = issuesList[position]
         holder.titleTextView.text = issue.title
         holder.dateTextView.text = issue.date
         holder.statusTextView.text = issue.status
 
         // Optional: Color the text based on the status
         when (issue.status) {
-            "Pending" -> holder.titleTextView.setTextColor(
-                ContextCompat.getColor(holder.itemView.context, R.color.black)
+            "Pending" -> holder.statusTextView.setTextColor(
+                ContextCompat.getColor(holder.itemView.context, R.color.red)
             )
-            "Resolved" -> holder.titleTextView.setTextColor(
-                ContextCompat.getColor(holder.itemView.context, R.color.black)
+            "Resolved" -> holder.statusTextView.setTextColor(
+                ContextCompat.getColor(holder.itemView.context, R.color.orange)
             )
+        }
+
+        // Handle click on the status text
+        holder.statusTextView.setOnClickListener {
+            showStatusDialog(holder, key, issue)
         }
     }
 
-    override fun getItemCount(): Int {
-        return issues.size
+    private fun showStatusDialog(holder: MaintenanceViewHolder, key: String, issue: MaintenanceIssue) {
+        val context = holder.itemView.context
+        val options = arrayOf("Pending", "Resolved")
+
+        AlertDialog.Builder(context)
+            .setTitle("Update Status")
+            .setSingleChoiceItems(options, options.indexOf(issue.status)) { dialog, which ->
+                val newStatus = options[which]
+
+                // Update the status in the Firebase database
+                FirebaseDatabase.getInstance().reference
+                    .child("maintenanceIssues")
+                    .child(key) // Use the unique key
+                    .child("status")
+                    .setValue(newStatus)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Status updated to $newStatus", Toast.LENGTH_SHORT).show()
+
+                        // Update the status locally and refresh the view
+                        issue.status = newStatus
+                        notifyItemChanged(holder.adapterPosition)
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Failed to update status", Toast.LENGTH_SHORT).show()
+                    }
+
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
-    fun updateData(newIssues: List<MaintenanceIssue>) {
-        issues = newIssues
+    override fun getItemCount(): Int {
+        return issuesList.size
+    }
+
+    fun updateData(newIssuesMap: Map<String, MaintenanceIssue>) {
+        issuesMap = newIssuesMap
+        issuesList.clear()
+        issuesList.addAll(newIssuesMap.toList())
         notifyDataSetChanged()
     }
 
@@ -303,7 +343,7 @@ class MaintenanceAdapter(private var issues: List<MaintenanceIssue>) : RecyclerV
 data class MaintenanceIssue(
     val title: String = "",
     val date: String = "",
-    val status: String = "Pending"
+    var status: String = "Pending"
 )
 
 

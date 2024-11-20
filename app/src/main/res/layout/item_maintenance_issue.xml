@@ -43,6 +43,9 @@
             android:text="@string/status_pending"
             android:textSize="16sp"
             android:textColor="#F46F6F"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
