@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="@string/maintenance_form_title"
-        android:textColor="#3F51B5"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
