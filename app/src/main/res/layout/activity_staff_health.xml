@@ -108,13 +108,13 @@
                 android:layout_width="match_parent"
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                android:hint="Select Batch" />
+                android:hint="@string/select_batch" />
 
             <EditText
                 android:id="@+id/dateInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Select Date"
+                android:hint="@string/select_date"
                 android:focusable="false"
                 android:textColor="@color/black"
                 android:clickable="true" />
@@ -125,7 +125,7 @@
                 android:backgroundTint="@color/UI"
                 android:textColor="@color/white"
                 android:layout_height="wrap_content"
-                android:text="Save" />
+                android:text="@string/save" />
         </LinearLayout>
     </LinearLayout>
 

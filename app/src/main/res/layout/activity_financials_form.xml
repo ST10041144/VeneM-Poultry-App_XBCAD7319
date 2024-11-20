@@ -117,7 +117,7 @@
         android:layout_height="150dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/input_background"
-        android:hint="Description"
+        android:hint="@string/description"
         android:textColor="@color/black"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"

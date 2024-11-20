@@ -30,7 +30,7 @@
             android:id="@+id/issueDateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date: 01/01/2024"
+            android:text="@string/date_01_01_2024"
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
             android:layout_marginBottom="8dp" />

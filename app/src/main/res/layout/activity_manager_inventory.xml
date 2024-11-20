@@ -7,28 +7,21 @@
     android:padding="16dp">
 
     <!-- Total Inventory Title -->
-    <TextView
-        android:id="@+id/inventory_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Inventory"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="36sp"
-        android:textStyle="bold" />
+
+    <!-- Card 1 - Batches -->
 
     <TextView
         android:id="@+id/total_inventory_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total Inventory"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/total_inventory"
+        android:layout_marginStart="105dp"
         android:textColor="@android:color/black"
-        android:layout_marginBottom="12dp"/>
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
-    <!-- Card 1 - Batches -->
     <LinearLayout
         android:id="@+id/cardChickenBatches"
         android:layout_width="match_parent"
@@ -43,7 +36,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_chicken"
-            android:contentDescription="Chicken Image"/>
+            android:contentDescription="@string/chicken_image"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -56,7 +49,7 @@
                 android:id="@+id/tvChickenBatches"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="45 Batches"
+                android:text="@string/_45_batches"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"/>
 
@@ -64,7 +57,7 @@
                 android:id="@+id/tvChickenBatchDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Latest: 22 September"
+                android:text="@string/latest_22_september"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"/>
         </LinearLayout>
@@ -85,7 +78,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_meat"
-            android:contentDescription="Meat Image"/>
+            android:contentDescription="@string/meat_image"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -98,7 +91,7 @@
                 android:id="@+id/tvMeatProduction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="30 Kg"
+                android:text="@string/_30_kg"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"/>
 
@@ -106,7 +99,7 @@
                 android:id="@+id/tvMeatProductionDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Latest: 22 September"
+                android:text="@string/latest_22_september"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"/>
         </LinearLayout>
@@ -127,7 +120,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_egg"
-            android:contentDescription="Eggs Image"/>
+            android:contentDescription="@string/eggs_image"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -140,7 +133,7 @@
                 android:id="@+id/tvEggProduction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="35 Dozen"
+                android:text="@string/_35_dozen"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"/>
 
@@ -148,7 +141,7 @@
                 android:id="@+id/tvEggProductionDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Latest: 22 September"
+                android:text="@string/latest_22_september"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"/>
         </LinearLayout>
@@ -171,7 +164,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_feed"
-            android:contentDescription="Feed Image"/>
+            android:contentDescription="@string/feed_image"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -184,7 +177,7 @@
                 android:id="@+id/tvFeedQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10 Kg"
+                android:text="@string/_10_kg"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"
                 android:clickable="true"
@@ -194,7 +187,7 @@
                 android:id="@+id/editFeedQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Enter Quantity"
+                android:hint="@string/enter_quantity"
                 android:textColor="@android:color/black"
                 android:inputType="numberDecimal"
                 android:visibility="gone"/>
@@ -203,7 +196,7 @@
                 android:id="@+id/tvFeedDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Latest: 22 September"
+                android:text="@string/latest_22_september"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"/>
         </LinearLayout>

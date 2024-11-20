@@ -23,7 +23,7 @@
             android:layout_height="80dp"
             android:src="@drawable/ic_profile_placeholder"
             android:layout_gravity="center_horizontal"
-            android:contentDescription="Profile Image"
+            android:contentDescription="@string/profile_image"
             android:background="@drawable/ic_profile" />
 
         <!-- Name and Email -->
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Andrew Tate"
+            android:text="@string/andrew_tate"
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@android:color/black"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="drewTate@what.com"
+            android:text="@string/drewtate_what_com"
             android:textColor="@android:color/darker_gray"
             android:textSize="14sp"
             android:layout_marginBottom="16dp" />
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Edit Profile"
+            android:text="@string/edit_profile"
             android:textSize="14sp"
             android:backgroundTint="@android:color/transparent"
             android:textColor="#FD6100"
@@ -85,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Auto Backup"
+                android:text="@string/auto_backup"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -111,7 +111,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Language"
+                android:text="@string/language"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -120,7 +120,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="English"
+                android:text="@string/english"
                 android:textSize="16sp"
                 android:textColor="@android:color/darker_gray"/>
         </LinearLayout>
@@ -135,7 +135,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notifications"
+                android:text="@string/notifications"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -178,7 +178,7 @@
                 android:id="@+id/helpTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Help"
+                android:text="@string/help"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:layout_marginStart="16dp"
@@ -211,7 +211,7 @@
                 android:id="@+id/contactTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contact"
+                android:text="@string/contact"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:layout_marginStart="16dp"
@@ -243,7 +243,7 @@
                 android:id="@+id/logoutTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logout"
+                android:text="@string/logout"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:layout_marginStart="16dp"

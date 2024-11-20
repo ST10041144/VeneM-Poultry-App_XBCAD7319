@@ -13,11 +13,12 @@
         android:id="@+id/totalProductionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total Production"
+        android:text="@string/total_production"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="24sp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -47,12 +48,12 @@
 
             <TextView
                 android:id="@+id/chickenCountText"
-                android:layout_width="184dp"
+                android:layout_width="170dp"
                 android:layout_height="26dp"
                 android:textColor="@color/black"
                 android:layout_weight="1"
                 android:paddingStart="16dp"
-                android:text="45"
+                android:text="@string/_45"
                 android:textSize="18sp" />
 
             <EditText
@@ -97,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                android:text="10 kg"
+                android:text="@string/_10_kg"
                 android:textSize="18sp"
                 android:layout_weight="1"
                 android:paddingStart="16dp"/>
@@ -142,7 +143,7 @@
                 android:id="@+id/eggsCountText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20"
+                android:text="@string/_20"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:layout_weight="1"
@@ -165,14 +166,14 @@
     <!-- Submit Button -->
     <Button
         android:id="@+id/updateButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="282dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/UI"
         android:text="@string/update"
         android:textColor="@color/white"
-        android:backgroundTint="@color/UI"
-        app:layout_constraintTop_toBottomOf="@id/eggsCard"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eggsCard" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
