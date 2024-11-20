@@ -1,9 +1,17 @@
 package com.example.venempoultry
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
@@ -17,119 +25,161 @@ import com.google.firebase.database.ValueEventListener
 
 class ManagerSettingsActivity : AppCompatActivity() {
 
-    private lateinit var autoBackupSwitch: Switch
-    private lateinit var notificationsSwitch: Switch
-    private lateinit var helpTextView: TextView
-    private lateinit var contactTextView: TextView
-    private lateinit var logoutTextView: TextView
-    private lateinit var editProfileButton: Button
-    private lateinit var profileImageView: ImageView
-    private lateinit var userNameTextView: TextView
-    private lateinit var userEmailTextView: TextView
-
-    private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+    private lateinit var biometricsSwitch: Switch
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var languageSpinner: Spinner
+    private lateinit var logoutLayout: LinearLayout
+
+    private var isUserChangingLanguage = false  // Flag to check if the user is changing the language
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manager_settings)
 
-        // Initialize Firebase
+        // Initialize Firebase and SharedPreferences
         auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().reference
+        database = FirebaseDatabase.getInstance().reference.child("users").child(auth.currentUser?.uid ?: "")
+        sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
-        // Initialize UI components
-        autoBackupSwitch = findViewById(R.id.auto_backup_switch)
-        notificationsSwitch = findViewById(R.id.notifications_switch)
-        helpTextView = findViewById(R.id.helpTextView)
-        contactTextView = findViewById(R.id.contactTextView)
-        logoutTextView = findViewById(R.id.logoutTextView)
-        editProfileButton = findViewById(R.id.edit_profile_button)
-        profileImageView = findViewById(R.id.profileImageView)
-        userNameTextView = findViewById(R.id.userNameTextView)
-        userEmailTextView = findViewById(R.id.userEmailTextView)
+        // Find views
+        biometricsSwitch = findViewById(R.id.biometrics_switch)
+        languageSpinner = findViewById(R.id.languageSpinner)
+        logoutLayout = findViewById(R.id.logoutLayout)
 
-        // Load manager profile and preferences
-        setManagerProfileInfo()
-        loadManagerPreferences()
+        // Load current settings
+        loadBiometricSetting()
+        loadLanguageSetting()
 
-        // Set UI listeners
-        setListeners()
-    }
+        // Set up listeners for biometrics
+        biometricsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            updateBiometricSettingInDatabase(isChecked)
+        }
 
-    private fun loadManagerPreferences() {
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            database.child("managers").child(userId).child("preferences").addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val isAutoBackupEnabled = snapshot.child("auto_backup").getValue(Boolean::class.java) ?: false
-                    val areNotificationsEnabled = snapshot.child("notifications").getValue(Boolean::class.java) ?: true
-
-                    // Set values in UI
-                    autoBackupSwitch.isChecked = isAutoBackupEnabled
-                    notificationsSwitch.isChecked = areNotificationsEnabled
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@ManagerSettingsActivity, "Failed to load preferences", Toast.LENGTH_SHORT).show()
-                }
-            })
+        // Set logout click listener
+        logoutLayout.setOnClickListener {
+            confirmLogout()
         }
     }
 
-    private fun setListeners() {
-        // Auto Backup Switch Listener
-        autoBackupSwitch.setOnCheckedChangeListener { _, isChecked ->
-            savePreference("auto_backup", isChecked)
-            Toast.makeText(this, "Auto Backup is now ${if (isChecked) "enabled" else "disabled"}", Toast.LENGTH_SHORT).show()
-        }
+    private fun loadBiometricSetting() {
+        database.child("settings").child("biometrics").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val biometricsEnabled = snapshot.getValue(Boolean::class.java) ?: true
+                biometricsSwitch.isChecked = biometricsEnabled
+            }
 
-        // Notifications Switch Listener
-        notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            savePreference("notifications", isChecked)
-            Toast.makeText(this, "Notifications are now ${if (isChecked) "enabled" else "disabled"}", Toast.LENGTH_SHORT).show()
-        }
+            override fun onCancelled(error: DatabaseError) {
+                showToast("Failed to load biometric setting")
+            }
+        })
+    }
 
-        // Help & Contact clicks (can add navigation here)
-        helpTextView.setOnClickListener {
-            // Add help action or open help dialog
-        }
-        contactTextView.setOnClickListener {
-            // Add contact action or open contact dialog
-        }
+    private fun updateBiometricSettingInDatabase(isEnabled: Boolean) {
+        database.child("settings").child("biometrics").setValue(isEnabled)
+            .addOnSuccessListener {
+                showToast("Biometric setting updated")
+            }
+            .addOnFailureListener {
+                showToast("Failed to update biometric setting")
+            }
+    }
 
-        // Logout Button Listener
-        logoutTextView.setOnClickListener {
-            auth.signOut()
-            startActivity(Intent(this, AuthActivity::class.java))
-            finish()
+    private fun loadLanguageSetting() {
+        val languages = arrayOf("English", "Afrikaans", "Zulu")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, languages)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        languageSpinner.adapter = adapter
+
+        database.child("settings").child("language").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val selectedLanguage = snapshot.getValue(String::class.java) ?: "English"
+                val selectedPosition = languages.indexOf(selectedLanguage)
+                languageSpinner.setSelection(selectedPosition)
+
+                isUserChangingLanguage = true
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                showToast("Failed to load language setting")
+            }
+        })
+
+        languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (isUserChangingLanguage) {
+                    val selectedLanguage = languages[position]
+                    val currentLanguage = sharedPreferences.getString("language", "English") ?: "English"
+                    if (selectedLanguage != currentLanguage) {
+                        confirmLanguageChange(selectedLanguage)
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
     }
 
-    private fun setManagerProfileInfo() {
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            database.child("managers").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val userName = snapshot.child("name").getValue(String::class.java) ?: "Manager"
-                    val userEmail = snapshot.child("email").getValue(String::class.java) ?: "No Email"
-
-                    // Set profile data
-                    userNameTextView.text = userName
-                    userEmailTextView.text = userEmail
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@ManagerSettingsActivity, "Failed to load profile", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
+    private fun confirmLanguageChange(language: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Change Language")
+            .setMessage("Are you sure you want to change the language to $language?")
+            .setPositiveButton("OK") { _, _ ->
+                updateLanguageSettingInDatabase(language)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
-    private fun savePreference(key: String, value: Any) {
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            database.child("managers").child(userId).child("preferences").child(key).setValue(value)
+    private fun updateLanguageSettingInDatabase(language: String) {
+        database.child("settings").child("language").setValue(language)
+            .addOnSuccessListener {
+                saveLanguagePreference(language)
+                showToast("Language updated to $language")
+                updateLocale(language)
+            }
+            .addOnFailureListener {
+                showToast("Failed to update language setting")
+            }
+    }
+
+    private fun saveLanguagePreference(language: String) {
+        sharedPreferences.edit().putString("language", language).apply()
+    }
+
+    private fun updateLocale(language: String) {
+        val localeCode = when (language) {
+            "Afrikaans" -> "af"
+            "Zulu" -> "zu"
+            else -> "en"
         }
+
+        val configuration = resources.configuration
+        configuration.setLocale(java.util.Locale(localeCode))
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+
+        recreate()
+    }
+
+    private fun confirmLogout() {
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to log out?")
+            .setPositiveButton("Yes") { _, _ ->
+                logoutUser()
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+    private fun logoutUser() {
+        auth.signOut()
+        startActivity(Intent(this, AuthActivity::class.java))
+        finish()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
