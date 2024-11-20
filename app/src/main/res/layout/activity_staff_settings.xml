@@ -243,12 +243,15 @@
 
             <!-- Logout -->
             <LinearLayout
+                android:id="@+id/logoutLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:padding="16dp"
+                android:background="?android:attr/selectableItemBackground" > <!-- Optional: adds a ripple effect -->
 
                 <ImageView
                     android:layout_width="24dp"
@@ -266,6 +269,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_weight="1" />
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
