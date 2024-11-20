@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.Switch
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +29,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var languageSpinner: Spinner
     private lateinit var logoutLayout: LinearLayout
+    private lateinit var userNameTextView: TextView
+    private lateinit var userEmailTextView: TextView
 
     private var isUserChangingLanguage = false  // Flag to check if the user is changing the language
 
@@ -44,10 +47,16 @@ class SettingsActivity : AppCompatActivity() {
         biometricsSwitch = findViewById(R.id.biometrics_switch)
         languageSpinner = findViewById(R.id.languageSpinner)
         logoutLayout = findViewById(R.id.logoutLayout)
+        userNameTextView = findViewById(R.id.userNameTextView)
+        userEmailTextView = findViewById(R.id.userEmailTextView)
 
+
+        // Load user profile data
+        loadUserProfile()
         // Load current settings
         loadBiometricSetting()
         loadLanguageSetting()
+
 
         // Set up listeners for biometrics
         biometricsSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -58,6 +67,27 @@ class SettingsActivity : AppCompatActivity() {
         logoutLayout.setOnClickListener {
             confirmLogout()
         }
+    }
+
+    private fun loadUserProfile() {
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val userName = snapshot.child("id").getValue(String::class.java) ?: "Unknown"
+                    val userEmail = snapshot.child("email").getValue(String::class.java) ?: "Unknown"
+
+                    // Set the text to the TextViews
+                    userNameTextView.text = userName
+                    userEmailTextView.text = userEmail
+                } else {
+                    showToast("User data not found.")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                showToast("Failed to load user profile: ${error.message}")
+            }
+        })
     }
 
     private fun loadBiometricSetting() {

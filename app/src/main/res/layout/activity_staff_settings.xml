@@ -26,22 +26,22 @@
             android:id="@+id/userNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/andrew_tate"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:layout_marginBottom="4dp"
             android:gravity="center"
-            android:layout_marginBottom="4dp" />
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/userEmailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:gravity="left|center"
-            android:text="@string/drewtate_what_com"
+            android:text=""
+            android:textSize="14sp"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:gravity="left|center"
+            android:layout_marginBottom="12dp" />
 
         <Button
             android:id="@+id/editProfileButton"
