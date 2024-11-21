@@ -6,6 +6,12 @@
     android:background="@color/white"
     android:layout_height="match_parent">
 
+    <!-- Code Attribution
+       // This is was referenced from GeeksForGeeks
+       // https://www.geeksforgeeks.org/android-recyclerview/
+       // Author Name GeeksForGeeks
+       // https://www.geeksforgeeks.org/android-recyclerview/ -->
+
     <TextView
         android:id="@+id/textView13"
         android:layout_width="213dp"

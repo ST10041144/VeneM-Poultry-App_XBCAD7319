@@ -6,6 +6,12 @@
     android:background="@color/white"
     android:padding="16dp">
 
+    <!--  Code Attribution
+       // This code was referenced from StackOverFlow
+       // https://stackoverflow.com/questions/25372467/how-to-make-a-simple-settings-page-in-android
+       // Author Name StackOverFlow
+       // https://stackoverflow.com/questions/25372467/how-to-make-a-simple-settings-page-in-android -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

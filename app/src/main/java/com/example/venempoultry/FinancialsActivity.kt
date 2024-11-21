@@ -23,6 +23,13 @@ import com.google.firebase.database.ValueEventListener
 import java.util.Calendar
 
 
+//Code Attribution
+//This code was referenced from StackOverFlow
+// https://stackoverflow.com/questions/37793362/making-form-on-android-studio
+//Author Name StackOverFlow
+// https://stackoverflow.com/questions/37793362/making-form-on-android-studio
+
+
 class FinancialsActivity : AppCompatActivity() {
 
     private lateinit var financialEntriesContainer: LinearLayout

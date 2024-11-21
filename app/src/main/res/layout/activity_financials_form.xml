@@ -8,8 +8,13 @@
     android:background="@color/white"
     android:padding="16dp">
 
-    <!-- Title -->
-    <!-- Title element can be added here if needed -->
+
+    <!-- Code Attribution
+    This code was referenced from StackOverFlow
+    https://stackoverflow.com/questions/37793362/making-form-on-android-studio
+    Author Name StackOverFlow
+    https://stackoverflow.com/questions/37793362/making-form-on-android-studio-->
+
 
     <!-- Amount Input -->
     <EditText

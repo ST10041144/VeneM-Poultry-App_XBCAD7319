@@ -31,7 +31,11 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 
 
-
+//Code Attribution
+//This code was referenced from Android Developers
+//https://developer.android.com/training/data-storage/shared-preferences
+//Author Name Android Developers
+//https://developer.android.com/training/data-storage/shared-preferences
 
 
 class HealthActivity : AppCompatActivity() {

@@ -14,16 +14,13 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -33,6 +30,11 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.database.getValue
 import java.util.PriorityQueue
 
+// Code Attribution
+// This is was referenced from GeeksForGeeks
+// https://www.geeksforgeeks.org/android-recyclerview/
+// Author Name GeeksForGeeks
+// https://www.geeksforgeeks.org/android-recyclerview/
 
 class StaffMaintenanceActivity : AppCompatActivity() {
 

@@ -7,6 +7,12 @@
     android:padding="16dp"
     android:background="@color/white">
 
+    <!-- Code Attribution
+    //This code was referenced from Android Developers
+    //https://developer.android.com/training/data-storage/shared-preferences
+    //Author Name Android Developers
+    //https://developer.android.com/training/data-storage/shared-preferences -->
+
     <!-- Species Input -->
     <EditText
         android:id="@+id/editTextSpecies"

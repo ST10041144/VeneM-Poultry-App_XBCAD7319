@@ -18,10 +18,6 @@ class MainActivity : AppCompatActivity() {
         // Enable Firebase offline persistence (moved here for redundancy)
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
-//        supabase = SupabaseClient.builder()
-//            .url("https://your-supabase-url.supabase.co") // Replace with your Supabase URL
-//            .apikey("your-anon-key") // Replace with your Supabase anon key
-//            .build()
     }
 
     private fun fetchFlocks(token: String) {

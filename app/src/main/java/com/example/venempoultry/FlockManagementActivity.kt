@@ -5,6 +5,12 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 
+//Code Attribution
+//This code was referenced from Android Developers
+//https://developer.android.com/training/data-storage/shared-preferences
+//Author Name Android Developers
+//https://developer.android.com/training/data-storage/shared-preferences
+
 class FlockManagementActivity : AppCompatActivity() {
 
     private lateinit var speciesEditText: EditText

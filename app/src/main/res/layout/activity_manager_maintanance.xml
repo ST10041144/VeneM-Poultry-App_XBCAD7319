@@ -8,6 +8,13 @@
     android:background="@color/white"
     tools:context=".ManagerMaintenanceActivity">
 
+    <!-- Code Attribution
+     // This is was referenced from GeeksForGeeks
+     // https://www.geeksforgeeks.org/android-recyclerview/
+     // Author Name GeeksForGeeks
+     // https://www.geeksforgeeks.org/android-recyclerview/ -->
+
+
     <!-- Title -->
     <TextView
         android:id="@+id/maintenanceIssuesTitle"
