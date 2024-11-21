@@ -22,6 +22,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.concurrent.Executor
 
+// Code Attribution
+//This code was referenced from Developers
+//https://developer.android.com/identity/sign-in/biometric-auth
+//Author Name Developers
+//https://developer.android.com/identity/sign-in/biometric-auth
+
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -126,6 +132,10 @@ class AuthActivity : AppCompatActivity() {
             }
     }
 
+    // Show a biometric authentication dialog
+    // Android Studio Developer Guide
+    // https://developer.android.com/identity/sign-in/biometric-auth
+
     // Retain the original methods below
     private fun setupBiometrics() {
         executor = ContextCompat.getMainExecutor(this)
@@ -163,6 +173,10 @@ class AuthActivity : AppCompatActivity() {
             .build()
     }
 
+    // Show a biometric authentication dialog
+    // Android Studio Developer Guide
+    // https://developer.android.com/identity/sign-in/biometric-auth
+
     private fun checkBiometricSupportAndAuthenticate() {
         val biometricManager = BiometricManager.from(this)
         when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
@@ -175,6 +189,10 @@ class AuthActivity : AppCompatActivity() {
             else -> showToast("Biometric authentication is not supported on this device.")
         }
     }
+
+    // Show a biometric authentication dialog
+    // Android Studio Developer Guide
+    // https://developer.android.com/identity/sign-in/biometric-auth
 
     private fun reAuthenticateWithBiometrics() {
         val email = sharedPreferences.getString("email", null)

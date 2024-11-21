@@ -1,0 +1,35 @@
+name: SonarCloud analysis
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: read # Allows SonarCloud to decorate PRs with analysis results
+
+jobs:
+  Analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: SonarCloud Analysis
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: "71b52d264d17e8c8dbb3d1523af37753f4878203"
+        with:
+          args: >
+            -Dsonar.projectKey=venem_venem-poultry-app-xbcad7319
+            -Dsonar.organization=venem
+            -Dsonar.host.url=https://sonarcloud.io

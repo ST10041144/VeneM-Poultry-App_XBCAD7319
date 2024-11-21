@@ -21,6 +21,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+// Code Attribution
+//This code was referenced from StackOverFlow
+// https://stackoverflow.com/questions/25372467/how-to-make-a-simple-settings-page-in-android
+// Author Name StackOverFlow
+//https://stackoverflow.com/questions/25372467/how-to-make-a-simple-settings-page-in-android
+
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth

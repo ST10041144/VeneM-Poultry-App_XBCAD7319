@@ -8,6 +8,12 @@
     android:background="#F6F5F5"
     tools:context=".HealthActivity">
 
+    <!-- Code Attribution
+        //This code was referenced from Android Developers
+        //https://developer.android.com/training/data-storage/shared-preferences
+        //Author Name Android Developers
+        //https://developer.android.com/training/data-storage/shared-preferences -->
+
     <!-- Ongoing Medication Regimens Card -->
     <LinearLayout
         android:id="@+id/medicationCard"

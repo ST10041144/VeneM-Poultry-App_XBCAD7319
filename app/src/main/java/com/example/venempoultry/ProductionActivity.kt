@@ -14,6 +14,12 @@ import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.*
 
+// Code Attribution
+//This code was referenced from StackOverFlow
+// https://stackoverflow.com/questions/25372467/how-to-make-a-simple-settings-page-in-android
+// Author Name StackOverFlow
+//https://stackoverflow.com/questions/25372467/how-to-make-a-simple-settings-page-in-android
+
 class ProductionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStaffProductionBinding

@@ -6,9 +6,11 @@
     android:background="@color/white"
     android:padding="16dp">
 
-    <!-- Total Inventory Title -->
-
-    <!-- Card 1 - Batches -->
+    <!-- //Code Attribution
+     // This code was referenced from StackOverFlow
+     // https://stackoverflow.com/questions/61453437/how-can-i-add-cardview-to-my-android-studio-project#:~:text=Navigate%20to%20the%20layout%20design%20part%20and%20select,add%20the%20following%20dependency%20com.google.android.material%3Amaterial%3A1.0.0%20and%20you%27re%20done.
+     // Author Name StackOverFlow
+     // https://stackoverflow.com/questions/61453437/how-can-i-add-cardview-to-my-android-studio-project#:~:text=Navigate%20to%20the%20layout%20design%20part%20and%20select,add%20the%20following%20dependency%20com.google.android.material%3Amaterial%3A1.0.0%20and%20you%27re%20done. -->
 
     <TextView
         android:id="@+id/total_inventory_title"

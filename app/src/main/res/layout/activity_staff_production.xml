@@ -8,6 +8,12 @@
     android:layout_height="match_parent"
     tools:context=".ProductionActivity">
 
+    <!--  Code Attribution
+       // This code was referenced from StackOverFlow
+       // https://stackoverflow.com/questions/25372467/how-to-make-a-simple-settings-page-in-android
+       // Author Name StackOverFlow
+       // https://stackoverflow.com/questions/25372467/how-to-make-a-simple-settings-page-in-android -->
+
     <!-- Title -->
     <TextView
         android:id="@+id/totalProductionTitle"

@@ -10,7 +10,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -19,6 +18,12 @@ import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+//Code Attribution
+// This code was referenced from StackOverFlow
+// https://stackoverflow.com/questions/61453437/how-can-i-add-cardview-to-my-android-studio-project#:~:text=Navigate%20to%20the%20layout%20design%20part%20and%20select,add%20the%20following%20dependency%20com.google.android.material%3Amaterial%3A1.0.0%20and%20you%27re%20done.
+// Author Name StackOverFlow
+// https://stackoverflow.com/questions/61453437/how-can-i-add-cardview-to-my-android-studio-project#:~:text=Navigate%20to%20the%20layout%20design%20part%20and%20select,add%20the%20following%20dependency%20com.google.android.material%3Amaterial%3A1.0.0%20and%20you%27re%20done.
 
 class InventoryActivity : AppCompatActivity() {
 

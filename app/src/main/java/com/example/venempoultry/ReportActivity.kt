@@ -12,6 +12,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+
+// Code Attribution
+// This is was referenced from GeeksForGeeks
+// https://www.geeksforgeeks.org/android-recyclerview/
+// Author Name GeeksForGeeks
+// https://www.geeksforgeeks.org/android-recyclerview/
+
 class ReportActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityManagerReportBinding
