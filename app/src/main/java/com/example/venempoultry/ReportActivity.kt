@@ -61,7 +61,7 @@ class ReportActivity : AppCompatActivity() {
 
                         // Update the UI for egg production
                         runOnUiThread {
-                            binding.eggProductionDetail.text = "$totalEggs Eggs" // Display total eggs
+                            binding.eggProductionDetail.text = "$totalEggs Dozen" // Display total eggs
                             binding.circularProgressBarRight.progress = eggsPercentage.toInt() // Update the progress bar
                             binding.rightProgressPercentage.text = "${eggsPercentage.toInt()}%" // Display the percentage
                         }
