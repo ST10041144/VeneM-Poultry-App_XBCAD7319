@@ -48,7 +48,6 @@
         <activity android:name=".MedicationActivity" />
         <activity android:name=".VaccinationsActivity" />
         <activity android:name=".HealthActivity" />
-        <activity android:name=".FlockManagementActivity" />
 
         <service
             android:name=".NotificationsActivity"

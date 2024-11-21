@@ -49,8 +49,11 @@ class HealthActivity : AppCompatActivity() {
 
     // Hidden form for updating checkup date
     private lateinit var updateCheckupForm: LinearLayout
+    private lateinit var updateFeedingForm: LinearLayout
     private lateinit var batchDropdown: AutoCompleteTextView
+    private lateinit var feedingDropdown: AutoCompleteTextView
     private lateinit var dateInput: EditText
+    private lateinit var feedingdateInput: EditText
     private lateinit var saveButton: Button
 
     // Firebase Database and Auth reference
@@ -76,9 +79,12 @@ class HealthActivity : AppCompatActivity() {
         feedingDatesContainer = findViewById(R.id.FeedingDatesContainer)
 
         // Hidden Form Initialization
-        updateCheckupForm = findViewById(R.id.updateFeedingForm)
-        batchDropdown = findViewById(R.id.FeedingDropdown)
-        dateInput = findViewById(R.id.FeedingdateInput)
+        updateCheckupForm = findViewById(R.id.updateCheckupForm)
+        updateFeedingForm = findViewById(R.id.updateFeedingForm)
+        feedingDropdown = findViewById(R.id.feedingDropdown)
+        batchDropdown = findViewById(R.id.batchDropdown)
+        dateInput = findViewById(R.id.dateInput)
+        feedingdateInput = findViewById(R.id.feedingdateInput)
         saveButton = findViewById(R.id.saveFeedButton)
 
         // Set up UI actions
@@ -106,20 +112,23 @@ class HealthActivity : AppCompatActivity() {
 
     // Toggle visibility of the feeding dates update form
     private fun toggleFeedingFormVisibility() {
+        updateFeedingForm.visibility = if (updateFeedingForm.visibility == View.GONE) View.VISIBLE else View.GONE
+    }
+    private fun toggleCheckupFormVisibility() {
         updateCheckupForm.visibility = if (updateCheckupForm.visibility == View.GONE) View.VISIBLE else View.GONE
     }
 
     // Set click listeners
     private fun setCardViewClickListeners() {
-        nextCheckupCard.setOnClickListener { toggleFeedingFormVisibility() }
+        nextCheckupCard.setOnClickListener { toggleCheckupFormVisibility() }
         vaccinationsCard.setOnClickListener { startActivity(Intent(this, VaccinationsActivity::class.java)) }
         medicationCard.setOnClickListener { startActivity(Intent(this, MedicationActivity::class.java)) }
         feedingDatesCard.setOnClickListener { toggleFeedingFormVisibility() }
     }
 
+
     // Fetch and display ongoing medication regimens
     private fun fetchMedicationData() {
-        val userId = auth.currentUser?.uid ?: return
         medicationListContainer.removeAllViews()
 
         database.child("medications")
@@ -142,7 +151,6 @@ class HealthActivity : AppCompatActivity() {
 
     // Fetch and display monitored flock batches
     private fun fetchVaccineData() {
-        val userId = auth.currentUser?.uid ?: return
         flockBatchListContainer.removeAllViews()
 
         database.child("vaccinations")
@@ -166,7 +174,6 @@ class HealthActivity : AppCompatActivity() {
 
     // Fetch and display next checkup dates
     private fun fetchCheckupDates() {
-        val userId = auth.currentUser?.uid ?: return
         checkupDatesContainer.removeAllViews()
 
         database.child("nextCheckupDates")
@@ -189,7 +196,6 @@ class HealthActivity : AppCompatActivity() {
 
     // Fetch and display feeding dates
     private fun fetchFeedingDates() {
-        val userId = auth.currentUser?.uid ?: return
         feedingDatesContainer.removeAllViews()
 
         database.child("feedingDates")
@@ -231,7 +237,6 @@ class HealthActivity : AppCompatActivity() {
 
     // Save the feeding date for the selected batch
     private fun saveFeedingDate(selectedBatch: String, selectedDate: String) {
-        val userId = auth.currentUser?.uid ?: return
         val feedingData = mapOf(
             "batch" to selectedBatch,
             "date" to selectedDate

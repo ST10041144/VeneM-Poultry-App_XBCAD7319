@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/disease"
         android:padding="12dp"
+        android:textColor="@color/black"
         android:textColorHint="#8A8A8A"
         android:background="@drawable/input_background"
         android:layout_marginBottom="16dp" />
@@ -55,6 +56,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/select_batch"
             android:padding="12dp"
+            android:textColor="@color/black"
             android:background="@drawable/input_background"
             tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -68,6 +70,7 @@
         android:background="@drawable/input_background"
         android:gravity="top|start"
         android:hint="@string/description"
+        android:textColor="@color/black"
         android:inputType="textMultiLine"
         android:minLines="3"
         android:padding="12dp"
@@ -79,6 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="@string/medication"
+        android:textColor="@color/black"
         android:padding="12dp"
         android:textColorHint="#8A8A8A"
         android:background="@drawable/input_background"
