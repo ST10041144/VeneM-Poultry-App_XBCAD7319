@@ -59,6 +59,7 @@ class HealthActivity : AppCompatActivity() {
     private lateinit var dateInput: EditText
     private lateinit var feedingdateInput: EditText
     private lateinit var saveButton: Button
+    private lateinit var saveFeedButton: Button
 
     // Firebase Database and Auth reference
     private lateinit var database: DatabaseReference
@@ -89,11 +90,13 @@ class HealthActivity : AppCompatActivity() {
         batchDropdown = findViewById(R.id.batchDropdown)
         dateInput = findViewById(R.id.dateInput)
         feedingdateInput = findViewById(R.id.feedingdateInput)
-        saveButton = findViewById(R.id.saveFeedButton)
+        saveButton = findViewById(R.id.saveButton)
+        saveFeedButton= findViewById(R.id.saveFeedButton)
 
         // Set up UI actions
         setupBatchDropdown()
         setupDatePicker()
+        setupFeedDatePicker()
         setCardViewClickListeners()
 
         // Button for saving the checkup date
@@ -101,11 +104,23 @@ class HealthActivity : AppCompatActivity() {
             val selectedBatch = batchDropdown.text.toString()
             val selectedDate = dateInput.text.toString()
             if (selectedBatch.isNotEmpty() && selectedDate.isNotEmpty()) {
-                saveFeedingDate(selectedBatch, selectedDate)
+                saveCheckupDate(selectedBatch, selectedDate)
             } else {
                 Toast.makeText(this, "Please select both batch and date", Toast.LENGTH_SHORT).show()
             }
         }
+
+        saveFeedButton.setOnClickListener {
+            val selectedFeedBatch = feedingDropdown.text.toString()
+            val selectedFeedDate = feedingdateInput.text.toString()
+            if (selectedFeedBatch.isNotEmpty() && selectedFeedDate.isNotEmpty()) {
+                saveFeedingDate(selectedFeedBatch, selectedFeedDate)
+            } else {
+                Toast.makeText(this, "Please select both batch and date", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
 
         // Fetch data for all sections
         fetchMedicationData()
@@ -239,11 +254,32 @@ class HealthActivity : AppCompatActivity() {
         return layout
     }
 
-    // Save the feeding date for the selected batch
-    private fun saveFeedingDate(selectedBatch: String, selectedDate: String) {
-        val feedingData = mapOf(
+    private fun saveCheckupDate(selectedBatch: String, selectedDate: String) {
+        val checkupData = mapOf(
             "batch" to selectedBatch,
             "date" to selectedDate
+        )
+
+        // Save to Firebase
+        database.child("nextCheckupDates").push()
+            .setValue(checkupData)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Checkup date saved successfully!", Toast.LENGTH_SHORT).show()
+                    fetchCheckupDates() // Refresh the checkup dates list
+                    toggleCheckupFormVisibility() // Hide the form after saving
+                } else {
+                    Toast.makeText(this, "Error saving checkup date: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+
+    // Save the feeding date for the selected batch
+    private fun saveFeedingDate(selectedFeedBatch: String, selectedFeedDate: String) {
+        val feedingData = mapOf(
+            "batch" to selectedFeedBatch,
+            "date" to selectedFeedDate
         )
 
         // Save the data to Firebase Database under the user's "feedingDates" node
@@ -260,12 +296,30 @@ class HealthActivity : AppCompatActivity() {
             }
     }
 
-    // Setup Batch Dropdown
+
+    // Setup Batch Dropdown to dynamically fetch from Firebase
     private fun setupBatchDropdown() {
-        val batches = listOf("Batch A", "Batch B", "Batch C", "Batch D")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, batches)
-        batchDropdown.setAdapter(adapter)
+        database.child("batches") // Replace "batches" with the correct node in your Firebase database
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val batchList = mutableListOf<String>()
+                    if (snapshot.exists()) {
+                        for (batchSnapshot in snapshot.children) {
+                            val batchName = batchSnapshot.child("name").getValue(String::class.java)
+                            batchName?.let { batchList.add(it) }
+                        }
+                    }
+                    // Set up the adapter for the dropdown
+                    val adapter = ArrayAdapter(this@HealthActivity, android.R.layout.simple_dropdown_item_1line, batchList)
+                    batchDropdown.setAdapter(adapter)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@HealthActivity, "Error loading batches: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
+
 
     // Setup Date Picker for feeding dates
     private fun setupDatePicker() {
@@ -273,9 +327,21 @@ class HealthActivity : AppCompatActivity() {
         val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             val date = "$dayOfMonth/${month + 1}/$year"
             dateInput.setText(date)
+            feedingdateInput.setText(date)
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
 
         dateInput.setOnClickListener { datePicker.show() }
+        feedingdateInput.setOnClickListener { datePicker.show() }
+    }
+
+    private fun setupFeedDatePicker() {
+        val calendar = Calendar.getInstance()
+        val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            val date = "$dayOfMonth/${month + 1}/$year"
+            feedingdateInput.setText(date)
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+
+        feedingdateInput.setOnClickListener { datePicker.show() }
     }
 }
 
