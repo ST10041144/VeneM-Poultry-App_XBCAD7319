@@ -1,17 +1,18 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="12dp"
-    android:padding="20dp"
-    android:backgroundTint="@color/white"
->
+    android:padding="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="8dp"
         android:background="@drawable/input_background">
 
         <!-- Issue Title -->
@@ -19,7 +20,7 @@
             android:id="@+id/issueTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/issue_title"
+            android:text="Issue Title"
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@color/black"
@@ -30,7 +31,7 @@
             android:id="@+id/issueDateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/date_01_01_2024"
+            android:text="01/01/2024"
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
             android:layout_marginBottom="8dp" />
@@ -40,12 +41,33 @@
             android:id="@+id/issueStatusTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/status_pending"
+            android:text="Pending"
             android:textSize="16sp"
             android:textColor="#F46F6F"
             android:layout_marginBottom="8dp"
             android:clickable="true"
             android:focusable="true" />
+
+        <!-- Issue Urgency -->
+        <TextView
+            android:id="@+id/urgencyTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Urgency: High"
+            android:textSize="16sp"
+            android:textColor="#FF0000"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Dependencies Button -->
+        <Button
+            android:id="@+id/dependenciesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/orange"
+            android:textColor="@color/white"
+            android:padding="8dp"
+            android:text="View Dependencies" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -27,8 +27,11 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.google.firebase.database.getValue
+import java.util.PriorityQueue
 
 
 class StaffMaintenanceActivity : AppCompatActivity() {
@@ -215,12 +218,20 @@ class StaffMaintenanceActivity : AppCompatActivity() {
     }
 }
 
-
+// ManagerMaintenanceActivity.kt
 class ManagerMaintenanceActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MaintenanceAdapter
     private val db = FirebaseDatabase.getInstance().reference
+
+    // Priority Queues for issues based on urgency
+    private val highPriorityQueue = PriorityQueue<MaintenanceIssue>(compareByDescending { it.urgencyLevel })
+    private val mediumPriorityQueue = PriorityQueue<MaintenanceIssue>(compareByDescending { it.urgencyLevel })
+    private val lowPriorityQueue = PriorityQueue<MaintenanceIssue>(compareByDescending { it.urgencyLevel })
+
+    // Dependency Graph for issues
+    private val dependencyGraph = mutableMapOf<String, List<String>>() // Key: Issue ID, Value: List of dependencies
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -228,7 +239,7 @@ class ManagerMaintenanceActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = MaintenanceAdapter(emptyMap())  // Initialize with empty map
+        adapter = MaintenanceAdapter(emptyList()) // Initialize with an empty list
         recyclerView.adapter = adapter
 
         loadMaintenanceIssues()
@@ -238,16 +249,40 @@ class ManagerMaintenanceActivity : AppCompatActivity() {
         db.child("maintenanceIssues")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val issuesMap = mutableMapOf<String, MaintenanceIssue>()
+                    // Clear queues and graph
+                    highPriorityQueue.clear()
+                    mediumPriorityQueue.clear()
+                    lowPriorityQueue.clear()
+                    dependencyGraph.clear()
+
                     for (issueSnapshot in snapshot.children) {
-                        val key = issueSnapshot.key // Get the unique key for the issue
                         val issue = issueSnapshot.getValue(MaintenanceIssue::class.java)
-                        if (key != null && issue != null) {
-                            issuesMap[key] = issue
+                        val key = issueSnapshot.key
+
+                        if (issue != null && key != null) {
+                            issue.id = key // Set the ID for Firebase updates
+
+                            // Categorize based on urgency
+                            when (issue.urgencyLevel.lowercase()) {
+                                "high" -> highPriorityQueue.add(issue)
+                                "medium" -> mediumPriorityQueue.add(issue)
+                                "low" -> lowPriorityQueue.add(issue)
+                            }
+
+                            // Load dependencies
+                            val dependencies = issueSnapshot.child("dependsOn").getValue<List<String>>()
+                            if (dependencies != null) {
+                                dependencyGraph[key] = dependencies
+                            }
                         }
                     }
-                    // Pass the issues map to the adapter
-                    adapter.updateData(issuesMap)
+
+                    // Combine all queues for display (High -> Medium -> Low)
+                    val sortedIssues = highPriorityQueue.toList() +
+                            mediumPriorityQueue.toList() +
+                            lowPriorityQueue.toList()
+
+                    adapter.updateData(sortedIssues, dependencyGraph)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -255,13 +290,13 @@ class ManagerMaintenanceActivity : AppCompatActivity() {
                 }
             })
     }
-
 }
 
-class MaintenanceAdapter(private var issuesMap: Map<String, MaintenanceIssue>) :
-    RecyclerView.Adapter<MaintenanceAdapter.MaintenanceViewHolder>() {
-
-    private val issuesList: MutableList<Pair<String, MaintenanceIssue>> = issuesMap.toList().toMutableList()
+// MaintenanceAdapter.kt
+class MaintenanceAdapter(
+    private var issues: List<MaintenanceIssue>,
+    private var dependencyGraph: Map<String, List<String>> = emptyMap()
+) : RecyclerView.Adapter<MaintenanceAdapter.MaintenanceViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaintenanceViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_maintenance_issue, parent, false)
@@ -269,28 +304,31 @@ class MaintenanceAdapter(private var issuesMap: Map<String, MaintenanceIssue>) :
     }
 
     override fun onBindViewHolder(holder: MaintenanceViewHolder, position: Int) {
-        val (key, issue) = issuesList[position]
+        val issue = issues[position]
         holder.titleTextView.text = issue.title
         holder.dateTextView.text = issue.date
         holder.statusTextView.text = issue.status
+        holder.urgencyTextView.text = issue.urgencyLevel
 
-        // Optional: Color the text based on the status
-        when (issue.status) {
-            "Pending" -> holder.statusTextView.setTextColor(
-                ContextCompat.getColor(holder.itemView.context, R.color.red)
-            )
-            "Resolved" -> holder.statusTextView.setTextColor(
-                ContextCompat.getColor(holder.itemView.context, R.color.orange)
-            )
+        // Set urgency color
+        when (issue.urgencyLevel.lowercase()) {
+            "high" -> holder.urgencyTextView.setTextColor(Color.RED)
+            "medium" -> holder.urgencyTextView.setTextColor(Color.parseColor("#FFA500")) // Orange
+            "low" -> holder.urgencyTextView.setTextColor(Color.GREEN)
         }
 
-        // Handle click on the status text
+        // Handle status click
         holder.statusTextView.setOnClickListener {
-            showStatusDialog(holder, key, issue)
+            showStatusDialog(holder, issue)
+        }
+
+        // Show dependencies on button click
+        holder.dependenciesButton.setOnClickListener {
+            showDependencies(holder.itemView.context, issue.id)
         }
     }
 
-    private fun showStatusDialog(holder: MaintenanceViewHolder, key: String, issue: MaintenanceIssue) {
+    private fun showStatusDialog(holder: MaintenanceViewHolder, issue: MaintenanceIssue) {
         val context = holder.itemView.context
         val options = arrayOf("Pending", "Resolved")
 
@@ -302,7 +340,7 @@ class MaintenanceAdapter(private var issuesMap: Map<String, MaintenanceIssue>) :
                 // Update the status in the Firebase database
                 FirebaseDatabase.getInstance().reference
                     .child("maintenanceIssues")
-                    .child(key) // Use the unique key
+                    .child(issue.id)
                     .child("status")
                     .setValue(newStatus)
                     .addOnSuccessListener {
@@ -322,14 +360,25 @@ class MaintenanceAdapter(private var issuesMap: Map<String, MaintenanceIssue>) :
             .show()
     }
 
-    override fun getItemCount(): Int {
-        return issuesList.size
+    private fun showDependencies(context: Context, issueId: String) {
+        val dependencies = dependencyGraph[issueId]
+        if (dependencies.isNullOrEmpty()) {
+            Toast.makeText(context, "No dependencies for this issue", Toast.LENGTH_SHORT).show()
+        } else {
+            val dependencyList = dependencies.joinToString("\n") { "Issue ID: $it" }
+            AlertDialog.Builder(context)
+                .setTitle("Dependencies for Issue $issueId")
+                .setMessage(dependencyList)
+                .setPositiveButton("OK", null)
+                .show()
+        }
     }
 
-    fun updateData(newIssuesMap: Map<String, MaintenanceIssue>) {
-        issuesMap = newIssuesMap
-        issuesList.clear()
-        issuesList.addAll(newIssuesMap.toList())
+    override fun getItemCount(): Int = issues.size
+
+    fun updateData(newIssues: List<MaintenanceIssue>, newDependencyGraph: Map<String, List<String>>) {
+        issues = newIssues
+        dependencyGraph = newDependencyGraph
         notifyDataSetChanged()
     }
 
@@ -337,13 +386,19 @@ class MaintenanceAdapter(private var issuesMap: Map<String, MaintenanceIssue>) :
         val titleTextView: TextView = itemView.findViewById(R.id.issueTitleTextView)
         val dateTextView: TextView = itemView.findViewById(R.id.issueDateTextView)
         val statusTextView: TextView = itemView.findViewById(R.id.issueStatusTextView)
+        val urgencyTextView: TextView = itemView.findViewById(R.id.urgencyTextView)
+        val dependenciesButton: Button = itemView.findViewById(R.id.dependenciesButton)
     }
 }
 
+// MaintenanceIssue.kt
 data class MaintenanceIssue(
+    var id: String = "", // Added to track Firebase keys
     val title: String = "",
     val date: String = "",
-    var status: String = "Pending"
+    var status: String = "Pending", // Mutable to allow status updates
+    val urgencyLevel: String = "Low",// Default urgency
+    val relatedTo: String = "",
+    val dependsOn: List<String> = emptyList() // List of dependencies
 )
-
 
